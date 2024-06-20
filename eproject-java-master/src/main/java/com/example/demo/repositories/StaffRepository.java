@@ -24,7 +24,7 @@ public interface StaffRepository extends CrudRepository<Staff, Integer> {
     @Query(value = "SELECT * FROM staff WHERE firstname like ?1 and lastname like ?2", nativeQuery = true)
     List<Staff> findByLikeName(String firstname, String lastname);
 
-    @Query(value = "SELECT * FROM staff WHERE status=0", nativeQuery = true)
+    @Query(value = "SELECT o FROM Staff o WHERE o.status = false")
     List<Staff> findAlls();
 
     @Query(value = "CALL GetStaffMonth();", nativeQuery = true)
