@@ -2,7 +2,7 @@
 
 @section('content')
 
-<style>
+{{-- <style>
     .content {
         padding: 0px 10px
     }
@@ -284,7 +284,7 @@
         z-index: 1000;
         background: center no-repeat #fff;
     }
-</style>
+</style> --}}
 
 <div class="container-fluid fluid-view-menu">
     <div class="row text-center">
