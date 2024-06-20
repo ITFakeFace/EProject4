@@ -6,18 +6,19 @@
 package com.example.demo.repositories;
 
 import com.example.demo.entities.Regional;
-import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 /**
- *
  * @author DELL
  */
-public interface RegionalRepository extends CrudRepository<Regional, Integer>{
-    
-    @Query(value = "SELECT * FROM Regional WHERE parent =0", nativeQuery=true)
+public interface RegionalRepository extends CrudRepository<Regional, Integer> {
+
+    @Query(value = "SELECT o FROM Regional o WHERE o.parent = 0")
     List<Regional> ListAll();
-    @Query(value = "SELECT * FROM Regional WHERE parent = ?1", nativeQuery=true)
+
+    @Query(value = "SELECT o FROM Regional o WHERE o.parent = ?1")
     List<Regional> ListDistrict(Integer parent_id);
 }
