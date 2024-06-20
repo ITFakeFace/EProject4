@@ -1,21 +1,21 @@
 @extends('main._layouts.master')
 
 <?php
-    // {{ }} <--- cac ky tu dac biet se duoc thay the
-    // {!! !!} <--- cac ky tu dac biet se khong thay the
-    // {{-- --}} <--- comment code trong blade
-    /**
-     * section('scripts') <--- coi o? master.blade.php <--- no' la @yield('scripts')
-     * section co' mo? la phai co' dong'
-     * neu ma soan code php thi nen de? tren dau` de? no' load tuan tu chinh xac hon giong nhu code php nam tren section('scripts') vay ok roi
-     * */
+// {{ }} <--- special characters will be replaced
+// {!! !!} <--- special characters will not be replaced
+// {{-- --}} <--- comment code in blade
+/**
+ * section('scripts') <--- see in master.blade.php <--- it is @yield('scripts')
+ * section must have both opening and closing tags
+ * if writing PHP code, it should be at the top to load sequentially more accurately like PHP code placed at the top of section('scripts')
+ * */
 ?>
 
 @section('css')
     <link href="{{ asset('assets/css/components_datatables.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
-@section('js')    
+@section('js')
     <script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
 @endsection
@@ -23,10 +23,10 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Danh Sách Nhân Viên Tạm Xóa</h1>
+        <h1 class="pt-3 pl-3 pr-3">List of Temporarily Deleted Employees</h1>
         <div class="card-header header-elements-inline">
             <div class="header-elements">
-             
+
             </div>
         </div>
         <div class="card-body">
@@ -38,64 +38,65 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Mã</th>
-                    <th>Tên</th>
-                    <th>Họ</th>
-                    <th>Phòng Ban</th>
-                    <th>Is_Manager</th>
-                    <th>Ngày vào</th>
-                    <th>Ngày sinh</th>
-                    <th>Giới tính</th>
-                    <th>Thao tác</th>
+                    <th>Code</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Department</th>
+                    <th>Is Manager</th>
+                    <th>Join Date</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>          
-                    @foreach($data_staff as $staff)
+            <tbody>
+                @foreach ($data_staff as $staff)
                     <tr>
                         <td>{{ $staff['id'] }}</td>
                         <td>{{ $staff['code'] }}</td>
                         <td>{{ $staff['firstname'] }}</td>
                         <td>{{ $staff['lastname'] }}</td>
                         @foreach ($data_department as $department)
-                                    @if ($staff['department'] == $department['id'])
-                                        <td>{{$department['name']}}</td>
-                                    @endif
+                            @if ($staff['department'] == $department['id'])
+                                <td>{{ $department['name'] }}</td>
+                            @endif
                         @endforeach
-                        <td>@if($staff['isManager'] == 0)
-                                Nhân viên
+                        <td>
+                            @if ($staff['isManager'] == 0)
+                                Employee
                             @else
-                                Quản lý
-                            @endif 
+                                Manager
+                            @endif
                         </td>
                         <td>{{ $staff['joinedAt'] }}</td>
                         <td>{{ $staff['dob'] }}</td>
-                        <td>@if($staff['gender'] == 1)
-                                Nam
+                        <td>
+                            @if ($staff['gender'] == 1)
+                                Male
                             @else
-                                Nữ
-                            @endif 
+                                Female
+                            @endif
                         </td>
                         <td>
-                        <div class="list-icons">
-                            <div class="dropdown">
-                                <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                    <i class="icon-menu9"></i>
-                                </a>
+                            <div class="list-icons">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                        <i class="icon-menu9"></i>
+                                    </a>
 
-                                <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="{{ action('StaffController@getUndoStaff') }}?id={{ $staff['id'] }}" class="dropdown-item">Hoàn tác</a>
-                                        <a href="{{ action('StaffController@getDetail') }}?id={{ $staff['id'] }}" class="dropdown-item">Chi tiết</a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="{{ action('StaffController@getUndoStaff') }}?id={{ $staff['id'] }}" class="dropdown-item">Undo</a>
+                                        <a href="{{ action('StaffController@getDetail') }}?id={{ $staff['id'] }}" class="dropdown-item">Details</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
+                        </td>
                     </tr>
-                    @endforeach
+                @endforeach
             </tbody>
         </table>
     </div>
     <!-- /basic datatable -->
-
 @endsection
 
 @section('scripts')
