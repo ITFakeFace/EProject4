@@ -1,41 +1,35 @@
-<div class="navbar navbar-expand-md navbar-dark">
-    <div class="navbar-brand p-0">
-        <a href="{{ action('ViewmenuController@index') }}" class="d-inline-block">
-            <img src="{{ asset('images/logo.png') }}" alt="" width="240px" style="height: auto">
-            <span>Tân Thành Nam</span>
-        </a>
+<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo mr-1" href="#"><img src="{{asset('images/Logo-FutureHRM-index.svg')}}" class="mr-1" alt="logo"/></a>
+      <a class="navbar-brand brand-logo-mini" href="#"><img src="{{asset('images/LogoOnly_FutureHRM.svg')}}" alt="logo"/></a>
     </div>
-
-    <div class="d-md-none">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
-            <i class="icon-tree5"></i>
+    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="icon-menu"></span>
         </button>
-        <button class="navbar-toggler sidebar-mobile-main-toggle" type="button">
-            <i class="icon-paragraph-justify3"></i>
-        </button>
-    </div>
-
-    <div class="collapse navbar-collapse" id="navbar-mobile">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
-                    <i class="icon-paragraph-justify3"></i>
+        <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item nav-profile dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">{{ auth()->user() ? auth()->user()->firstname . ' ' . auth()->user()->lastname : null}}
+                    <img src="{{asset(auth()->user()->photo)}}" alt="profile"/>
                 </a>
-            </li>
-        </ul>
-
-        <ul class="navbar-nav ml-auto">
-
-            <li class="nav-item dropdown dropdown-user">
-                <a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
-                    <span>{{ auth()->user() ? auth()->user()->firstname . ' ' . auth()->user()->lastname : null }}</span>
-                </a>
-
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="{{ action('StaffController@viewProfile') }}" class="dropdown-item"><i class="icon-user-plus"></i> Thông tin cá nhân</a>
-                    <a href="{{ action('AuthenticateController@getLogout') }}" class="dropdown-item"><i class="icon-switch2"></i> Đăng xuất</a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                    {{-- <a class="dropdown-item">
+                    <i class="ti-settings text-primary"></i>
+                    Settings
+                    </a> --}}
+                    <a href="{{ action('StaffController@viewProfile') }}" class="dropdown-item">
+                        <i class="ti-user text-primary"></i>
+                    View Profile
+                    </a>
+                    <a href="{{ action('AuthenticateController@getLogout') }}" class="dropdown-item">
+                        <i class="ti-power-off text-primary"></i>
+                    Sign Out
+                    </a>
                 </div>
             </li>
         </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="icon-menu"></span>
+        </button>
     </div>
-</div>
+</nav>

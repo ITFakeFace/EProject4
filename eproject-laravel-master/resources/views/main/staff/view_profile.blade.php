@@ -1,3 +1,4 @@
+
 @extends('main._layouts.master')
 
 @section('css')
@@ -55,7 +56,7 @@
                         <span class="text-green"><i class="icon-qrcode"></i> Code: </span> <i class="ml-2"><?php echo $staff['code']; ?></i>
                     </p>
                     <p>
-                        <span class="text-green"><i class="icon-calendar"></i> Ngày sinh: </span> <i class="ml-2"> <?php $date = date_create($staff['dob']);
+                        <span class="text-green"><i class="icon-calendar"></i> Ngày sinh: </span> <i class="ml-2"> <?php use Carbon\Carbon; $date = Carbon::parse($staff['dob']);
                         echo date_format($date, 'd/m/Y'); ?> </i>
                     </p>
                     <p>
