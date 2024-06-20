@@ -44,7 +44,7 @@ public interface StaffRepository extends CrudRepository<Staff, Integer> {
     @Query(value = "update Staff c set c.status = :status where c.id = :id")
     void setDelStaff(@Param("id") Integer id, @Param("status") boolean status);
 
-    @Query(value = "SELECT o FROM Staff o WHERE o.status = false")
+    @Query(value = "SELECT o FROM Staff o WHERE o.status = true")
     List<Staff> ListUndo();
 
     @Query(value = "SELECT * FROM Staff WHERE id = ?1 and password = ?2", nativeQuery = true)
