@@ -18,13 +18,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <h1 class="pt-3 pl-3 pr-3">Chi tiết hợp đồng</h1>
+                <h1 class="pt-3 pl-3 pr-3">Contract Details</h1>
                 <div class="card-header header-elements-inline">
                     
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label>Mã nhân viên</label>
+                        <label>Employee ID</label>
                         <select class="form-control select-search" name="staffId" readonly>
                             @foreach($listStaff as $staff)
                                 <option value="{{ $staff->id }}" @if($contract->staffId == $staff->id) selected @endif>{{ $staff->firstname .' '. $staff->lastname }}</option>
@@ -34,7 +34,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Ngày bắt đầu hợp đồng:</label>
+                                <label>Contract Start Date:</label>
                                 <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Ngày kết thúc hợp đồng:</label>
+                                <label>Contract End Date:</label>
                                 <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -61,7 +61,7 @@
                         @if($stopDate->lt($endDate))
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Chấm dứt hợp đồng trước kì hạn:</label>
+                                    <label>Contract Terminated Before Term:</label>
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -77,7 +77,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Lương:</label>
+                                <label>Salary:</label>
                                 <input type="number" class="form-control" name="salary" value="{{ $contract->baseSalary }}" readonly>
                             </div>
                         </div>

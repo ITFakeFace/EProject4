@@ -35,7 +35,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Danh Sách Ngày Lễ</h1>
+        <h1 class="pt-3 pl-3 pr-3">List of Special Dates</h1>
         <div class="card-header header-elements-inline">
             
         </div>
@@ -62,17 +62,17 @@
                         <input class="form-control" type="number" value="<?php echo $year ?>" name="year" id="year">
                     </div>
                     <div class="ml-3">
-                        <input class="form-control btn btn-primary" type="submit" value="Tìm kiếm">
+                        <input class="form-control btn btn-primary" type="submit" value="Search">
                     </div>
                 </div>
             </form>
 
             <div class="form-group d-flex">
                 <div class="export">
-                    <a href ="{{ action('ExportController@exportSpecialDate') }}?y={{ $year }}" class="btn btn-success export" id="export-button"> Xuất Excel </a>
+                    <a href ="{{ action('ExportController@exportSpecialDate') }}?y={{ $year }}" class="btn btn-success export" id="export-button"> Export to Excel </a>
                </div>
                <div class=" ml-1">
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">Tạo ngày lễ mới</button>
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">Create New Special Date</button>
                 </div>
             </div>
         </div>
@@ -84,36 +84,36 @@
                         @csrf
                         <input type="hidden" name="type_day" value="1">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Tạo Ngày Lễ</h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">Create Special Date</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Từ ngày:</label>
+                                <label class="col-lg-3 col-form-label">From Date:</label>
                                 <div class="col-lg-9">
                                     <input type="text" class="form-control day_leave" name="day_special_from" value="" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Đến ngày:</label>
+                                <label class="col-lg-3 col-form-label">To Date:</label>
                                 <div class="col-lg-9">
                                     <input type="text" class="form-control day_leave" name="day_special_to" value="" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Mô tả ngày lễ:</label>
+                                <label class="col-lg-3 col-form-label">Description:</label>
                                 <div class="col-lg-9">
-                                    <textarea class="form-control" name="note" id="note" cols="20" rows="10" placeholder="VD: Lễ quốc khánh, Lễ Tết, ..." required></textarea>
+                                    <textarea class="form-control" name="note" id="note" cols="20" rows="10" placeholder="E.g., National Day, New Year, ..." required></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary">Tạo mới</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Create</button>
                         </div>
                     </form>  
                 </div>
@@ -123,13 +123,13 @@
         <table class="table datatable-basic">
             <thead>
                 <tr>
-                    <th>STT</th>
-                    <th>Từ Ngày</th>
-                    <th>Đến Ngày</th>
-                    <th>Mô tả</th>
-                    <th>Loại</th>
-                    <th class="text-center">Sửa / Xóa</th>
-                    <th style="max-width: 100px">Bổ sung công ngày lễ cho toàn nhân viên</th>
+                    <th>No.</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th class="text-center">Edit / Delete</th>
+                    <th style="max-width: 100px">Add Holiday Workdays for All Employees</th>
                 </tr>
             </thead>
             <tbody>
@@ -147,16 +147,16 @@
                                 ?>
                             </td>
                             <td>
-                                <span class="badge badge-danger">Ngày lễ</span>
+                                <span class="badge badge-danger">Special Date</span>
                             </td>
                             <td class="text-center">
                                 @if(date("Y-m-d") < $special_date['day_special_from'])
                                     <div class="from-group">
-                                        <a class="btn btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Sửa</a>
-                                        <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Xóa</a>
+                                        <a class="btn btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Edit</a>
+                                        <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
                                     </div>
                                 @else 
-                                    <span class="badge badge-primary">Ngày lễ đã diễn ra!</span>
+                                    <span class="badge badge-primary">Date has passed!</span>
                                 @endif
                             </td>
                             <td>
@@ -165,12 +165,12 @@
                                 ?>
                                 @if(date("Y-m-d") > $date_check)
                                     @if($special_date['detail_id'])
-                                        <a href="{{ action('TimeSpecialController@details') }}?id_special_date={{ $special_date['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Chi tiết</a>
+                                        <a href="{{ action('TimeSpecialController@details') }}?id_special_date={{ $special_date['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Details</a>
                                     @else
-                                        <a href="{{ action('TimeSpecialController@create') }}?id={{ $special_date['id'] }}" class="btn btn-warning ml-2" style="color: white; cursor: pointer;">Bổ sung</a>
+                                        <a href="{{ action('TimeSpecialController@create') }}?id={{ $special_date['id'] }}" class="btn btn-warning ml-2" style="color: white; cursor: pointer;">Add</a>
                                     @endif
                                 @else
-                                    <span class="">Sau kết thúc lễ 3 ngày mới được bổ sung công lễ!</span>
+                                    <span class="">Only allowed to add after 3 days of the end of the holiday!</span>
                                 @endif
                             </td>
                         </tr>

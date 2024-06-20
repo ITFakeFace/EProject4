@@ -47,7 +47,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Danh Sách Đề Xuất Tăng Ca</h1>
+        <h1 class="pt-3 pl-3 pr-3">List of Overtime Requests</h1>
         <div class="card-header header-elements-inline">
             
         </div>
@@ -74,7 +74,7 @@
                         <input class="form-control" type="number" value="<?php echo $year ?>" name="year" id="year">
                     </div>
                     <div class="ml-3">
-                        <input class="form-control btn btn-primary" type="submit" value="Tìm kiếm">
+                        <input class="form-control btn btn-primary" type="submit" value="Search">
                     </div>
                 </div>
             </form>
@@ -82,7 +82,7 @@
             <div class="form-group d-flex">
                 @if(auth()->user()->id !== 7)
                     <div class="">
-                        <button class="btn btn-primary" style="background-color: #046A38" data-toggle="modal" data-target="#exampleModalCenter2">Tạo đề xuất tăng ca mới</button>
+                        <button class="btn btn-primary" style="background-color: #046A38" data-toggle="modal" data-target="#exampleModalCenter2">Create New Overtime Request</button>
                     </div>
                 @endif
             </div>
@@ -98,26 +98,26 @@
                         <input type="hidden" name="department_request" value="{{ auth()->user()->department }}">
                         <input type="hidden" name="type_day" value="2">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Đề Xuất Ngày Tăng Ca</h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">Overtime Request</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label">Tên quản lý phòng ban:</label>
+                                <label class="col-lg-4 col-form-label">Department Manager:</label>
                                 <div class="col-lg-8">
                                     <div class="col-form-label">{{ auth()->user()->firstname . ' ' . auth()->user()->lastname }}</div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label">Phòng ban đề xuất:</label>
+                                <label class="col-lg-4 col-form-label">Requesting Department:</label>
                                 <div class="col-lg-8">
                                     <div class="col-form-label">{{ $staff[0][2] }}</div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label">Chọn nhân viên tăng ca: </label>
+                                <label class="col-lg-4 col-form-label">Select Employees for Overtime: </label>
                                 <div class="col-lg-8">
                                     <select name="staff_ot[]" class="form-control multiselect-full-featured" multiple="multiple" data-fouc>
                                         @foreach ($data_staff as $item)
@@ -127,27 +127,27 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label">Từ ngày:</label>
+                                <label class="col-lg-4 col-form-label">From Date:</label>
                                 <div class="col-lg-8">
                                     <input type="text" class="form-control day_leave" name="day_special_from" value="" required>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label">Đến ngày:</label>
+                                <label class="col-lg-4 col-form-label">To Date:</label>
                                 <div class="col-lg-8">
                                     <input type="text" class="form-control day_leave" name="day_special_to" value="" required>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label">Lý do tăng ca:</label>
+                                <label class="col-lg-4 col-form-label">Reason for Overtime:</label>
                                 <div class="col-lg-8">
-                                    <textarea class="form-control" name="note" id="note" cols="20" rows="10" placeholder="VD: Tăng ca sản xuất sản phẩm mới, ..." required></textarea>
+                                    <textarea class="form-control" name="note" id="note" cols="20" rows="10" placeholder="e.g., Overtime for new product production, ..." required></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary">Tạo đề xuất</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Create Request</button>
                         </div>
                     </form>  
                 </div>
@@ -157,15 +157,15 @@
         <table class="table datatable-basic">
             <thead>
                 <tr>
-                    <th>STT</th>
-                    <th>Họ tên quản lý phòng ban</th>
-                    <th>Phòng ban đề xuất</th>
-                    <th>Từ Ngày</th>
-                    <th>Đến Ngày</th>
-                    <th>Trạng thái</th>
-                    <th>Sửa / Xóa</th>
+                    <th>No.</th>
+                    <th>Department Manager Name</th>
+                    <th>Requesting Department</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Status</th>
+                    <th>Edit / Delete</th>
                     @if(auth()->user()->id != 7)
-                        <th>Chi tiết</th>
+                        <th>Details</th>
                     @endif
                 </tr>
             </thead>
@@ -181,45 +181,45 @@
                             <td><?php echo $special_date['day_special_to'] ?></td>
                             <td>
                                 @if($special_date['is_approved'] == 0)
-                                    <span class="badge badge-warning">Chưa phê duyệt</span>
+                                    <span class="badge badge-warning">Pending</span>
                                 @elseif($special_date['is_approved'] == -1)
-                                    <span class="badge badge-danger">Đã từ chối</span>
+                                    <span class="badge badge-danger">Rejected</span>
                                 @else
-                                    <span class="badge badge-primary" style="background-color: #046A38">Đã duyệt</span>
+                                    <span class="badge badge-primary" style="background-color: #046A38">Approved</span>
                                 @endif
                             </td>
                             <td>
                                 @if(auth()->user()->id != 7)
                                     @if($special_date['is_approved'] == 1)
-                                        <span class="badge badge-primary">Đã duyệt. Không thể chỉnh sửa!</span>
+                                        <span class="badge badge-primary">Approved. Cannot Edit!</span>
                                     @elseif($special_date['is_approved'] == -1)
-                                        <span class="badge badge-danger">Đã từ chối!</span>
+                                        <span class="badge badge-danger">Rejected!</span>
                                     @elseif(date("Y-m-d") <= $special_date['day_special_from'])
                                         <div class="from-group d-flex">
-                                            <a class="btn btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Sửa</a>
-                                            <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Xóa</a>
+                                            <a class="btn btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Edit</a>
+                                            <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
                                         </div>
                                     @else
-                                        <span class="badge badge-warning">Đã hết hạn!</span>
+                                        <span class="badge badge-warning">Expired!</span>
                                     @endif
                                 @else
                                     @if($special_date['is_approved'] == 1)
-                                        <span class="badge badge-primary">Đã duyệt!</span>
+                                        <span class="badge badge-primary">Approved!</span>
                                     @elseif($special_date['is_approved'] == -1)
-                                        <span class="badge badge-danger">Đã từ chối!</span>
+                                        <span class="badge badge-danger">Rejected!</span>
                                     @elseif(date("Y-m-d") <= $special_date['day_special_from'])
                                         <div class="from-group d-flex">
-                                            <a class="btn btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Chi tiết</a>
+                                            <a class="btn btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Details</a>
                                         </div>
                                     @else
-                                        <span class="badge badge-warning">Đã hết hạn!</span>
+                                        <span class="badge badge-warning">Expired!</span>
                                     @endif
                                 @endif
                             </td>
                             @if(auth()->user()->id != 7)
                                 <td>
                                     <div class="from-group d-flex">
-                                        <a class="btn btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Chi tiết</a>
+                                        <a class="btn btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Details</a>
                                     </div>
                                 </td>
                             @endif
