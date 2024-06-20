@@ -23,7 +23,7 @@
                   <div class="col-xl-4">
                       <!-- Profile picture card-->
                       <div class="card mb-4 mb-xl-0">
-                          <div class="card-header">Image</div>
+                          <div class="card-header">Photo</div>
                           <div class="card-body text-center">
                               <!-- Profile picture image-->
                               @if(!empty($staff['photo']))
@@ -49,8 +49,8 @@
                                       <!-- Form Group (Account type)-->
                                       <div class="col-md-6">
                                             <label class="small mb-1" for="dob">Date of Birth</label>
-                                            <input class="form-control" name="dob" type="text" value="@php use Carbon\Carbon;  $date = date_create($staff['dob']);
-                                               echo date_format($date, 'd/m/Y'); @endphp" readonly>
+                                            <input class="form-control" name="dob" type="text" value="@php use Carbon\Carbon;  $date = Carbon::parse($staff['dob'],"Asia/Ho_Chi_Minh")->format('d/m/Y');
+                                               echo $date; @endphp" readonly>
                                       </div>
                                   </div>
                                   <!-- Form Row-->
@@ -84,7 +84,8 @@
                                     <!-- Form Group (organization name)-->
                                     <div class="col-md-6">
                                       <label class="small mb-1" for="joinedAt">Joined Date</label>
-                                      <input class="form-control" name="joinedAt" type="text"  value="{{$staff['joined_at']}}" readonly>
+                                      <input class="form-control" name="joinedAt" type="text"  value="@php   $joinedDate = Carbon::parse($staff['joined_at'],"Asia/Ho_Chi_Minh")->format('d/m/Y');
+                                               echo $joinedDate; @endphp" readonly>
                                     </div>
                                     <!-- Form Group (location)-->
                                     <div class="col-md-6">
@@ -108,7 +109,7 @@
 
   <!-- content-wrapper ends -->
   <!-- partial:partials/_footer.html --> 
-  @include('admin.layout.footer')
+  @include('main._partials.footer')
   <!-- partial -->
 </div>
 @endsection
