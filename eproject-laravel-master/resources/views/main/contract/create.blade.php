@@ -18,10 +18,10 @@
     <form action="{{ route('postSaveContract') }}" method="post">
         @csrf
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="card">
                     <h1 class="pt-3 pl-3 pr-3">Create New Contract</h1>
-                    <div class="card-header header-elements-inline">
+                    <div>
                     </div>
                     <div class="card-body">
                         @if(session('message'))
