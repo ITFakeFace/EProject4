@@ -42,7 +42,7 @@
     <!-- Basic datatable -->
     <!-- 2 columns form -->
     <div class="card">
-        <div class="card-header header-elements-inline">
+        <div>
             <h1 class="pt-3 pl-3 pr-3">Update Certificate</h1>
             <div class="header-elements">
                 <div class="list-icons">
@@ -86,7 +86,7 @@
             <form action="{{ action('EducationController@postEditEducation') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <fieldset>
                             <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Information</legend>
 
