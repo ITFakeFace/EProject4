@@ -1,7 +1,7 @@
 @extends('main._layouts.master')
 
 <?php
-header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 ?>
 
@@ -23,8 +23,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             background-color: #212121;
         }
     </style>
-
-
 @endsection
 
 @section('js')
@@ -39,35 +37,33 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.time.js') }}"></script>
     <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
-    <script src="{{asset('global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
-    <script src="{{asset('global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
-    <script src="{{asset('global_assets/js/demo_pages/form_layouts.js')}}"></script>
+    <script src="{{ asset('global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/demo_pages/form_layouts.js') }}"></script>
 @endsection
-
-
 
 @section('content')
     <!-- Basic datatable -->
     <!-- 2 columns form -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Thêm Nhân Viên Mới</h1>
+        <h1 class="pt-3 pl-3 pr-3">Add New Employee</h1>
         <div class="card-header header-elements-inline">
 
         </div>
         <div class="card-body">
             <form action="{{ route('postAddStaff') }}" method="post" enctype="multipart/form-data">
                 @csrf
-                @if(session('message'))
+                @if (session('message'))
                     <div class="alert alert-{{ session('message')['type'] }} border-0 alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                         {{ session('message')['message'] }}
                     </div>
                 @endif
 
-                @if($errors->any())
+                @if ($errors->any())
                     <div class="alert alert-danger border-0 alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                        <p><b>Dữ liệu đầu vào không chính xác:</b></p>
+                        <p><b>Input data is not correct:</b></p>
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -80,10 +76,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     <div class="col-md-12">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#staff" role="tab" aria-controls="staff" aria-selected="true">Nhân viên</a>
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#staff" role="tab" aria-controls="staff" aria-selected="true">Employee</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="allowance-tab" data-toggle="tab" href="#allowance" role="tab" aria-controls="allowance" aria-selected="false">Bằng cấp</a>
+                                <a class="nav-link" id="allowance-tab" data-toggle="tab" href="#allowance" role="tab" aria-controls="allowance" aria-selected="false">Education</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -91,23 +87,22 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 <div class="row">
                                     <div class="col-md-6">
                                         <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Thông tin</legend>
+                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Information</legend>
 
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Mã Nhân viên:(*)</label>
-                                                        <input type="text" class="form-control" name="txtCode" value="{{ old('txtCode') }}" require placeholder="Nhập Mã Nhân viên: TTN">
+                                                        <label>Employee Code:(*)</label>
+                                                        <input type="text" class="form-control" name="txtCode" value="{{ old('txtCode') }}" required placeholder="Enter Employee Code: TTN">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Phân Quyền:(*)</label>
-                                                        <!-- <input type="text" class="form-control" name="txtGender"> -->
+                                                        <label>Role:(*)</label>
                                                         <select class="form-control" name="txtisManager" color="red">
-                                                            <option value="0" selected>Nhân viên</option>
-                                                            <option value="1">Quản lý</option>
+                                                            <option value="0" selected>Employee</option>
+                                                            <option value="1">Manager</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -116,25 +111,24 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Họ nhân viên:</label>
-                                                        <input type="text" class="form-control" name="txtLname" value="{{ old('txtLname') }}" placeholder="Nhập Họ">
+                                                        <label>Last Name:</label>
+                                                        <input type="text" class="form-control" name="txtLname" value="{{ old('txtLname') }}" placeholder="Enter Last Name">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Tên Nhân viên:(*)</label>
-                                                        <input type="text" class="form-control" name="txtFname" value="{{ old('txtFname') }}" require placeholder="Nhập Tên">
+                                                        <label>First Name:(*)</label>
+                                                        <input type="text" class="form-control" name="txtFname" value="{{ old('txtFname') }}" required placeholder="Enter First Name">
                                                     </div>
                                                 </div>
-
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Phòng Ban:(*)</label>
+                                                        <label>Department:(*)</label>
                                                         <select class="form-control" name="txtDepartment" value="{{ old('txtDepartment') }}">
-                                                            @foreach($data_department as $dep)
+                                                            @foreach ($data_department as $dep)
                                                                 <option value="{{ $dep['id'] }}">{{ $dep['name'] }}</option>
                                                             @endforeach
                                                         </select>
@@ -143,30 +137,26 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Ngày sinh:</label>
+                                                        <label>Date of Birth:</label>
                                                         <input type="text" class="form-control daterange-single" name="txtDob" value="{{ old('txtDob') }}">
-                                                        {{--                                                            <input type="Date" class="form-control" name="txtDob" value="{{ old('txtDob') }}">--}}
                                                     </div>
                                                 </div>
-
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Ngày Vào:(*)</label>
+                                                        <label>Joining Date:(*)</label>
                                                         <input type="text" class="form-control daterange-single" name="txtJoinat" value="{{ old('txtJoinat') }}">
-                                                        {{--                                                            <input type="Date" class="form-control" name="txtJoinat" value="{{ old('txtJoinat') }}">--}}
                                                     </div>
                                                 </div>
 
-
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Giới tính:(*)</label>
+                                                        <label>Gender:(*)</label>
                                                         <select class="form-control" name="txtGender" color="red">
-                                                            <option value="1" selected>Nam</option>
-                                                            <option value="0">Nữ</option>
+                                                            <option value="1" selected>Male</option>
+                                                            <option value="0">Female</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -175,11 +165,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Khu vực:(*)</label>
-                                                        <!-- <input type="text" class="form-control" name="txtGender"> -->
+                                                        <label>Region:(*)</label>
                                                         <select id="province" class="form-control form-control-select2" color="red" data-fouc>
-                                                            @foreach($data_reg as $reg)
-                                                                <option value="{{$reg['id']}}">{{ $reg['name'] }}</option>
+                                                            @foreach ($data_reg as $reg)
+                                                                <option value="{{ $reg['id'] }}">{{ $reg['name'] }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -187,10 +176,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Thành Phố/Huyện/Xã:(*)</label>
+                                                        <label>City/District/Commune:(*)</label>
                                                         <select id="district" class="form-control form-control-select2" name="txtRegional" color="red" data-fouc>
-                                                            @foreach($data_district as $district)
-                                                                <option value="{{$district['id']}}">{{ $district['name'] }}</option>
+                                                            @foreach ($data_district as $district)
+                                                                <option value="{{ $district['id'] }}">{{ $district['name'] }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -200,59 +189,58 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Điện thoại:</label>
-                                                        <input type="number" class="form-control" name="txtPhone" value="{{ old('txtPhone') }}" placeholder="Nhập số điện thoại">
+                                                        <label>Phone:</label>
+                                                        <input type="number" class="form-control" name="txtPhone" value="{{ old('txtPhone') }}" placeholder="Enter phone number">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Email:(*)</label>
-                                                        <input type="text" class="form-control" name="txtEmail" value="{{ old('txtEmail') }}" placeholder="Nhập Email abc12@exam.com">
+                                                        <input type="text" class="form-control" name="txtEmail" value="{{ old('txtEmail') }}" placeholder="Enter Email abc12@exam.com">
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </fieldset>
                                     </div>
 
                                     <div class="col-md-6">
                                         <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-paperplane mr-2"></i> Hình ảnh</legend>
+                                            <legend class="font-weight-semibold"><i class="icon-paperplane mr-2"></i> Images</legend>
 
                                             <div class="form-group" hidden>
-                                                <label>Mật Khẩu:(*)</label>
-                                                <input type="password" class="form-control" name="txtPass"  value="<?php echo md5(123456);?>" require>
+                                                <label>Password:(*)</label>
+                                                <input type="password" class="form-control" name="txtPass" value="<?php echo md5(123456); ?>" required>
                                             </div>
 
                                             <div class="form-group">
-                                                <label>CMND:(*)</label>
-                                                <input type="text" class="form-control" name="txtIDNumber" placeholder="Nhập số CMND" value="{{ old('txtIDNumber') }}">
+                                                <label>ID Number:(*)</label>
+                                                <input type="text" class="form-control" name="txtIDNumber" placeholder="Enter ID Number" value="{{ old('txtIDNumber') }}">
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Ngày cấp:(*)</label>
+                                                <label>Issue Date:(*)</label>
                                                 <input type="text" class="form-control daterange-single" name="txtIssue" value="{{ old('txtIssue') }}">
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Hình ảnh:</label>
+                                                <label>Image:</label>
                                                 <input type="file" class="form-input-styled" name="txtPhoto">
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Mặt trước CMND:</label>
+                                                <label>ID Front:</label>
                                                 <input type="file" class="form-input-styled" name="txtIDPhoto">
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Mặt sau CMND:</label>
+                                                <label>ID Back:</label>
                                                 <input type="file" class="form-input-styled" name="txtIDPhoto2">
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Ghi chú:</label>
-                                                <textarea rows="5" cols="5" class="form-control" name="txtNote" value="{{ old('txtNote') }}" placeholder="Nhập Ghi chú"></textarea>
+                                                <label>Notes:</label>
+                                                <textarea rows="5" cols="5" class="form-control" name="txtNote" value="{{ old('txtNote') }}" placeholder="Enter Notes"></textarea>
                                             </div>
                                         </fieldset>
                                     </div>
@@ -262,63 +250,63 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             <div class="tab-pane fade" id="allowance" role="tabpanel" aria-labelledby="allowance-tab">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="button" class="btn btn-success" onclick="addOption()"><i title="Thêm chi tiết" class="icon-stack-plus "></i> Thêm bằng cấp</button>
+                                        <button type="button" class="btn btn-success" onclick="addOption()"><i title="Add Details" class="icon-stack-plus "></i> Add Degree</button>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Thông tin</legend>
+                                        <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Information</legend>
                                         <div id="education">
                                             <div class="row">
-                                                <div class="col-md-2"hidden>
-                                                    <div class="form-group" >
-                                                        <label>Cấp Bậc:</label>
+                                                <div class="col-md-2" hidden>
+                                                    <div class="form-group">
+                                                        <label>Level:</label>
                                                         <input type="text" class="form-control" name="education[0][level]" value="1">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Tên Cấp Bậc:</label>
+                                                        <label>Level Name:</label>
                                                         <select id="txtLevelName" class="form-control" name="education[0][levelName]">
-                                                            <option value="Tiểu học">Tiểu học</option>
-                                                            <option value="Trung học cơ sở">Trung học cơ sở</option>
-                                                            <option value="Trung học phổ thông">THPT</option>
-                                                            <option value="Đại học">Đại học</option>
-                                                            <option value="Thạc sĩ">Thạc sĩ</option>
-                                                            <option value="Tiến sĩ">Tiến sĩ</option>
-                                                            <option value="Phó giáo sư">Phó Giáo sư</option>
-                                                            <option value="Giáo sư">Giáo sư</option>
-                                                            <option value="Khác">Khác</option>
+                                                            <option value="Elementary">Elementary</option>
+                                                            <option value="Secondary">Secondary</option>
+                                                            <option value="High School">High School</option>
+                                                            <option value="University">University</option>
+                                                            <option value="Master">Master</option>
+                                                            <option value="Doctor">Doctor</option>
+                                                            <option value="Associate Professor">Associate Professor</option>
+                                                            <option value="Professor">Professor</option>
+                                                            <option value="Other">Other</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Tên Trường: (*)</label>
+                                                        <label>School Name: (*)</label>
                                                         <input type="text" class="form-control text-uppercase" id="txtSchool" name="education[0][school]" value="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Chuyên ngành: (*)</label>
+                                                        <label>Field of Study: (*)</label>
                                                         <input type="text" class="form-control" name="education[0][fieldOfStudy]" value="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Năm tốt nghiệp:(*)</label>
+                                                        <label>Year of Graduation:(*)</label>
                                                         <input type="text" class="form-control" name="education[0][graduatedYear]" value="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Xếp loại:</label>
+                                                        <label>Grade:</label>
                                                         <input type="text" class="form-control" name="education[0][grade]" value="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Hình thức học:</label>
+                                                        <label>Mode of Study:</label>
                                                         <input type="text" class="form-control" name="education[0][modeOfStudy]" value="">
                                                     </div>
                                                 </div>
@@ -332,12 +320,11 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="btn btn-success" type="submit">Tạo mới <i class="icon-paperplane ml-2"></i></button>
-                        <button type="reset" class="btn btn-primary">Nhập lại <i class="icon-paperplane ml-2"></i></button>
+                        <button class="btn btn-success" type="submit">Create New <i class="icon-paperplane ml-2"></i></button>
+                        <button type="reset" class="btn btn-primary">Reset <i class="icon-paperplane ml-2"></i></button>
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
     <!-- /2 columns form -->
@@ -356,53 +343,53 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Cấp Bậc:</label>
+                                <label>Level:</label>
                                 <input type="text" class="form-control" name="education[${optionIndex}][level]">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Tên Cấp Bậc:</label>
+                                <label>Level Name:</label>
                                 <select id="txtLevelName" class="form-control" name="education[${optionIndex}][levelName]">
-                                    <option value="Tiểu học">Tiểu học</option>
-                                    <option value="Trung học cơ sở">Trung học cơ sở</option>
-                                    <option value="Trung học phổ thông">THPT</option>
-                                    <option value="Đại học">Đại học</option>
-                                    <option value="Thạc sĩ">Thạc sĩ</option>
-                                    <option value="Tiến sĩ">Tiến sĩ</option>
-                                    <option value="Phó giáo sư">Phó Giáo sư</option>
-                                    <option value="Giáo sư">Giáo sư</option>
-                                    <option value="Khác">Khác</option>
+                                    <option value="Elementary">Elementary</option>
+                                    <option value="Secondary">Secondary</option>
+                                    <option value="High School">High School</option>
+                                    <option value="University">University</option>
+                                    <option value="Master">Master</option>
+                                    <option value="Doctor">Doctor</option>
+                                    <option value="Associate Professor">Associate Professor</option>
+                                    <option value="Professor">Professor</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Tên Trường: (*)</label>
+                                <label>School Name: (*)</label>
                                 <input type="text" class="form-control text-uppercase" id="txtSchool" name="education[${optionIndex}][school]">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Chuyên ngành: (*)</label>
+                                <label>Field of Study: (*)</label>
                                 <input type="text" class="form-control" name="education[${optionIndex}][fieldOfStudy]">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Năm tốt nghiệp:(*)</label>
+                                <label>Year of Graduation:(*)</label>
                                 <input type="text" class="form-control" name="education[${optionIndex}][graduatedYear]">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Xếp loại:</label>
+                                <label>Grade:</label>
                                 <input type="text" class="form-control" name="education[${optionIndex}][grade]">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Hình thức học:</label>
+                                <label>Mode of Study:</label>
                                 <input type="text" class="form-control" name="education[${optionIndex}][modeOfStudy]">
                             </div>
                         </div>
@@ -410,19 +397,18 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             `);
         }
 
-        $('#province').on('change', function () {
+        $('#province').on('change', function() {
             var parent = this.value;
 
             $.ajax({
                 url: '{{ action('StaffController@loadRegional') }}',
-                Type: 'GET',
+                type: 'GET',
                 datatype: 'text',
-                data:
-                    {
-                        parent: parent,
-                    },
+                data: {
+                    parent: parent,
+                },
                 cache: false,
-                success: function (data) {
+                success: function(data) {
                     var obj = $.parseJSON(data);
                     $('#district').empty();
                     for (var i = 0; i < obj.length; i++) {
@@ -432,25 +418,23 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             });
         });
 
-        $('.open-detail-time-leave').click(function () {
+        $('.open-detail-time-leave').click(function() {
             var id = $(this).attr('id');
 
             $.ajax({
                 url: '{{ action('TimeleaveController@detailTime') }}',
-                Type: 'POST',
+                type: 'POST',
                 datatype: 'text',
-                data:
-                    {
-                        id: id,
-                    },
+                data: {
+                    id: id,
+                },
                 cache: false,
-                success: function (data) {
+                success: function(data) {
                     console.log(data);
                     $('#html_pending').empty().append(data);
                     $('#bsc-modal').modal();
                 }
             });
         });
-
     </script>
 @endsection

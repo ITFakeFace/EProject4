@@ -55,51 +55,55 @@
                         <span class="text-green"><i class="icon-qrcode"></i> Code: </span> <i class="ml-2"><?php echo $staff['code']; ?></i>
                     </p>
                     <p>
-                        <span class="text-green"><i class="icon-calendar"></i> Ngày sinh: </span> <i class="ml-2"> <?php $date = date_create($staff['dob']);
-                        echo date_format($date, 'd/m/Y'); ?> </i>
-                    </p>
-                    <p>
-                        <span class="text-green"><i class="icon-user"></i> Giới tính: </span> <i class="ml-2"> <?php echo $staff['gender'] == 1 ? 'Nam' : 'Nữ'; ?> </i>
-                    </p>
-                    <p>
-                        <span class="text-green"><i class="icon-phone2"></i> Số điện thoại: </span> <i class="ml-2"> <?php echo $staff['phone_number']; ?> </i>
-                    </p>
-                    <p>
-                        <span class="text-green"><i class="icon-mail5"></i> Địa chỉ email: </span> <i class="ml-2"> <?php echo $staff['email']; ?> </i>
-                    </p>
-                    <p>
-                        <span class="text-green"><i class="icon-redo2"></i> Ngày vào: </span> <i class="ml-2">
+                        <span class="text-green"><i class="icon-calendar"></i> Date of Birth: </span> <i class="ml-2">
                             <?php
-                            // $date=date_create($staff['joined_at']);
-                            // echo date_format($date,"d/m/Y");
-                            echo $staff['joined_at'];
+                            use Carbon\Carbon;
+                            $date = Carbon::parse($staff['dob']);
+                            echo date_format($date, 'd/m/Y');
                             ?>
                         </i>
                     </p>
                     <p>
-                        <span class="text-green"><i class="icon-user-check"></i> Trạng thái: </span> <i class="ml-2"> <?php echo $staff['off_date'] == null ? 'Enable' : 'Disable'; ?> </i>
+                        <span class="text-green"><i class="icon-user"></i> Gender: </span> <i class="ml-2"> <?php echo $staff['gender'] == 1 ? 'Male' : 'Female'; ?> </i>
+                    </p>
+                    <p>
+                        <span class="text-green"><i class="icon-phone2"></i> Phone Number: </span> <i class="ml-2"> <?php echo $staff['phone_number']; ?> </i>
+                    </p>
+                    <p>
+                        <span class="text-green"><i class="icon-mail5"></i> Email Address: </span> <i class="ml-2"> <?php echo $staff['email']; ?> </i>
+                    </p>
+                    <p>
+                        <span class="text-green"><i class="icon-redo2"></i> Join Date: </span> <i class="ml-2">
+                            <?php
+                            $date = Carbon::parse($staff['joined_at']);
+                            echo date_format($date, 'd/m/Y');
+                            ?>
+                        </i>
+                    </p>
+                    <p>
+                        <span class="text-green"><i class="icon-user-check"></i> Status: </span> <i class="ml-2"> <?php echo $staff['off_date'] == null ? 'Enable' : 'Disable'; ?> </i>
                     </p>
                 </div>
                 <div class="image text-center mt-5">
                     <div class="front">
                         <img src="{{ asset($staff['id_photo']) }}" alt="" width="60%" height="auto">
-                        <h6 class="text-green">Ảnh CMND/CCCD mặt trước</h6>
+                        <h6 class="text-green">ID Front Photo</h6>
                     </div>
                     <div class="back mt-4">
                         <img src="{{ asset($staff['id_photo_back']) }}" alt="" width="60%" height="auto">
-                        <h6 class="text-green">Ảnh CMND/CCCD mặt sau</h6>
+                        <h6 class="text-green">ID Back Photo</h6>
                     </div>
                 </div>
             </div>
         </div>
-        {{-- <div class="col-lg-8" style="border: 1px solid gray">
+        <div class="col-lg-8" style="border: 1px solid gray">
             <div class="row">
                 <div id="accordion" style="width: 100%">
                     <div class="card">
                         <div class="card-header p-1" id="headingOne">
                             <h5 class="mb-0">
                                 <button class="btn btn-link text-green" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-size: 17px">
-                                    Thông tin cơ bản
+                                    Basic Information
                                 </button>
                             </h5>
                         </div>
@@ -109,59 +113,63 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Họ và tên: </label>
+                                            <label for="" class="col-4 p-0">Full Name: </label>
                                             <div class="control col-8"><?php echo $staff['firstname'] . ' ' . $staff['lastname']; ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Phòng ban: </label>
+                                            <label for="" class="col-4 p-0">Department: </label>
                                             <div class="control col-8"><?php echo $staff['department_name']; ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Chức danh: </label>
-                                            <div class="control col-8"><?php echo $staff['is_manager'] == 1 ? 'Quản lý' : 'Nhân viên'; ?></div>
+                                            <label for="" class="col-4 p-0">Position: </label>
+                                            <div class="control col-8"><?php echo $staff['is_manager'] == 1 ? 'Manager' : 'Employee'; ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Xã/Huyện: </label>
+                                            <label for="" class="col-4 p-0">District: </label>
                                             <div class="control col-8"><?php echo $staff['district']; ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Tỉnh/Thành phố: </label>
+                                            <label for="" class="col-4 p-0">Province/City: </label>
                                             <div class="control col-8"><?php echo $staff['province']; ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Ngày phép còn: </label>
+                                            <label for="" class="col-4 p-0">Remaining Leave Days: </label>
                                             <div class="control col-8"><?php echo $staff['day_of_leave']; ?></div>
                                         </div>
                                     </div>
 
                                     <div class="col-12 col-md-6">
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Ngày vào: </label>
-                                            <div class="control col-8"><?php $date = date_create($staff['joined_at']);
-                                            echo date_format($date, 'd/m/Y'); ?></div>
+                                            <label for="" class="col-4 p-0">Join Date: </label>
+                                            <div class="control col-8">
+                                                <?php
+                                                $date = date_create($staff['joined_at']);
+                                                echo date_format($date, 'd/m/Y');
+                                                ?>
+                                            </div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Ngày nghỉ việc: </label>
+                                            <label for="" class="col-4 p-0">Off Date: </label>
                                             <div class="control col-8"><?php if ($staff['off_date']) {
                                                 $date_off = date_create($staff['off_date']);
                                                 echo date_format($date_off, 'd/m/Y');
                                             } ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Được tạo bởi: </label>
+                                            <label for="" class="col-4 p-0">Created By: </label>
                                             <div class="control col-8"><?php echo $staff['name_staff_create']; ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Được tạo lúc: </label>
+                                            <label for="" class="col-4 p-0">Created At: </label>
                                             <div class="control col-8"><?php $date = date_create($staff['created_at']);
                                             echo date_format($date, 'd/m/Y'); ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Chỉnh sửa bởi: </label>
+                                            <label for="" class="col-4 p-0">Updated By: </label>
                                             <div class="control col-8"><?php echo $staff['name_staff_update']; ?></div>
                                         </div>
                                         <div class="control-group row">
-                                            <label for="" class="col-4 p-0">Chỉnh sửa lúc: </label>
+                                            <label for="" class="col-4 p-0">Updated At: </label>
                                             <div class="control col-8"><?php $date = date_create($staff['updated_at']);
                                             echo date_format($date, 'd/m/Y'); ?></div>
                                         </div>
@@ -174,7 +182,7 @@
                         <div class="card-header p-1" id="headingTwo">
                             <h5 class="mb-0">
                                 <button class="btn btn-link text-green collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="font-size: 17px">
-                                    Trình độ học vấn
+                                    Education
                                 </button>
                             </h5>
                         </div>
@@ -184,13 +192,13 @@
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>STT</th>
-                                                <th>Cấp bậc</th>
-                                                <th>Trường</th>
-                                                <th>Ngành</th>
-                                                <th>Năm tốt nghiệp</th>
-                                                <th>Xếp loại</th>
-                                                <th>Phương thức</th>
+                                                <th>No.</th>
+                                                <th>Level</th>
+                                                <th>School</th>
+                                                <th>Field of Study</th>
+                                                <th>Year of Graduation</th>
+                                                <th>Grade</th>
+                                                <th>Mode of Study</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -217,7 +225,7 @@
                         <div class="card-header p-1" id="headingThree">
                             <h5 class="mb-0">
                                 <button class="btn btn-link text-green collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="font-size: 17px">
-                                    Hợp đồng
+                                    Contract
                                 </button>
                             </h5>
                         </div>
@@ -227,11 +235,11 @@
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>STT</th>
-                                                <th>Ngày bắt đầu</th>
-                                                <th>Ngày kết thúc</th>
-                                                <th>Lương</th>
-                                                <th>Tạo lúc</th>
+                                                <th>No.</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Salary</th>
+                                                <th>Created At</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -243,7 +251,7 @@
                                                     echo date_format($date, 'd/m/Y'); ?></td>
                                                     <td><?php $date = date_create($contract['endDate']);
                                                     echo date_format($date, 'd/m/Y'); ?></td>
-                                                    <td>{{ number_format($contract['baseSalary']) }} vnđ</td>
+                                                    <td>{{ number_format($contract['baseSalary']) }} VND</td>
                                                     <td><?php $date = date_create($contract['createAt']);
                                                     echo date_format($date, 'd/m/Y'); ?></td>
                                                 </tr>
@@ -260,7 +268,7 @@
                         <div class="card-header p-1" id="headingFour">
                             <h5 class="mb-0">
                                 <button class="btn btn-link text-green collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree" style="font-size: 17px">
-                                    Thay đổi mật khẩu
+                                    Change Password
                                 </button>
                             </h5>
                         </div>
@@ -286,25 +294,25 @@
                                                 </div>
                                             @endif
                                             <div class="form-group row">
-                                                <label class="col-lg-5 col-form-label">Mật khẩu cũ:</label>
+                                                <label class="col-lg-5 col-form-label">Old Password:</label>
                                                 <div class="col-lg-7">
                                                     <input type="password" class="form-control" name="pass_old" required>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-lg-5 col-form-label">Mật khẩu mới:</label>
+                                                <label class="col-lg-5 col-form-label">New Password:</label>
                                                 <div class="col-lg-7">
                                                     <input type="password" class="form-control" name="pass_new" required>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-lg-5 col-form-label">Xác nhận mật khẩu mới:</label>
+                                                <label class="col-lg-5 col-form-label">Confirm New Password:</label>
                                                 <div class="col-lg-7">
                                                     <input type="password" class="form-control" name="comfirm_pass" required>
                                                 </div>
                                             </div>
                                             <div class="">
-                                                <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Thay đổi</button>
+                                                <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Change</button>
                                             </div>
                                         </div>
                                     </div>
@@ -315,7 +323,7 @@
                 </div>
 
             </div>
-        </div> --}}
+        </div>
     </div>
 
     <script>
