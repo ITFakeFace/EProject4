@@ -24,7 +24,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Chi Tiết Bổ Sung Công Lễ {{ date('d/m/Y', strtotime($data[0]['day_special_from'])) }} - {{ date('d/m/Y', strtotime($data[0]['day_special_to'])) }} ( {{ $data[0]['note'] }} )</h1>
+        <h1 class="pt-3 pl-3 pr-3">>Detail of Special Time Supplement {{ date('d/m/Y', strtotime($data[0]['day_special_from'])) }} - {{ date('d/m/Y', strtotime($data[0]['day_special_to'])) }} ( {{ $data[0]['note'] }} )</h1>
         <div class="card-body">
             @if (\Session::has('success'))
                 <div class="">
@@ -46,12 +46,12 @@
         <table class="table datatable-basic">
             <thead>
             <tr>
-                <th>Tên nhân viên</th>
-                <th>Phòng ban</th>
-                <th>Chức vụ</th>
-                <th>Ngày bổ sung</th>
-                <th>Công</th>
-                <th>Ngày tạo</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Position</th>
+                <th>Supplement Date</th>
+                <th>Time</th>
+                <th>Creation Date</th>
             </tr>
             </thead>
             <tbody>
@@ -59,7 +59,7 @@
                 <tr>
                     <td>{{ $time_special['full_name'] }}</td>
                     <td>{{ $time_special['department_name'] }}</td>
-                    <td>{{ $time_special['is_manager'] == 1 ? "Quản lý" : "Nhân viên" }}</td>
+                    <td>{{ $time_special['is_manager'] == 1 ? "Manager" : "Employee" }}</td>
                     <td>{{ $time_special['day_time_special'] }}</td>
                     <td>{{ $time_special['number_time'] }}</td>
                     <td>{{ $time_special['date_create'] }}</td>

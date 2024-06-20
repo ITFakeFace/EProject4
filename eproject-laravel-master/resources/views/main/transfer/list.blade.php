@@ -28,7 +28,7 @@
 
 @section('content')
     <!-- Basic datatable -->
-    <div class="card">
+    <div class="card"> 
         <h1 class="pt-3 pl-3 pr-3">Danh Sách Nhân Viên Điều Chuyển Phòng Ban</h1>
         <div class="card-header header-elements-inline">
 
