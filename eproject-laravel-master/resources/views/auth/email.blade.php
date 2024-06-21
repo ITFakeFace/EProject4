@@ -1,4 +1,4 @@
-Gửi nhân viên,
+Dear Mr./Ms,
 
-Nếu bạn quên mật khẩu của mình thì hãy truy cập vào đường dẫn
-sau để khôi phục lại mật khẩu: {{ url('auth/reset?token='.$token) }}
+If you forgot your password, please access the following link
+to reset your password: {{ url('auth/reset?token='.$token) }}

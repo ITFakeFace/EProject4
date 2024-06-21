@@ -24,7 +24,7 @@
                     @endif
                     <div class="text-center mb-3">
                         <i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
-                        <h5 class="mb-0">Đăng nhập tài khoản</h5>
+                        <h5 class="mb-0">Login</h5>
                     </div>
 
                     <div class="form-group form-group-feedback form-group-feedback-left">
@@ -42,11 +42,11 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">Đăng nhập <i class="icon-circle-right2 ml-2"></i></button>
+                        <button type="submit" class="btn btn-primary btn-block">Login <i class="icon-circle-right2 ml-2"></i></button>
                     </div>
 
                     <div class="text-center">
-                        <a href="{{ action('AuthenticateController@getForgot') }}">Quên mật khẩu?</a>
+                        <a href="{{ action('AuthenticateController@getForgot') }}">Forgot Password?</a>
                     </div>
                 </div>
             </div>
