@@ -13,11 +13,11 @@
         }
 
         .wrap-select {
-            width: 302px;
+            width: 5000px;
             overflow: hidden;
         }
         .wrap-select select {
-            width: 320px;
+            width: 5000px;
             margin: 0;
             background-color: #212121;
         }
@@ -39,9 +39,7 @@
     <!-- Basic datatable -->
     <div class="card">
         <h1 class="pt-3 pl-3 pr-3">Update Department</h1>
-        <div class="card-header header-elements-inline">
- 
-        </div>
+        
         <div class="card-body">
             @if (\Session::has('success'))
                 <div class="">
@@ -75,7 +73,7 @@
             <form action="{{ route('postEditDepartment') }}" method="post">
                 @csrf
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-9">
                         <div class="form-group">
                             <label>Department ID:</label>
                             <input type="text" class="form-control" name="txtID" value="{{$data['id']}}" readonly/>
@@ -88,7 +86,7 @@
                             <label>Department Name in Vietnamese:</label>
                             <input type="text" class="form-control" name="txtName1" value="{{$data['nameVn']}}" >
                         </div>
-                        <div class="form-group">
+                        <div hidden class="form-group">
                             <label>Status:</label>
                             <select class="form-control" name="txtDel" color="red" >
                                 <option value="0">None</option>
