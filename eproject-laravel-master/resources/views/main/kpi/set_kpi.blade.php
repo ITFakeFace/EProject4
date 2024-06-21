@@ -1,8 +1,8 @@
 @extends('main._layouts.master')
 
 <?php
-    header("Access-Control-Allow-Origin: *");
-    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 ?>
 
 @section('css')
@@ -15,13 +15,12 @@
         }
 
         /* .div_set_kpi {
-            display: none;
-        } */
-
+                        display: none;
+                    } */
     </style>
 @endsection
 
-@section('js')    
+@section('js')
     <script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/notifications/jgrowl.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.js') }}"></script>
@@ -35,7 +34,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <h1 class="pt-3 pl-3 pr-3">Thiết Lập KPI</h1>
+                <h1 class="pt-3 pl-3 pr-3">Setup KPI</h1>
                 @if (\Session::has('success'))
                     <div class="">
                         <div class="alert alert-success">
@@ -43,7 +42,7 @@
                         </div>
                     </div>
                 @endif
-            
+
                 @if (\Session::has('error'))
                     <div class="">
                         <div class="alert alert-danger">
@@ -54,64 +53,64 @@
             </div>
         </div>
     </div>
-  
+
     <div class="row">
-        <div class="col-lg-6 col-12">         
+        <div class="col-lg-6 col-12">
             <!-- Left buttons -->
             <div class="card">
                 <div class="card-header header-elements-inline">
-                    <h6 class="card-title">KPI Cá Nhân</h6>
+                    <h6 class="card-title">Personal KPI</h6>
                 </div>
 
                 <div class="card-body">
                     <form action="#">
                         <div class="form-group row">
-                            <label class="col-form-label col-lg-4">Chọn thời gian thiết lập:</label>
+                            <label class="col-form-label col-lg-4">Select setup time:</label>
                             <div class="col-lg-6">
                                 <select class="form-control" name="select_kpi" id="select_kpi">
                                     <option value="">-- Select --</option>
-                                    <option value="Năm <?php echo date('Y') ?>">Năm <?php echo date('Y') ?></option>
-                                    <option value="Quý I - <?php echo date('Y') ?>">Quý I - <?php echo date('Y') ?></option>
-                                    <option value="Quý II - <?php echo date('Y') ?>">Quý II - <?php echo date('Y') ?></option>
-                                    <option value="Quý III - <?php echo date('Y') ?>">Quý III - <?php echo date('Y') ?></option>
-                                    <option value="Quý IV - <?php echo date('Y') ?>">Quý IV - <?php echo date('Y') ?></option>
+                                    <option value="Year <?php echo date('Y'); ?>">Year <?php echo date('Y'); ?></option>
+                                    <option value="Quarter I - <?php echo date('Y'); ?>">Quarter I - <?php echo date('Y'); ?></option>
+                                    <option value="Quarter II - <?php echo date('Y'); ?>">Quarter II - <?php echo date('Y'); ?></option>
+                                    <option value="Quarter III - <?php echo date('Y'); ?>">Quarter III - <?php echo date('Y'); ?></option>
+                                    <option value="Quarter IV - <?php echo date('Y'); ?>">Quarter IV - <?php echo date('Y'); ?></option>
                                 </select>
                             </div>
                         </div>
                         <div id="html_pending_staff">
 
-                        </div>               
+                        </div>
                     </form>
                 </div>
             </div>
             <!-- /left buttons -->
         </div>
 
-        <div class="col-lg-6 col-12">         
+        <div class="col-lg-6 col-12">
             <!-- Left buttons -->
             <div class="card">
                 <div class="card-header header-elements-inline">
-                    <h6 class="card-title">KPI Phòng Ban</h6>
+                    <h6 class="card-title">Department KPI</h6>
                 </div>
 
                 <div class="card-body">
                     <form action="#">
                         <div class="form-group row">
-                            <label class="col-form-label col-lg-4">Chọn thời gian để xem:</label>
+                            <label class="col-form-label col-lg-4">Select view time:</label>
                             <div class="col-lg-6">
-                                <select  class="form-control" name="select_kpi_department" id="select_kpi_department">
+                                <select class="form-control" name="select_kpi_department" id="select_kpi_department">
                                     <option value="">-- Select --</option>
-                                    <option value="Năm <?php echo date('Y') ?>">Năm <?php echo date('Y') ?></option>
-                                    <option value="Quý I - <?php echo date('Y') ?>">Quý I - <?php echo date('Y') ?></option>
-                                    <option value="Quý II - <?php echo date('Y') ?>">Quý II - <?php echo date('Y') ?></option>
-                                    <option value="Quý III - <?php echo date('Y') ?>">Quý III - <?php echo date('Y') ?></option>
-                                    <option value="Quý IV - <?php echo date('Y') ?>">Quý IV - <?php echo date('Y') ?></option>
+                                    <option value="Year <?php echo date('Y'); ?>">Year <?php echo date('Y'); ?></option>
+                                    <option value="Quarter I - <?php echo date('Y'); ?>">Quarter I - <?php echo date('Y'); ?></option>
+                                    <option value="Quarter II - <?php echo date('Y'); ?>">Quarter II - <?php echo date('Y'); ?></option>
+                                    <option value="Quarter III - <?php echo date('Y'); ?>">Quarter III - <?php echo date('Y'); ?></option>
+                                    <option value="Quarter IV - <?php echo date('Y'); ?>">Quarter IV - <?php echo date('Y'); ?></option>
                                 </select>
                             </div>
                         </div>
                         <div id="html_pending_department">
 
-                        </div>  
+                        </div>
                     </form>
                 </div>
             </div>
@@ -129,9 +128,9 @@
             }
         });
 
-        $( document ).ready(function() {
-                    
-            $( "#select_kpi" ).change(function() {
+        $(document).ready(function() {
+
+            $("#select_kpi").change(function() {
                 var select_kpi = $(this).val();
                 var staff_id = {{ auth()->user()->id }}
 
@@ -139,21 +138,19 @@
                     url: '{{ action('KpiController@findKpiStaff') }}',
                     Type: 'GET',
                     datatype: 'text',
-                    data:
-                    {
+                    data: {
                         staff_id: staff_id,
                         kpi_name: select_kpi
                     },
                     cache: false,
-                    success: function (data)
-                    {
+                    success: function(data) {
                         $('#html_pending_staff').empty().append(data);
                     }
                 });
 
-            }); 
+            });
 
-            $( "#select_kpi_department" ).change(function() {
+            $("#select_kpi_department").change(function() {
                 var select_kpi_department = $(this).val();
                 var department_id = {{ auth()->user()->department }}
                 var staff_manager = {{ auth()->user()->is_manager }}
@@ -162,21 +159,18 @@
                     url: '{{ action('KpiController@findKpiDepartment') }}',
                     Type: 'GET',
                     datatype: 'text',
-                    data:
-                    {
+                    data: {
                         department_id: department_id,
                         kpi_name: select_kpi_department,
                         staff_manager: staff_manager
                     },
                     cache: false,
-                    success: function (data)
-                    {
+                    success: function(data) {
                         $('#html_pending_department').empty().append(data);
                     }
                 });
 
-            }); 
+            });
         });
-
     </script>
 @endsection
