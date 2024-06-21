@@ -95,6 +95,7 @@ class _MenuPageState extends State<MenuPage> {
                               title: Text(
                                 "Hello ${currentAuth.lastname!}",
                                 style: const TextStyle(
+                                  fontFamily: 'Roboto',
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                 ),

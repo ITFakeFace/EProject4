@@ -153,11 +153,11 @@ class _LoginPageState extends State<LoginPage> {
                               backgroundColor: Colors.orange,
                             ),
                             onPressed: () {
-                              _login("dthung6604@gmail.com", "123");
-                              // if (_formKey.currentState!.validate()) {
-                              //   _login(_emailController.text,
-                              //       _passwordController.text);
-                              // }
+                              // _login("dthung6604@gmail.com", "123");
+                              if (_formKey.currentState!.validate()) {
+                                _login(_emailController.text,
+                                    _passwordController.text);
+                              }
                             },
                             child: const Text(
                               'Log in',
