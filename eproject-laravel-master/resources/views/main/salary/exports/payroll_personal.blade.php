@@ -1,17 +1,17 @@
 <table style="border:1px; border-style: solid;">
     <tr>
         <td colspan="5" style="text-align: center;">
-            <b>PHIẾU LƯƠNG THÁNG {{ \Carbon\Carbon::createFromFormat('Y-m-d', $dataSalaryDetail->salaryDetail->fromDate)->format('m/Y') }}</b>
+            <b>Monthly Pay Slip {{ \Carbon\Carbon::createFromFormat('Y-m-d', $dataSalaryDetail->salaryDetail->fromDate)->format('m/Y') }}</b>
         </td>
     </tr>
     <tr>
-        <td>Họ và tên</td>
+        <td>Fullname</td>
         <td colspan="2">{{ $dataSalaryDetail->staff->firstname . ' ' . $dataSalaryDetail->staff->lastname}}</td>
-        <td>Công chuẩn</td>
+        <td>Regular Attendance</td>
         <td>{{ $dataSalaryDetail->salaryDetail->standardDays }}</td>
     </tr>
     <tr>
-        <td>Phòng ban</td>
+        <td>Department</td>
         <td colspan="2">
             @foreach($data_department as $department)
                 @if($department['id'] === $dataSalaryDetail->staff->department)
@@ -20,19 +20,19 @@
                 @endif
             @endforeach
         </td>
-        <td>Chức danh</td>
+        <td>Position</td>
         <td>
-            {{ $dataSalaryDetail->staff->isManager ? 'Trưởng nhóm' : 'Nhân viên' }}
+            {{ $dataSalaryDetail->staff->isManager ? 'Manager' : 'Staff' }}
         </td>
     </tr>
     <tr>
         <td>
-            <b>Lương tháng</b>
+            <b>Monthly Salary</b>
         </td>
         <td></td>
         <td></td>
         <td>
-            <b>Thành tiền (1)</b>
+            <b>Total(1)</b>
         </td>
         <td>{{ number_format($dataSalaryDetail->salary) }}</td>
     </tr>
@@ -70,52 +70,52 @@
     @foreach(json_decode($dataSalaryDetail->allowanceDetails) as $allowance)
     @endforeach
     <tr>
-        <td>+ Ngày công</td>
+        <td>+ Daily Attendance</td>
         <td>{{ $dataSalaryDetail->totalDayWork }}</td>
-        <td>ngày</td>
-        <td rowspan="2">Thành tiền</td>
+        <td>Date</td>
+        <td rowspan="2">Total</td>
         <td rowspan="2">
             {{ number_format($total_paid_leave + $total_paid_normal) }}
         </td>
     </tr>
     <tr>
-        <td>+ Nghỉ có lương</td>
+        <td>+ Paid Leaves</td>
         <td>{{ $dataSalaryDetail->totalSpecialDay }}</td>
-        <td>ngày</td>
+        <td>Date</td>
     </tr>
     <tr>
-        <td>Làm thêm</td>
+        <td>Overtime</td>
         <td></td>
         <td></td>
-        <td><b>Thành tiền (2)</b></td>
+        <td><b>Total (2)</b></td>
         <td>{{ number_format($_150 + $_200 + $_300) }}</td>
     </tr>
     <tr>
-        <td>+ Thêm giờ (150%)</td>
+        <td>+ Overtime (150%)</td>
         <td>-</td>
-        <td>giờ</td>
-        <td>Thành tiền</td>
+        <td>Hours</td>
+        <td>Total</td>
         <td>{{ number_format($_150) }}</td>
     </tr>
     <tr>
-        <td>+ Thêm giờ (200%)</td>
+        <td>+ Overtime (200%)</td>
         <td>-</td>
-        <td>giờ</td>
-        <td>Thành tiền</td>
+        <td>Hours</td>
+        <td>Total</td>
         <td>{{ number_format($_200) }}</td>
     </tr>
     <tr>
-        <td>+ Thêm giờ (300%)</td>
+        <td>+ Overtime (300%)</td>
         <td>-</td>
-        <td>giờ</td>
-        <td>Thành tiền</td>
+        <td>Hours</td>
+        <td>Total</td>
         <td>{{ number_format($_300) }}</td>
     </tr>
     <tr>
-        <td>Các khoản phụ cấp</td>
+        <td>Allowances/td>
         <td></td>
         <td></td>
-        <td><b>Thành tiền (3)</b></td>
+        <td><b>Total (3)</b></td>
         <td>{{ number_format($dataSalaryDetail->totalAllowance) }}</td>
     </tr>
     @foreach(json_decode($dataSalaryDetail->allowanceDetails) as $allowance)
@@ -128,10 +128,10 @@
         </tr>
     @endforeach
     <tr>
-        <td>Các khoản khấu trừ</td>
+        <td>Deductions</td>
         <td></td>
         <td></td>
-        <td><b>Thành tiền (4)</b></td>
+        <td><b>Total (4)</b></td>
         <td>{{ number_format($dataSalaryDetail->totalInsurance) }}</td>
     </tr>
     @foreach(json_decode($dataSalaryDetail->insuranceDetails) as $insurance)
@@ -144,16 +144,16 @@
     </tr>
     @endforeach
     <tr>
-        <td>Thuế TNCN</td>
+        <td>Personal Income Tax(PIT)</td>
         <td>{{ number_format($dataSalaryDetail->personalTax) }}</td>
         <td></td>
         <td></td>
         <td></td>
     </tr>
     <tr>
-        <td>Thực lãnh = ((1+2+3)-4)</td>
+        <td>Net Salary = ((1+2+3)-4)</td>
         <td colspan="2">{{ number_format($dataSalaryDetail->salaryActuallyReceived) }}</td>
-        <td>Ký nhận</td>
+        <td>Signature</td>
         <td></td>
     </tr>
 </table>

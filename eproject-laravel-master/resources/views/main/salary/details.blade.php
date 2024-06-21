@@ -20,7 +20,7 @@
 
 @section('content')
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Chi tiết bảng tính lương</h1>
+        <h1 class="pt-3 pl-3 pr-3">Payroll Details</h1>
         <div class="card-header header-elements-inline">
             
         </div>
@@ -30,29 +30,29 @@
                     <table class="table datatable-basic">
                         <thead>
                         <tr>
-                            <th>Mã nhân viên</th>
-                            <th>Tên nhân viên</th>
-                            <th>Công thường</th>
-                            <th>Nghỉ có công</th>
-                            <th>Lương CB (1)</th>
-                            <th>Lương trong tháng (2)</th>
-                            <th>Lương tăng ca (3)</th>
-                            <th>Các khoản phụ cấp (4)</th>
-                            <th>Các khoản khấu trừ (5)</th>
+                            <th>Employee Id</th>
+                            <th>Name</th>
+                            <th>Regular Daily Rate</th>
+                            <th>Paid Leave</th>
+                            <th>Based Salary (1)</th>
+                            <th>Monthly Salary (2)</th>
+                            <th>Overtime Salary (3)</th>
+                            <th>Allowance (4)</th>
+                            <th>Deductions (5)</th>
                             <th>
-                                <p>Thu nhập chịu thuế (6)</p>
-                                <p>= 2 + 3 + 4 (PC tính thuế) - 4 (PC không tính thuế)</p>
+                                <p>Gross Salary (6)</p>
+                                <p>= 2 + 3 + 4 (Taxable Allowances) - 4 (Non-Taxable Allowances)</p>
                             </th>
                             <th>
-                                <p>Thu nhập tính thuế (7)</p>
-                                <p>= 6 - 5 - (Các khoản giảm trừ gia cảnh)</p>
+                                <p>Taxable Income (7)</p>
+                                <p>= 6 - 5 - (Families dependents)</p>
                             </th>
-                            <th>Thuế TNCC (8)</th>
+                            <th>Personal Income Tax (PIT) (8)</th>
                             <th>
-                                <p>Lương thực nhận (9)</p>
+                                <p>Net Salary (9)</p>
                                 <p>= 2 + 3 + 4 - 5 - 8</p>
                             </th>
-                            <th>Thao tác</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -78,10 +78,10 @@
                                         </a>
 
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modalDetail" onclick="loadDetailStaff({{ $item->staff->id }})" class="dropdown-item">Chi tiết lương</a>
-                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modalDetailAllowance" onclick="loadDetailAllowanceStaff({{ $item->staff->id }})" class="dropdown-item">Chi tiết phụ cấp</a>
-                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modalDetailInsurance" onclick="loadDetailInsuranceStaff({{ $item->staff->id }})" class="dropdown-item">Chi tiết khấu trừ</a>
-                                            <a href="{{ route('exportStaffPayroll', ['id' => $item->id]) }}" class="dropdown-item">Xuất phiếu lương</a>
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modalDetail" onclick="loadDetailStaff({{ $item->staff->id }})" class="dropdown-item">Salary Details</a>
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modalDetailAllowance" onclick="loadDetailAllowanceStaff({{ $item->staff->id }})" class="dropdown-item">Allowance Details</a>
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modalDetailInsurance" onclick="loadDetailInsuranceStaff({{ $item->staff->id }})" class="dropdown-item">Salary Deductions Details</a>
+                                            <a href="{{ route('exportStaffPayroll', ['id' => $item->id]) }}" class="dropdown-item">Export Payroll</a>
                                         </div>
                                     </div>
                                 </td>
@@ -95,7 +95,7 @@
                         <div class="modal-dialog modal-full">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Chi tiết bảng lương</h5>
+                                    <h5 class="modal-title">Payroll Details</h5>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
 
@@ -104,24 +104,24 @@
                                         <thead>
                                         <tr>
 {{--                                            <th>Tên nhân viên</th>--}}
-                                            <th>Ngày chấm công</th>
-                                            <th>Ghi chú</th>
-                                            <th>Công chuẩn của tháng (1)</th>
-                                            <th>Lương hợp đồng (2)</th>
-                                            <th>Lương 1 ngày (4)</th>
-                                            <th>Công đã làm (5)</th>
-                                            <th>Thành tiền lương ngày công (6)</th>
-                                            <th>Lương 1 giờ (7)</th>
+                                            <th>Attendance date</th>
+                                            <th>Note</th>
+                                            <th>Monthly Regular Attendance (1)</th>
+                                            <th>Based Salary (2)</th>
+                                            <th>Daily rate (4)</th>
+                                            <th>Tracked Attendances (5)</th>
+                                            <th>Daily Income (6)</th>
+                                            <th>Hourly Income (7)</th>
 {{--                                            <th>Hệ số</th>--}}
-                                            <th>Tổng giờ tăng ca (8)</th>
-                                            <th>Tăng ca 150% (9)</th>
-                                            <th>Tăng ca 200% (10)</th>
-                                            <th>Tăng ca 300% (11)</th>
+                                            <th>Overall overtime hours (8)</th>
+                                            <th>Overtime 150% (9)</th>
+                                            <th>Overtime 200% (10)</th>
+                                            <th>Overtime 300% (11)</th>
                                             <th>
-                                                <p>Thành tiền lương tăng ca (12)</p>
+                                                <p>Overtime Income(12)</p>
                                                 <p>= </p>
                                             </th>
-                                            <th>Tổng lương (13)</th>
+                                            <th>Gross Salary (13)</th>
                                         </tr>
                                         </thead>
                                         <tbody id="dataDetail"></tbody>
@@ -134,7 +134,7 @@
                         <div class="modal-dialog modal-full">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Chi tiết phụ cấp : <strong class="staff_name"></strong></h5>
+                                    <h5 class="modal-title">Allowance Details: <strong class="staff_name"></strong></h5>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
 
@@ -142,9 +142,9 @@
                                     <table class="table datatable-detail-allowance">
                                         <thead>
                                         <tr>
-                                            <th>Tên phụ cấp</th>
-                                            <th>Loại</th>
-                                            <th>Giá trị</th>
+                                            <th>Allowance Name</th>
+                                            <th>Type</th>
+                                            <th>Value</th>
                                         </tr>
                                         </thead>
                                         <tbody id="dataDetailAllowance"></tbody>
@@ -157,7 +157,7 @@
                         <div class="modal-dialog modal-full">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Chi tiết phụ cấp : <strong class="staff_name"></strong></h5>
+                                    <h5 class="modal-title">Allowance Details: <strong class="staff_name"></strong></h5>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
 
@@ -165,10 +165,10 @@
                                     <table class="table datatable-detail-insurance">
                                         <thead>
                                         <tr>
-                                            <th>Tên khấu trừ</th>
-                                            <th>Loại</th>
-                                            <th>Giá trị</th>
-                                            <th>Thành tiền</th>
+                                            <th>Deduction Name</th>
+                                            <th>Type</th>
+                                            <th>Value</th>
+                                            <th>Total</th>
                                         </tr>
                                         </thead>
                                         <tbody id="dataDetailInsurance"></tbody>

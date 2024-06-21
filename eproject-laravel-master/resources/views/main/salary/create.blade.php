@@ -19,7 +19,7 @@
 @section('content')
 
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Tạo Tính Lương</h1>
+        <h1 class="pt-3 pl-3 pr-3">Create Payroll</h1>
         <div class="card-header header-elements-inline">
             
         </div>
@@ -35,7 +35,7 @@
                 @if($errors->any())
                     <div class="alert alert-danger border-0 alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                        <p><b>Dữ liệu đầu vào không chính xác:</b></p>
+                        <p><b>Invalid input data:</b></p>
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Ngày bắt đầu:</label>
+                            <label>Start Date:</label>
                             <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Ngày kết thúc:</label>
+                            <label>End Date:</label>
                             <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -72,16 +72,16 @@
                     <div class="col-md-12">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#staff" role="tab" aria-controls="staff" aria-selected="true">Nhân viên</a>
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#staff" role="tab" aria-controls="staff" aria-selected="true">Staff</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="allowance-tab" data-toggle="tab" href="#allowance" role="tab" aria-controls="allowance" aria-selected="false">Phụ cấp</a>
+                                <a class="nav-link" id="allowance-tab" data-toggle="tab" href="#allowance" role="tab" aria-controls="allowance" aria-selected="false">Allowance</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="insurance-tab" data-toggle="tab" href="#insurance" role="tab" aria-controls="insurance" aria-selected="false">Bảo hiểm</a>
+                                <a class="nav-link" id="insurance-tab" data-toggle="tab" href="#insurance" role="tab" aria-controls="insurance" aria-selected="false">Insurance</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="tax-tab" data-toggle="tab" href="#tax" role="tab" aria-controls="tax" aria-selected="false">Thuế</a>
+                                <a class="nav-link" id="tax-tab" data-toggle="tab" href="#tax" role="tab" aria-controls="tax" aria-selected="false">Tax</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -89,10 +89,10 @@
                                 <table class="table datatable-basic">
                                     <thead>
                                     <tr>
-                                        <th>Mã nhân viên</th>
-                                        <th>Tên nhân viên</th>
-                                        <th>Ngày vào</th>
-                                        <th>Chọn</th>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Join Date</th>
+                                        <th>Select</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -113,10 +113,10 @@
                                 <table class="table datatable-basic">
                                     <thead>
                                     <tr>
-                                        <th>Tên</th>
-                                        <th>Bị tính thuế</th>
-                                        <th>Đơn vị tính</th>
-                                        <th>Giá trị</th>
+                                        <th>Name</th>
+                                        <th>Taxable</th>
+                                        <th>Unit</th>
+                                        <th>Value</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -129,9 +129,9 @@
                                                 </td>
                                                 <td>
                                                     @if($item->unit == 'NUMBER')
-                                                        Đồng
+                                                        VNĐ
                                                     @elseif($item->unit == 'PERCENT')
-                                                        Phần trăm
+                                                        Percent
                                                     @endif
                                                 </td>
                                                 <td>
@@ -153,9 +153,9 @@
                                 <table class="table datatable-basic">
                                     <thead>
                                     <tr>
-                                        <th>Tên</th>
-                                        <th>Đơn vị tính</th>
-                                        <th>Giá trị</th>
+                                        <th>Name</th>
+                                        <th>Unit</th>
+                                        <th>Value</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -165,9 +165,9 @@
                                                 <td>{{ $item->name }}</td>
                                                 <td>
                                                     @if($item->unit == 'NUMBER')
-                                                        Đồng
+                                                        VNĐ
                                                     @elseif($item->unit == 'PERCENT')
-                                                        Phần trăm
+                                                        Percent
                                                     @endif
                                                 </td>
                                                 <td>
@@ -189,9 +189,9 @@
                                 <table class="table datatable-basic">
                                     <thead>
                                     <tr>
-                                        <th>Tên</th>
-                                        <th>Đơn vị tính</th>
-                                        <th>Giá trị</th>
+                                        <th>Name</th>
+                                        <th>Unit</th>
+                                        <th>Value</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -201,9 +201,9 @@
                                                 <td>{{ $item->name }}</td>
                                                 <td>
                                                     @if($item->unit == 'NUMBER')
-                                                        Đồng
+                                                        VNĐ
                                                     @elseif($item->unit == 'PERCENT')
-                                                        Phần trăm
+                                                        Percent
                                                     @endif
                                                 </td>
                                                 <td>
@@ -227,7 +227,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="btn btn-success" type="submit">Tính toán</button>
+                        <button class="btn btn-success" type="submit">Submit</button>
                     </div>
                 </div>
             </form>

@@ -12,7 +12,7 @@
 @section('content')
 
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Danh sách kì lương</h1>
+        <h1 class="pt-3 pl-3 pr-3">Payroll List</h1>
         <div class="card-header header-elements-inline">
             
         </div>
@@ -27,11 +27,11 @@
         <table class="table datatable-basic">
             <thead>
             <tr>
-                <td>Mã</td>
-                <th>Ngày bắt đầu</th>
-                <th>Ngày kết thúc</th>
-                <th>Trạng thái</th>
-                <th class="text-center">Thao tác</th>
+                <td>Id</td>
+                <th>Start</th>
+                <th>End</th>
+                <th>Status</th>
+                <th class="text-center">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -49,12 +49,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="{{ route('getDetailSalary', ['id' => $item->id]) }}" class="dropdown-item">Chi tiết</a>
+                                    <a href="{{ route('getDetailSalary', ['id' => $item->id]) }}" class="dropdown-item">Details</a>
                                     @if($item->status == 'pending')
-                                        <a href="javascript:void(0)" onclick="deleteSalary({{ $item->id }})" class="dropdown-item">Xóa bảng tính</a>
-                                        <a href="javascript:void(0)" onclick="setSuccessSalary({{ $item->id }})" class="dropdown-item">Hoàn tất bảng lương</a>
+                                        <a href="javascript:void(0)" onclick="deleteSalary({{ $item->id }})" class="dropdown-item">Delete Payroll</a>
+                                        <a href="javascript:void(0)" onclick="setSuccessSalary({{ $item->id }})" class="dropdown-item">Complete Payroll</a>
                                     @endif
-                                    <a href="{{ route('exportPayroll',['id' => $item->id]) }}" class="dropdown-item">Xuất bảng lương</a>
+                                    <a href="{{ route('exportPayroll',['id' => $item->id]) }}" class="dropdown-item">Export Payroll</a>
                                 </div>
                             </div>
                         </div>

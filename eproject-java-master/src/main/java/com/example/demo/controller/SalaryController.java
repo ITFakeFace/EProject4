@@ -36,7 +36,7 @@ public class SalaryController {
 
     @Autowired
     private SalaryService salaryService;
-
+a
     @Autowired
     private SalaryDetailService salaryDetailService;
 
