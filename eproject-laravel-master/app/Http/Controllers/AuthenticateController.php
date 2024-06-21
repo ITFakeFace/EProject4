@@ -53,7 +53,7 @@ class AuthenticateController extends Controller
       //return response(auth()->user()); // thông tin user
       return redirect('/');
     }
-    return redirect()->back()->with('authentication', 'Không tìm thấy thông tin tài khoản');
+    return redirect()->back()->with('authentication', 'Username or Password not match');
   }
 
   public function getLogout(Request $request)
@@ -76,7 +76,7 @@ class AuthenticateController extends Controller
     $email = $request->input('email');
 
     if (!DB::table('staff')->where('email', $email)->value('id')) {
-      return redirect()->back()->with('error', 'Email không phải là email của nhân viên');
+      return redirect()->back()->with('error', 'Email is not an email of Staff');
     }
 
     $token = Str::random(60);
@@ -90,7 +90,7 @@ class AuthenticateController extends Controller
       $message->to($request->email);
       $message->subject('Reset Password Notification');
     });
-    return back()->with('success', 'Chúng tôi đã gửi hướng dẫn tới địa chỉ email của bạn!');
+    return back()->with('success', 'Message has been sent to your email !');
   }
 
   public function getReset(Request $request)
@@ -107,17 +107,17 @@ class AuthenticateController extends Controller
     $password_confirm = md5($request->input('password_confirm'));
 
     if ($request->input('password') != $request->input('password_confirm')) {
-      return redirect()->back()->with('error', 'Mật khẩu mới và xác nhận mật khẩu không giống nhau');
+      return redirect()->back()->with('error', 'Password and Confirm password don\'t match');
     }
 
     if (strlen($request->input('pass_new')) > 20) {
-      return redirect()->back()->with('error', 'Mật khẩu mới không được dài quá 20 kí tự');
+      return redirect()->back()->with('error', 'New passwrod cannot be longer than 20 characters');
     }
 
     $email = DB::table('reset_password')->where('token', $token)->value('email');
 
     if (!$email) {
-      return back()->with('error', 'Lỗi sai token');
+      return back()->with('error', 'Wrong token Error');
     }
 
     $id_staff = DB::table('staff')->where('email', $email)->value('id');
@@ -131,9 +131,9 @@ class AuthenticateController extends Controller
     $body = json_decode($response->body(), true);
 
     if ($body['data'] == "Change password Success") {
-      return redirect()->back()->with('success', 'Đổi mật khẩu thành công');
+      return redirect()->back()->with('success', 'Successfully change password');
     } else {
-      return redirect()->back()->with('success', 'Đổi mật khẩu thất bại');
+      return redirect()->back()->with('success', 'Failed to change password');
     }
   }
 }

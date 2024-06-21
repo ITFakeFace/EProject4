@@ -1,8 +1,8 @@
 @extends('main._layouts.master')
 
 <?php
-    header("Access-Control-Allow-Origin: *");
-    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 ?>
 
 @section('css')
@@ -13,9 +13,10 @@
         }
 
         .wrap-select {
-	        width: 302px;
-	        overflow: hidden;
+            width: 302px;
+            overflow: hidden;
         }
+
         .wrap-select select {
             width: 320px;
             margin: 0;
@@ -24,7 +25,7 @@
     </style>
 @endsection
 
-@section('js')    
+@section('js')
     <script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/notifications/jgrowl.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.js') }}"></script>
@@ -44,13 +45,13 @@
     <div class="card">
         <div>
             <h1 class="pt-3 pl-3 pr-3">Add New Certificate</h1>
-            <div class="header-elements">
+            {{-- <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
                     <a class="list-icons-item" data-action="reload"></a>
                     <a class="list-icons-item" data-action="remove"></a>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         @if (\Session::has('success'))
@@ -70,7 +71,7 @@
         @endif
 
         <!-- validate  -->
-        @if($errors->any())
+        @if ($errors->any())
             <div class="alert alert-danger border-0 alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                 <p><b>Incorrect input data:</b></p>
@@ -94,7 +95,7 @@
                                 <div class="col-md-6">
                                     <label>Employee ID:(*)</label>
                                     <select class="form-control" name="txtStaffID" color="red">
-                                        @foreach($data_staff as $staff)
+                                        @foreach ($data_staff as $staff)
                                             <option value="{{ $staff['id'] }}">{{ $staff['lastname'] }} {{ $staff['firstname'] }} || {{ $staff['id'] }} </option>
                                         @endforeach
                                     </select>
@@ -143,14 +144,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Grade:</label>
-                                        <input type="text" class="form-control" name="txtGrade"  value="{{ old('txtGrade') }}" >
+                                        <input type="text" class="form-control" name="txtGrade" value="{{ old('txtGrade') }}">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Mode of Study:</label>
-                                        <input type="text" class="form-control" name="txtModeOf"  value="{{ old('txtModeOf') }}" >
+                                        <input type="text" class="form-control" name="txtModeOf" value="{{ old('txtModeOf') }}">
                                     </div>
                                 </div>
                             </div>
@@ -178,17 +179,15 @@
                 url: '{{ action('StaffController@loadRegional') }}',
                 Type: 'GET',
                 datatype: 'text',
-                data:
-                {
+                data: {
                     parent: parent,
                 },
                 cache: false,
-                success: function (data)
-                {
+                success: function(data) {
                     var obj = $.parseJSON(data);
                     $('#district').empty();
                     for (var i = 0; i < obj.length; i++) {
-                        $('#district').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        $('#district').append('<option value="' + obj[i]['id'] + '">' + obj[i]['name'] + '</option>');
                     }
                 }
             });
@@ -201,13 +200,11 @@
                 url: '{{ action('TimeleaveController@detailTime') }}',
                 Type: 'POST',
                 datatype: 'text',
-                data:
-                {
+                data: {
                     id: id,
                 },
                 cache: false,
-                success: function (data)
-                {
+                success: function(data) {
                     console.log(data);
                     $('#html_pending').empty().append(data);
                     $('#bsc-modal').modal();
