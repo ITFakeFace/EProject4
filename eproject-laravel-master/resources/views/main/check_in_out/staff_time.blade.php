@@ -27,12 +27,12 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Lịch Sử Chấm Công</h1>
+        <h1 class="pt-3 pl-3 pr-3">Attendance History</h1>
         <div class="card-header header-elements-inline">
             <h4 class="card-title font-weight-bold text-uppercase">
                 <?php echo auth()->user()->firstname . ' ' . auth()->user()->lastname; ?>
                 - <?php echo $staff[0][2]; ?>
-                - <?php echo auth()->user()->is_manager == 1 ? 'Quản lý' : 'Nhân viên'; ?>
+                - <?php echo auth()->user()->is_manager == 1 ? 'Manager' : 'Employee'; ?>
             </h4>
             <div class="header-elements">
                 <div class="list-icons">
@@ -62,7 +62,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     <div class="">
                         <select class="form-control" name="month" id="month">
                             @for ($i = 1; $i <= 12; $i++)
-                                <option value="{{ $i }}" <?php echo $month == $i ? 'selected' : ''; ?>>Tháng {{ $i }}</option>
+                                <option value="{{ $i }}" <?php echo $month == $i ? 'selected' : ''; ?>>Month {{ $i }}</option>
                             @endfor
                         </select>
                     </div>
@@ -70,12 +70,12 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         <input class="form-control" type="number" value="<?php echo $year; ?>" name="year" id="year">
                     </div>
                     <div class="ml-3">
-                        <input class="form-control btn btn-primary" type="submit" value="Tìm kiếm">
+                        <input class="form-control btn btn-primary" type="submit" value="Search">
                     </div>
                 </div>
             </form>
             <div class="export">
-                <a href ="{{ action('pdfController@index') }}?y_m={{ $y_m }}" class="btn btn-danger export" id="export-button"> Xuất PDF </a>
+                <a href ="{{ action('pdfController@index') }}?y_m={{ $y_m }}" class="btn btn-danger export" id="export-button"> Export PDF </a>
             </div>
         </div>
 
@@ -83,19 +83,19 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Tổng ngày làm việc</th>
-                        <th>Ngày thường làm việc</th>
-                        <th>Ngày lễ làm việc</th>
-                        <th>Ngày nghỉ làm việc</th>
-                        <th>Bổ sung công</th>
-                        <th>Đăng kí phép</th>
-                        <th>Công nghỉ lễ</th>
-                        <th>Làm việc</th>
-                        <th>Tăng ca</th>
-                        <th>Đi trễ</th>
-                        <th>Về sớm</th>
-                        <th>Công</th>
-                        <th>Công được tính</th>
+                        <th>Total Work Days</th>
+                        <th>Normal Work Days</th>
+                        <th>Holiday Work Days</th>
+                        <th>Off Work Days</th>
+                        <th>Supplementary Work</th>
+                        <th>Registered Leave</th>
+                        <th>Holiday Leave</th>
+                        <th>Work Time</th>
+                        <th>Overtime</th>
+                        <th>Late</th>
+                        <th>Early Leave</th>
+                        <th>Work Hours</th>
+                        <th>Calculated Work Hours</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
@@ -121,18 +121,17 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
         <table class="table datatable-basic">
             <thead>
                 <tr>
-                    <th>Ngày</th>
-                    <th class="text-center">Giờ vào</th>
-                    <th class="text-center">Giờ ra</th>
-                    <th>Tổng thời gian làm việc</th>
-                    <th>Ngày công</th>
-                    <th>Ngày công được tính</th>
-                    <th>Ghi chú</th>
+                    <th>Date</th>
+                    <th class="text-center">Check-in Time</th>
+                    <th class="text-center">Check-out Time</th>
+                    <th>Total Work Time</th>
+                    <th>Work Hours</th>
+                    <th>Calculated Work Hours</th>
+                    <th>Notes</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($data as $check_in_out)
-                    {{-- @dd($data) --}}
                     <tr style="
                         <?php
                         if ($check_in_out['special_date_id'] !== null) {
@@ -146,14 +145,14 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             {{ $check_in_out['check_in_day'] }},
                             <?php
                             if ($check_in_out['day_of_week'] == 1) {
-                                echo 'Chủ Nhật';
+                                echo 'Sunday';
                             } else {
-                                echo 'Thứ ' . $check_in_out['day_of_week'];
+                                echo 'Day ' . $check_in_out['day_of_week'];
                             }
                             ?>
                             <?php
                             if ($check_in_out['special_date_id'] !== null) {
-                                echo '(Ngày lễ)';
+                                echo '(Holiday)';
                             }
                             ?>
                         </td>
@@ -172,23 +171,23 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             <?php
                             if ($check_in_out['in_late']) {
                                 $date = date_create($check_in_out['in_late']);
-                                echo 'Đi trễ: ' . date_format($date, 'H') . ' giờ';
-                                echo ' ' . date_format($date, 'i') . ' phút';
-                                echo ' ' . date_format($date, 's') . ' giây';
+                                echo 'Late: ' . date_format($date, 'H') . ' hours';
+                                echo ' ' . date_format($date, 'i') . ' minutes';
+                                echo ' ' . date_format($date, 's') . ' seconds';
                                 echo '<br>';
                             }
                             if ($check_in_out['out_soon']) {
                                 $date = date_create($check_in_out['out_soon']);
-                                echo 'Về sớm: ' . date_format($date, 'H') . ' giờ';
-                                echo ' ' . date_format($date, 'i') . ' phút';
-                                echo ' ' . date_format($date, 's') . ' giây';
+                                echo 'Early Leave: ' . date_format($date, 'H') . ' hours';
+                                echo ' ' . date_format($date, 'i') . ' minutes';
+                                echo ' ' . date_format($date, 's') . ' seconds';
                                 echo '<br>';
                             }
                             if ($check_in_out['ot']) {
                                 $date = date_create($check_in_out['ot']);
-                                echo 'Tăng ca: ' . date_format($date, 'H') . ' giờ';
-                                echo ' ' . date_format($date, 'i') . ' phút';
-                                echo ' ' . date_format($date, 's') . ' giây';
+                                echo 'Overtime: ' . date_format($date, 'H') . ' hours';
+                                echo ' ' . date_format($date, 'i') . ' minutes';
+                                echo ' ' . date_format($date, 's') . ' seconds';
                                 echo '<br>';
                             }
                             ?>
@@ -206,28 +205,27 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 
                                 switch ($dayofweek) {
                                     case '0':
-                                        $day = 'Chủ Nhật';
+                                        $day = 'Sunday';
                                         break;
                                     case '1':
-                                        $day = 'Thứ 2';
+                                        $day = 'Monday';
                                         break;
                                     case '2':
-                                        $day = 'Thứ 3';
+                                        $day = 'Tuesday';
                                         break;
                                     case '3':
-                                        $day = 'Thứ 4';
+                                        $day = 'Wednesday';
                                         break;
                                     case '4':
-                                        $day = 'Thứ 5';
+                                        $day = 'Thursday';
                                         break;
                                     case '5':
-                                        $day = 'Thứ 6';
+                                        $day = 'Friday';
                                         break;
                                     case '6':
-                                        $day = 'Thứ 7';
+                                        $day = 'Saturday';
                                         break;
                                     default:
-                                        # code...
                                         break;
                                 }
                                 echo date_format($date, 'd-m-Y') . ', ' . $day;
@@ -246,7 +244,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 echo $item['time'] == '08:00:00' ? '1' * $item['multiply'] : '0.5' * $item['multiply'];
                                 ?>
                             </td>
-                            <td><?php echo $item['type'] == '0' ? 'Bổ sung công' : 'Phép năm tính lương'; ?></td>
+                            <td><?php echo $item['type'] == '0' ? 'Supplementary work' : 'Paid leave'; ?></td>
                         </tr>
                     @endif
                 @endforeach
@@ -262,28 +260,27 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 
                                 switch ($dayofweek) {
                                     case '0':
-                                        $day = 'Chủ Nhật';
+                                        $day = 'Sunday';
                                         break;
                                     case '1':
-                                        $day = 'Thứ 2';
+                                        $day = 'Monday';
                                         break;
                                     case '2':
-                                        $day = 'Thứ 3';
+                                        $day = 'Tuesday';
                                         break;
                                     case '3':
-                                        $day = 'Thứ 4';
+                                        $day = 'Wednesday';
                                         break;
                                     case '4':
-                                        $day = 'Thứ 5';
+                                        $day = 'Thursday';
                                         break;
                                     case '5':
-                                        $day = 'Thứ 6';
+                                        $day = 'Friday';
                                         break;
                                     case '6':
-                                        $day = 'Thứ 7';
+                                        $day = 'Saturday';
                                         break;
                                     default:
-                                        # code...
                                         break;
                                 }
                                 echo date_format($date, 'd-m-Y') . ', ' . $day;
@@ -314,22 +311,22 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 <?php
                                 switch ($item['type_leave']) {
                                     case 3:
-                                        echo 'Phép nghỉ ốm đau ngắn ngày';
+                                        echo 'Short-term sick leave';
                                         break;
                                     case 4:
-                                        echo 'Phép nghỉ ốm đau dài ngày';
+                                        echo 'Long-term sick leave';
                                         break;
                                     case 5:
-                                        echo 'Phép thai sản';
+                                        echo 'Maternity leave';
                                         break;
                                     case 6:
-                                        echo 'Phép kết hôn';
+                                        echo 'Wedding leave';
                                         break;
                                     case 7:
-                                        echo 'Phép ma chay';
+                                        echo 'Funeral leave';
                                         break;
                                     default:
-                                        echo 'Phép nghỉ không lương';
+                                        echo 'Unpaid leave';
                                         break;
                                 }
                                 ?>
@@ -357,7 +354,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 1
                             </td>
                             <td>
-                                Công ngày lễ
+                                Holiday work
                             </td>
                         </tr>
                     @endif
@@ -370,7 +367,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     <!-- Event colors -->
     <div class="card">
         <div class="card-header header-elements-inline">
-            <h5 class="card-title">Xem lịch sử chấm công</h5>
+            <h5 class="card-title">View Attendance History</h5>
             <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
