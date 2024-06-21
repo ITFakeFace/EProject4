@@ -26,8 +26,8 @@
                 @endif
                 <div class="text-center mb-3">
                     <i class="icon-spinner11 icon-2x border-3 rounded-round p-3 mb-3 mt-1" style="color: #046A38; border-color: #046A38"></i>
-                    <h5 class="mb-0">Khôi phục mật khẩu</h5>
-                    <span class="d-block text-muted">Chúng tôi sẽ gửi cho bạn hướng dẫn qua email</span>
+                    <h5 class="mb-0">Reset Password</h5>
+                    <span class="d-block text-muted">An Instruction email would be sent to your email</span>
                 </div>
 
                 <div class="form-group form-group-feedback form-group-feedback-right">
@@ -38,11 +38,11 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn bg-blue btn-block"><i class="icon-spinner11 mr-2"></i> Đặt lại mật khẩu</button>
+                    <button type="submit" class="btn bg-blue btn-block"><i class="icon-spinner11 mr-2"></i> Reset Your Password</button>
                 </div>
 
                 <div class="text-center">
-                    <a href="{{ action('AuthenticateController@getLogin') }}">Quay về trang đăng nhập!</a>
+                    <a href="{{ action('AuthenticateController@getLogin') }}">Login again.</a>
                 </div>
             </div>
         </div>
