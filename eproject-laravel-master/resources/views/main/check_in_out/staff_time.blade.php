@@ -199,7 +199,8 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         <tr style="background-color: #ffffe7">
                             <td>
                                 <?php
-                                $date = date_create($item['day_time_leave']);
+                                // $date = date_create($item['day_time_leave']);
+                                $date = \Carbon\Carbon::createFromTimestampMs($item['day_time_leave'])->format('d/m/Y');
                                 $dayofweek = date('w', strtotime($item['day_time_leave']));
                                 $day = '';
                                 
@@ -228,7 +229,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                     default:
                                         break;
                                 }
-                                echo date_format($date, 'd-m-Y') . ', ' . $day;
+                                echo $date . ', ' . $day;
                                 ?>
                             </td>
                             <td></td>
@@ -254,7 +255,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         <tr style="background-color: #ffffe7">
                             <td>
                                 <?php
-                                $date = date_create($item['day_leave_other']);
+                                $date = \Carbon\Carbon::createFromTimestampMs($item['day_leave_other'])->format('d/m/Y');
                                 $dayofweek = date('w', strtotime($item['day_leave_other']));
                                 $day = '';
                                 
@@ -283,7 +284,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                     default:
                                         break;
                                 }
-                                echo date_format($date, 'd-m-Y') . ', ' . $day;
+                                echo $date . ', ' . $day;
                                 ?>
                             </td>
                             <td></td>
@@ -340,8 +341,8 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         <tr style="background-color: #ffe7e7">
                             <td>
                                 <?php
-                                $date = date_create($item['day_time_special']);
-                                echo date_format($date, 'd-m-Y');
+                                $date = \Carbon\Carbon::createFromTimestampMs($item['day_time_special'])->format('d/m/Y');
+                                echo $date;
                                 ?>
                             </td>
                             <td></td>

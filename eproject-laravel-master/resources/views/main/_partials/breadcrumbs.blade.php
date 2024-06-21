@@ -1,5 +1,5 @@
 <div class="breadcrumb">
-    <a href="{{ action('ViewmenuController@index') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Trang chủ</a>
+    <a href="{{ action('ViewmenuController@index') }}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
     @if (isset($breadcrumbs) && count($breadcrumbs) > 0)
         @foreach ($breadcrumbs as $index => $item)
             @if ($index < count($breadcrumbs) - 1)

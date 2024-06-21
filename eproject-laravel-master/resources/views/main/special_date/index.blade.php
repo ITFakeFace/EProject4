@@ -1,8 +1,8 @@
 @extends('main._layouts.master')
 
 <?php
-    header("Access-Control-Allow-Origin: *");
-    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 ?>
 
 @section('css')
@@ -14,7 +14,7 @@
     </style>
 @endsection
 
-@section('js')    
+@section('js')
     <script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/notifications/jgrowl.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.js') }}"></script>
@@ -22,14 +22,14 @@
     <script src="{{ asset('global_assets/js/plugins/pickers/daterangepicker.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('global_assets/js/demo_pages/picker_date.js') }}"></script>
-    
-	<!-- Theme JS files -->
-	<script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/core/main.min.js') }}"></script>
-	<script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/daygrid/main.min.js') }}"></script>
+
+    <!-- Theme JS files -->
+    <script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/core/main.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/daygrid/main.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
 
-	<!-- /theme JS files -->
+    <!-- /theme JS files -->
 @endsection
 
 @section('content')
@@ -37,7 +37,7 @@
     <div class="card">
         <h1 class="pt-3 pl-3 pr-3">List of Special Dates</h1>
         <div class="card-header header-elements-inline">
-            
+
         </div>
         <div class="card-body">
             @if (\Session::has('success'))
@@ -59,7 +59,7 @@
                 @csrf
                 <div class="form-group d-flex">
                     <div class="">
-                        <input class="form-control" type="number" value="<?php echo $year ?>" name="year" id="year">
+                        <input class="form-control" type="number" value="<?php echo $year; ?>" name="year" id="year">
                     </div>
                     <div class="ml-3">
                         <input class="form-control btn btn-primary" type="submit" value="Search">
@@ -70,8 +70,8 @@
             <div class="form-group d-flex">
                 <div class="export">
                     <a href ="{{ action('ExportController@exportSpecialDate') }}?y={{ $year }}" class="btn btn-success export" id="export-button"> Export to Excel </a>
-               </div>
-               <div class=" ml-1">
+                </div>
+                <div class=" ml-1">
                     <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">Create New Special Date</button>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Create</button>
                         </div>
-                    </form>  
+                    </form>
                 </div>
             </div>
         </div>
@@ -135,36 +135,46 @@
             <tbody>
                 <?php $count = 1; ?>
                 @foreach ($data as $special_date)
-                    @if($special_date['type_day'] == 1)
+                    @if ($special_date['type_day'] == 1)
                         <tr>
-                            <td><?php echo $count; $count++ ?></td>
-                            <td><?php echo $special_date['day_special_from'] ?></td>
-                            <td><?php echo $special_date['day_special_to'] ?></td>
+                            <td><?php echo $count;
+                            $count++; ?></td>
                             <td>
-                                <?php 
-                                    if(strlen($special_date['note']) > 40) echo substr($special_date['note'], 0, 40) . '...';
-                                    else echo $special_date['note'];    
+                                {{-- <?php echo $special_date['day_special_from']; ?> --}}
+                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('d/m/Y') }}
+                            </td>
+                            <td>
+                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_to'])->format('d/m/Y') }}
+                                {{-- <?php echo $special_date['day_special_to']; ?> --}}
+                            </td>
+                            <td>
+                                <?php
+                                if (strlen($special_date['note']) > 40) {
+                                    echo substr($special_date['note'], 0, 40) . '...';
+                                } else {
+                                    echo $special_date['note'];
+                                }
                                 ?>
                             </td>
                             <td>
                                 <span class="badge badge-danger">Special Date</span>
                             </td>
                             <td class="text-center">
-                                @if(date("Y-m-d") < $special_date['day_special_from'])
+                                @if (date('Y-m-d') < $special_date['day_special_from'])
                                     <div class="from-group">
                                         <a class="btn btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Edit</a>
                                         <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
                                     </div>
-                                @else 
+                                @else
                                     <span class="badge badge-primary">Date has passed!</span>
                                 @endif
                             </td>
                             <td>
                                 <?php
-                                    $date_check = date("Y-m-d", strtotime('+2 days', strtotime($special_date['day_special_to'])));   
+                                $date_check = date('Y-m-d', strtotime('+2 days', strtotime($special_date['day_special_to'])));
                                 ?>
-                                @if(date("Y-m-d") > $date_check)
-                                    @if($special_date['detail_id'])
+                                @if (date('Y-m-d') > $date_check)
+                                    @if ($special_date['detail_id'])
                                         <a href="{{ action('TimeSpecialController@details') }}?id_special_date={{ $special_date['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Details</a>
                                     @else
                                         <a href="{{ action('TimeSpecialController@create') }}?id={{ $special_date['id'] }}" class="btn btn-warning ml-2" style="color: white; cursor: pointer;">Add</a>
@@ -175,23 +185,23 @@
                             </td>
                         </tr>
                     @endif
-                @endforeach   
+                @endforeach
             </tbody>
         </table>
 
         <div id="bsc-modal" class="modal fade" role="dialog"> <!-- modal bsc -->
             <div class="modal-dialog">
-              <div class="modal-content">
-                <form action="{{ action('SpecialDateController@updateSpecialDate') }}" method="post" class="form-horizontal">
-                    @csrf
-                    <div id="html_pending">
-                        
-                    </div>
-                </form> <!-- end form -->
-              </div>
+                <div class="modal-content">
+                    <form action="{{ action('SpecialDateController@updateSpecialDate') }}" method="post" class="form-horizontal">
+                        @csrf
+                        <div id="html_pending">
+
+                        </div>
+                    </form> <!-- end form -->
+                </div>
             </div>
         </div> <!-- end modal bsc -->
-          
+
     </div>
     <!-- /basic datatable -->
 
@@ -200,10 +210,10 @@
         <div class="card-header header-elements-inline">
             <h5 class="card-title"></h5>
             <div class="header-elements">
-      
+
             </div>
         </div>
-        
+
         <div class="card-body">
 
             <div class="fullcalendar-basic"></div>
@@ -228,13 +238,11 @@
                 url: '{{ action('SpecialDateController@detailSpecialDate') }}',
                 Type: 'POST',
                 datatype: 'text',
-                data:
-                {
+                data: {
                     id: id,
                 },
                 cache: false,
-                success: function (data)
-                {
+                success: function(data) {
                     console.log(data);
                     $('#html_pending').empty().append(data);
                     $('#bsc-modal').modal();
@@ -251,22 +259,22 @@
                     return;
                 }
 
-                events = <?php echo $calendar ?>;
+                events = <?php echo $calendar; ?>;
 
                 var dt = new Date();
                 let now = new Date().toISOString().split('T')[0];
 
                 now = now.slice(4);
                 date_now = '';
-                date_now += <?php echo $year?> + now;
+                date_now += <?php echo $year; ?> + now;
 
                 // Define element
                 var calendarBasicViewElement = document.querySelector('.fullcalendar-basic');
 
                 // Initialize
-                if(calendarBasicViewElement) {
+                if (calendarBasicViewElement) {
                     var calendarBasicViewInit = new FullCalendar.Calendar(calendarBasicViewElement, {
-                        plugins: [ 'dayGrid', 'interaction' ],
+                        plugins: ['dayGrid', 'interaction'],
                         header: {
                             left: 'prev,next today',
                             center: 'title',
@@ -290,7 +298,5 @@
         document.addEventListener('DOMContentLoaded', function() {
             FullCalendarBasic.init();
         });
-
-
     </script>
 @endsection

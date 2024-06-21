@@ -50,7 +50,7 @@
         <div class="content-wrapper">
 
             <!-- Page header -->
-            @include('main._partials.header3')
+            {{-- @include('main._partials.header3') --}}
             <!-- /page header -->
 
 
