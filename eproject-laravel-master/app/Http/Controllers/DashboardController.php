@@ -136,7 +136,7 @@ class DashboardController extends Controller
       ->with('last_year', $last_year)
       ->with('staffs_off', $staffs_off)
       ->with('breadcrumbs', [
-        ['text' => 'Biểu đồ', 'url' => '#']
+        ['text' => 'Charts', 'url' => '#']
       ]);
   }
 }

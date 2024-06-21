@@ -38,7 +38,7 @@ class SpecialDateController extends Controller
             ->with('data', $body['data'])
             ->with('year', $year)
             ->with('calendar', json_encode($calendar))
-            ->with('breadcrumbs', [['text' => 'Công phép', 'url' => '../view-menu/time-leave'], ['text' => 'Quản lý ngày lễ', 'url' => '#']]);
+            ->with('breadcrumbs', [['text' => 'Check In', 'url' => '../view-menu/time-leave'], ['text' => 'Manage Holidays', 'url' => '#']]);
     }
 
     public function createSpecialDate(Request $request)

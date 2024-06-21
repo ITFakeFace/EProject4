@@ -19,7 +19,7 @@ class CheckInOutController extends Controller
 
     return view('main.check_in_out.index')
       ->with('staff', $body['data'])
-      ->with('breadcrumbs', [['text' => 'Công phép', 'url' => '../view-menu/time-leave'], ['text' => 'Chấm công GPS', 'url' => '#']]);
+      ->with('breadcrumbs', [['text' => 'Check In', 'url' => '../view-menu/time-leave'], ['text' => 'Check In GPS', 'url' => '#']]);
   }
 
   public function create(Request $request)
@@ -32,14 +32,14 @@ class CheckInOutController extends Controller
     $image = $request->input('image_64');
 
     if (empty($image)) {
-      return redirect()->back()->with('error', 'Vui lòng chụp hình!');
+      return redirect()->back()->with('error', 'Please take a photo!');
     }
 
     if (empty($latitude) || empty($longitude)) {
-      return redirect()->back()->with('error', 'Vui lòng bật GPS theo hướng dẫn!');
+      return redirect()->back()->with('error', 'Please enable GPS as instructed!');
     }
 
-    //Converting to radians
+    // Converting to radians
     // 590 cmt8
     $lati1 = deg2rad('10.7863823');
     $longi1 = deg2rad('106.6641083');
@@ -48,16 +48,16 @@ class CheckInOutController extends Controller
     $lati2 = deg2rad($latitude);
     $longi2 = deg2rad($longitude);
 
-    //Haversine Formula
+    // Haversine Formula
     $difflong = $longi2 - $longi1;
     $difflat = $lati2 - $lati1;
 
     $val = pow(sin($difflat / 2), 2) + cos($lati1) * cos($lati2) * pow(sin($difflong / 2), 2);
 
-    $res2 = 6378.8 * (2 * asin(sqrt($val))); //for kilomet
-    
-    // if($res2 > 0.5) {
-    //     return redirect()->back()->with('error', 'Bạn cách xa văn phòng quá 500m!');
+    $res2 = 6378.8 * (2 * asin(sqrt($val))); // for kilometer
+
+    // if ($res2 > 0.5) {
+    //     return redirect()->back()->with('error', 'You are too far from the office (over 500m)!');
     // }
 
     $image_name = "";
@@ -84,9 +84,9 @@ class CheckInOutController extends Controller
     $body = json_decode($response->body(), true);
 
     if ($body['message'] == "Save success") {
-      return redirect()->back()->with('success', 'Chấm công thành công!');
+      return redirect()->back()->with('success', 'Check-in successful!');
     } else {
-      return redirect()->back()->with('error', 'Chấm công thất bại!');
+      return redirect()->back()->with('error', 'Check-in failed!');
     }
 
     return response($body);
@@ -127,14 +127,6 @@ class CheckInOutController extends Controller
     $response = Http::post('http://localhost:8888/check-in-out/get-staff-time', $data_request);
     $body = json_decode($response->body(), true);
 
-
-    // $month_2 = $month + 1;
-    // $month_2 .= "";
-    // if(strlen($month_2) == 1) {
-    //     $month_2 = "0" . $month_2;
-    // }
-
-    // $date2 = $year . '-' . $month_2 . '-' . '01';
     $data_request_high = ['from_date' => $date, 'to_date' => $end_date];
 
     $response = Http::get('http://localhost:8888/time-leave/get-time-leave-from-to', $data_request_high);
@@ -203,7 +195,7 @@ class CheckInOutController extends Controller
     foreach ($time_leave['data'] as $value) {
       if ($value['is_approved'] == 1 && $value['staff_id'] == $user->id) {
         $arr = array();
-        $value['type'] == 0 ? $arr['title'] = "Bổ sung công: " . $value['time'] : $arr['title'] = "Phép năm tính lương: " . $value['time'];
+        $value['type'] == 0 ? $arr['title'] = "Additional work: " . $value['time'] : $arr['title'] = "Annual leave calculated: " . $value['time'];
         $arr['start'] = $value['day_time_leave'];
         $arr['end'] = $value['day_time_leave'];
         $arr['color'] = '#68683c';
@@ -228,22 +220,22 @@ class CheckInOutController extends Controller
 
         switch ($value['typeLeave']) {
           case 3:
-            $arr['title'] = "Phép nghỉ ốm đau ngắn ngày: 0 công";
+            $arr['title'] = "Short-term sick leave: 0 days";
             break;
           case 4:
-            $arr['title'] = "Phép nghỉ ốm đau dài ngày: 0 công";
+            $arr['title'] = "Long-term sick leave: 0 days";
             break;
           case 5:
-            $arr['title'] = "Phép thai sản: 0 công";
+            $arr['title'] = "Maternity leave: 0 days";
             break;
           case 6:
-            $arr['title'] = "Phép kết hôn: Có công";
+            $arr['title'] = "Marriage leave: With pay";
             break;
           case 7:
-            $arr['title'] = "Phép ma chay: Có công";
+            $arr['title'] = "Bereavement leave: With pay";
             break;
           default:
-            $arr['title'] = "Phép nghỉ không lương: 0 công";
+            $arr['title'] = "Unpaid leave: 0 days";
             break;
         }
 
@@ -270,7 +262,7 @@ class CheckInOutController extends Controller
 
       if ($value['check_out']) {
         $arr = array();
-        $title = 'Kết thúc: ' . $value['check_out'];
+        $title = 'End: ' . $value['check_out'];
 
         $arr['title'] = $title;
         $arr['start'] = $value['check_in_day_no_format'];
@@ -281,7 +273,7 @@ class CheckInOutController extends Controller
 
       if ($value['check_in']) {
         $arr = array();
-        $title = 'Bắt đầu: ' . $value['check_in'];
+        $title = 'Start: ' . $value['check_in'];
 
         $arr['title'] = $title;
         $arr['start'] = $value['check_in_day_no_format'];
@@ -330,6 +322,6 @@ class CheckInOutController extends Controller
       ->with('calendar', json_encode($calendar))
       ->with('y_m', $start_date)
       ->with('time_special', $time_special['data'])
-      ->with('breadcrumbs', [['text' => 'Công phép', 'url' => '../view-menu/time-leave'], ['text' => 'Lịch sử chấm công', 'url' => '#']]);
+      ->with('breadcrumbs', [['text' => 'Time Off', 'url' => '../view-menu/time-leave'], ['text' => 'Check-in history', 'url' => '#']]);
   }
 }
