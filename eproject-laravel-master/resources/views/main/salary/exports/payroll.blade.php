@@ -1,36 +1,36 @@
 <table>
     <thead>
     <tr>
-        <th rowspan="2">STT</th>
-        <th rowspan="2">MÃ SỐ</th>
-        <th rowspan="2">HỌ VÀ TÊN</th>
-        <th rowspan="2">CMND</th>
-        <th rowspan="2">NGÀY VÀO</th>
-        <th rowspan="2">PHÒNG BAN</th>
-        <th rowspan="2">CHỨC DANH</th>
+        <th rowspan="2">No.</th>
+        <th rowspan="2">EMPLOYEE ID</th>
+        <th rowspan="2">FULLNAME</th>
+        <th rowspan="2">IDENTITY NUMBER</th>
+        <th rowspan="2">JOIN DATE/th>
+        <th rowspan="2">DEPARTMENT</th>
+        <th rowspan="2">POSITION</th>
         <th colspan="4"></th>
-        <th colspan="5">LÀM THÊM</th>
-        <th colspan="4">PHỤ CẤP</th>
-        <th colspan="3">CÁC KHOẢN KHẤU TRỪ</th>
-        <th rowspan="2">THỰC LÃNH</th>
+        <th colspan="5">OVERTIME</th>
+        <th colspan="4">ALLOWANCES</th>
+        <th colspan="3">DEDUCTIONS</th>
+        <th rowspan="2">NET SALARY</th>
     </tr>
     <tr>
-        <th>LƯƠNG HỢP ĐỒNG</th>
-        <th>NGÀY CÔNG</th>
-        <th>NGHỈ CÓ LƯƠNG</th>
-        <th>THÀNH TIỀN</th>
-        <th>THÊM GIỜ 100%</th>
-        <th>THÊM GIỜ 150%</th>
-        <th>THÊM GIỜ 200%</th>
-        <th>THÊM GIỜ 300%</th>
-        <th>TỔNG CỘNG</th>
-        <th>CƠM</th>
-        <th>ĐIỆN THOẠI</th>
-        <th>XĂNG</th>
-        <th>TỔNG CỘNG</th>
-        <th>BHXH, BHYT, BHTN</th>
-        <th>THUẾ TNCC</th>
-        <th>TỔNG CỘNG</th>
+        <th>BASED SALARY</th>
+        <th>ATTENDANCES</th>
+        <th>PAID LEAVES</th>
+        <th>TOTAL</th>
+        <th>OVERTIME 100%</th>
+        <th>OVERTIME 150%</th>
+        <th>OVERTIME 200%</th>
+        <th>OVERTIME 300%</th>
+        <th>GRAND TOTAL</th>
+        <th>MEAL</th>
+        <th>PHONE</th>
+        <th>FUEL</th>
+        <th>TOTAL</th>
+        <th>INSURANCES</th>
+        <th>PIT</th>
+        <th>GRAND TOTAL</th>
     </tr>
     </thead>
     <tbody>

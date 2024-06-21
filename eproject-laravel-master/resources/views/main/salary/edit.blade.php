@@ -17,7 +17,7 @@
 @section('content')
 
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Danh sách hợp đồng</h1>
+        <h1 class="pt-3 pl-3 pr-3">Contracts List</h1>
         <div class="card-header header-elements-inline">
            
         </div>
@@ -36,7 +36,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Mã nhân viên</label>
+                            <label>Employee Id</label>
                             <select class="form-control select-search" name="staffId">
                                 @foreach($listStaff as $staff)
                                     <option value="{{ $staff->id }}" @if($contract->staffId == $staff->id) selected @endif>{{ $staff->firstname .' '. $staff->lastname }}</option>
@@ -46,7 +46,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Ngày bắt đầu hợp đồng:</label>
+                                    <label>Contract's effected Date:</label>
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Ngày kết thúc hợp đồng:</label>
+                                    <label>Contract's Exprired Date:</label>
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Lương:</label>
+                            <label>Salary:</label>
                             <input type="number" class="form-control" name="salary" value="{{ $contract->salary }}">
                         </div>
                         <button class="btn btn-success" type="submit">Lưu</button>
