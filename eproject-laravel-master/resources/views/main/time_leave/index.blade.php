@@ -464,7 +464,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 <td><span class="badge badge-danger">Closed</span></td>
                             @elseif($time_leave['isApproved'] == 0 || ($time_leave['isApproved'] == 2 && auth()->user()->is_manager == 1))
                                 <?php
-                                $date1 = \Carbon\Carbon::parse($time_leave['createdAt']);
+                                $date1 = \Carbon\Carbon::createFromTimestampMs($time_leave['createdAt']);
                                 $date2 = \Carbon\Carbon::today();
                                 $diff = date_diff($date1, $date2);
                                 ?>
