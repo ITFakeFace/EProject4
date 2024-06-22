@@ -43,7 +43,7 @@
         <table class="table datatable-basic">
             <thead>
                 <tr>
-                    <th>Mã ID</th>
+                    <th>ID</th>
                     <th>Họ tên Nhân viên</th>
                     <th>Bậc</th>
                     <th>Hạng Bậc</th>
