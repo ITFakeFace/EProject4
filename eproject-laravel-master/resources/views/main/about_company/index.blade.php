@@ -79,14 +79,6 @@
                 </div>
             </div>
     
-            <!-- Indicators -->
-            <ul class="carousel-indicators mt-3">
-                <li data-target="#demo" data-slide-to="0" class="active"><p>Phân bón Tân Thành Nam</p></li>
-                <li data-target="#demo" data-slide-to="1"><p>Dây chuyền sản xuất tiên tiến</p></li>
-                <li data-target="#demo" data-slide-to="2"><p>Vụ mùa bội thu</p></li>
-                <li data-target="#demo" data-slide-to="3"><p>Kho bãi đạt tiêu chuẩn</p></li>
-                <li data-target="#demo" data-slide-to="4"><p>Luôn luôn phát triển</p></li>
-            </ul>
     
             <!-- Left and right controls -->
             <a class="carousel-control-prev" href="#demo" data-slide="prev">
@@ -101,31 +93,51 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-6">
-                <h1 class="text-center title-vct mb-2">
-                    Về Công Ty Tân Thành Nam
-                    <i class="fa"></i>
-                </h1>
-                <p class="des">Công ty TNHH Xuất Nhập Khẩu Tân Thành Nam Agriculture là doanh nghiệp chuyên nhập khẩu và sản xuất phân bón phức hợp NPK, Phân Hữu cơ, phân vi sinh vi lượng và các sản phẩm kích thích tăng trưởng cho các loại cây trồng.</p>
-                <p class="des">Là một doanh nghiệp trẻ, ngay từ ngày đầu thành lập năm 2014 Công ty Xuất Nhập Khẩu Tân Thành Nam Agriculture đã chủ động áp dụng công nghệ sản xuất phân bón mới nhất, tiến tiến nhất của nước ngoài để tạo ra các sản phẩm phân bón đa dạng, cao cấp đạt chất lượng hàng đầu nhưng có giá thành cạnh tranh nhất trên thị trường.</p>
-                <p class="des">Công ty đã đầu tư và đưa vào sản xuất dây chuyền sản xuất phân phức hợp NPK công suất lớn, công nghệ hơi nước kết hợp ure hóa lỏng hiện đại và tiên tiến hàng đầu Việt Nam.</p>
-            </div>
+            <div class="col-lg-6 py-3">
+                <div class="our-story">
+                  <h1>Hành trình tạo lập</h1>
+                  <p><strong>HUDECO được thành lập trên nền tảng đồng tâm nhất trí, cùng nhau tạo lập nên một tập thể đoàn kết và vững mạnh.</strong></p>
+                  <p><strong>Đội ngũ lãnh đạo:</strong></p>
+                  <ul>
+                    <li><i class="bi bi-check-circle"></i> <span>Tất cả Thành viên Hội đồng quản trị, Ban Tổng Giám đốc và các Ban Nội nghiệp, Ban Dự án đều có nhiều năm gắn bó và cùng nhau tạo dựng nên Hudeco.</span></li>
+                    <li><i class="bi bi-check-circle"></i> <span>Nhờ sự đồng lòng và chuyên môn cao, Hudeco cam kết mang đến những sản phẩm xây dựng chất lượng cao nhất, tối ưu nhất cho khách hàng và đối tác, góp phần vào sự phát triển của đất nước.</span></li>
+                  </ul>
+                  <p><strong>Trách nhiệm xã hội:</strong></p>
+                  <ul>
+                    <li><i class="bi bi-check-circle"></i> <span>Hudeco luôn ý thức được trách nhiệm xã hội của mình. Từ năm 2019, tập thể HUDECO đã đồng hành cùng các trường Đại học, Trung học trong công tác giảng dạy, hỗ trợ sinh viên nghèo và xây dựng nhà tình thương, nhà tình nghĩa tại các tỉnh thành Việt Nam.</span></li>
+                    <li><i class="bi bi-check-circle"></i> <span>HUDECO tâm niệm rằng sự tận tâm vào trách nhiệm xã hội luôn song song với sự phát triển của công ty và sự phát triển chung của xã hội.</span></li>
+                  </ul>
+                  <p>Chúng tôi, HUDECO, tâm nguyện sự tận tâm vào trách nhiệm xã hội luôn song song
+                    sự phát triển Công ty và phát triển xã hội.</p>
+    
+                  <div class="watch-video d-flex align-items-center position-relative">
+                    <i class="bi bi-play-circle"></i>
+                    <a href="https://www.youtube.com/watch?v=N5QmTxJ9RAI" class="glightbox stretched-link" target="blank">Watch Video</a>
+                  </div>
+                </div>
+              </div>
             <div class="col-6 mt-5">
-                <img src="{{ asset('images/about_company/image_about.jpg') }}" alt="">
+                <img src="{{ asset('images/about_company/image_about.jpg') }}" alt="" class="w-100 rounded-circle mb-5">
             </div>
         </div>
     
-        <div class="row mt-4" style="border: 1px solid #046A38">
-            <div class="col-6 mt-3">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d489.85351186315756!2d106.63539878141007!3d10.824464073127688!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752964a38b6e07%3A0x1607946fdf79ba36!2zQ8O0bmcgVHkgVG5oaCBYdeG6pXQgTmjhuq1wIEto4bqpdSBUw6JuIFRow6BuaCBOYW0gQWdyaWN1bHR1cmU!5e0!3m2!1svi!2s!4v1555037288848!5m2!1svi!2s" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen=""></iframe>
-            </div>
+        <div class="row mt-4" style="border: 1px solid #cb370e">
+            
             <div class="col-6 mt-2">
-                <h1>Địa chỉ liên hệ:</h1>
-                <h2>CÔNG TY TNHH XUẤT NHẬP KHẨU TÂN THÀNH NAM AGRICULTURE</h2>
-                <p class="des"><i class="icon-location3" style="color: #046A38"></i> 82/1C Hoàng Bật Đạt, Phường 15, Quận Tân Bình, Thành Phố Hồ Chí Minh.</p>
-                <p class="des"><i class="icon-mail5" style="color: #046A38"></i> Tanthanhnam.agriculture@gmail.com <br> Tanthanhnamhcm@gmail.com</p>
-                
-                <p class="des"><i class="icon-phone2" style="color: #046A38"></i> Điện thoại: 02633.797.676 <br> Fax: 02633.797.676</p>
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <img src="{{ asset('images/Logo-FutureHRM-index.svg') }}" alt="" width="250" height="auto" class="mr-2">
+                    <img src="{{ asset('images/about_company/logo01.png') }}" alt="" width="200" height="auto">
+                </div>
+                <div class="col-lg-12 mt-3">
+                    <h2>Liên hệ</h2>
+                    <p class="des"><i class="icon-location3 mr-2" style="color: #cb370e"></i> 199 Phạm Huy Thông, Phường 6, Quận Gò Vấp Thành Phố Hồ Chí Minh.</p>
+                    <p class="des"><i class="icon-mail5 mr-2" style="color: #cb370e"></i>info@hudeco.com.vn </p>
+                    <p class="des"><i class="icon-phone2 mr-2" style="color: #cb370e"></i>028.2705.2705 </p>
+                    <p class="des"><i class="icon-display mr-2" style="color: #cb370e"></i><a href="https://hudeco.comv.vn">https://hudeco.comv.vn</a> </p>
+                </div>
+            </div>
+            <div class="col-6 mt-3">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.6783006987907!2d106.68242287451793!3d10.835912358094777!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528565369a31d%3A0xab3769700b36fa39!2zMTk5IFBo4bqhbSBIdXkgVGjDtG5nLCBQaMaw4budbmcgNiwgR8OyIFbhuqVwLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmggNzAwMDAsIFZpZXRuYW0!5e0!3m2!1sen!2s!4v1713839321189!5m2!1sen!2s" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen=""></iframe>
             </div>
         </div>
     </div>
