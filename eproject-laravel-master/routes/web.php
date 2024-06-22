@@ -268,4 +268,4 @@ Route::group(['prefix' => 'education'], function () {
   Route::post('/pedit', 'EducationController@postEditEducation');
 });
 
-Route::get('images/{filename}', 'ImageController@getImage')->where('filename', '.*');
+Route::get('/file/{path}', 'ImageController@getImage')->where('path', '.*');

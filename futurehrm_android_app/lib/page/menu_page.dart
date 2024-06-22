@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:futurehrm_android_app/models/ApiService.dart';
 import 'package:futurehrm_android_app/models/route_paths.dart';
 import 'package:futurehrm_android_app/models/staff.dart';
+import 'package:futurehrm_android_app/page/menu/widget/main_drawer.dart';
 import 'package:hive/hive.dart';
 
 class MenuPage extends StatefulWidget {
@@ -59,7 +60,7 @@ class _MenuPageState extends State<MenuPage> {
         }
 
         Staff currentAuth = snapshot.data!;
-
+        print("URL: ${ApiService.imgUrl}/file${currentAuth.photo}");
         return Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
@@ -153,40 +154,11 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
           ),
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                  ),
-                  accountName:
-                      Text("${currentAuth.firstname} ${currentAuth.lastname}"),
-                  accountEmail: Text("${currentAuth.email}"),
-                  currentAccountPicture: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      "${ApiService.baseUrl}/static/images/${currentAuth.photo}",
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('Profile'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
+          drawer: MainDrawer(
+            firstname: currentAuth.firstname!,
+            lastname: currentAuth.lastname!,
+            email: currentAuth.email!,
+            photoUrl: '${ApiService.imgUrl}/file${currentAuth.photo}',
           ),
         );
       },
