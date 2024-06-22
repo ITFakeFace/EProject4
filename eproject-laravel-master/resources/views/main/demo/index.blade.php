@@ -1,18 +1,17 @@
 @extends('main._layouts.master')
 
 @section('content')
-
     <!-- Basic card -->
     <div class="card">
         <div class="card-header header-elements-inline">
             <h5 class="card-title">Basic card - {{ $message }}</h5>
-            <div class="header-elements">
+            {{-- <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
                     <a class="list-icons-item" data-action="reload"></a>
                     <a class="list-icons-item" data-action="remove"></a>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <div class="card-body">
@@ -36,13 +35,13 @@
     <div class="card">
         <div class="card-header header-elements-inline">
             <h5 class="card-title">Basic table</h5>
-            <div class="header-elements">
+            {{-- <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
                     <a class="list-icons-item" data-action="reload"></a>
                     <a class="list-icons-item" data-action="remove"></a>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <div class="card-body">
@@ -53,38 +52,38 @@
         <div class="table-responsive">
             <table class="table">
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Eugene</td>
-                    <td>Kopyov</td>
-                    <td>@Kopyov</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Victoria</td>
-                    <td>Baker</td>
-                    <td>@Vicky</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>James</td>
-                    <td>Alexander</td>
-                    <td>@Alex</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Franklin</td>
-                    <td>Morrison</td>
-                    <td>@Frank</td>
-                </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Eugene</td>
+                        <td>Kopyov</td>
+                        <td>@Kopyov</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Victoria</td>
+                        <td>Baker</td>
+                        <td>@Vicky</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>James</td>
+                        <td>Alexander</td>
+                        <td>@Alex</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Franklin</td>
+                        <td>Morrison</td>
+                        <td>@Frank</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -100,13 +99,13 @@
             <div class="card">
                 <div class="card-header header-elements-inline">
                     <h5 class="card-title">Horizontal form</h5>
-                    <div class="header-elements">
+                    {{-- <div class="header-elements">
                         <div class="list-icons">
                             <a class="list-icons-item" data-action="collapse"></a>
                             <a class="list-icons-item" data-action="reload"></a>
                             <a class="list-icons-item" data-action="remove"></a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="card-body">
@@ -164,13 +163,13 @@
             <div class="card">
                 <div class="card-header header-elements-inline">
                     <h5 class="card-title">Vertical form</h5>
-                    <div class="header-elements">
+                    {{-- <div class="header-elements">
                         <div class="list-icons">
                             <a class="list-icons-item" data-action="collapse"></a>
                             <a class="list-icons-item" data-action="reload"></a>
                             <a class="list-icons-item" data-action="remove"></a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="card-body">
@@ -210,7 +209,6 @@
         </div>
     </div>
     <!-- /form layouts -->
-
 @endsection
 
 @section('scripts')

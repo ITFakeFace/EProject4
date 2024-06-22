@@ -24,14 +24,6 @@
     <!-- Basic datatable -->
     <div class="card">
         <h1 class="pt-3 pl-3 pr-3">Employee List</h1>
-        <div class="card-header header-elements-inline">
-
-        </div>
-        <div class="card-body">
-            <form action="#" method="GET">
-
-            </form>
-        </div>
         <table class="table datatable-basic">
             <thead>
                 <tr>
