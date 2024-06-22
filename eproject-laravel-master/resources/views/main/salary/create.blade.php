@@ -21,18 +21,18 @@
     <div class="card">
         <h1 class="pt-3 pl-3 pr-3">Create Payroll</h1>
         <div class="card-header header-elements-inline">
-            
+
         </div>
         <div class="card-body">
             <form action="{{ route('postCalculatedSalary') }}" method="post">
-                @if(session('message'))
+                @if (session('message'))
                     <div class="alert alert-{{ session('message')['type'] }} border-0 alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                         {{ session('message')['message'] }}
                     </div>
                 @endif
 
-                @if($errors->any())
+                @if ($errors->any())
                     <div class="alert alert-danger border-0 alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                         <p><b>Invalid input data:</b></p>
@@ -49,9 +49,9 @@
                         <div class="form-group">
                             <label>Start Date:</label>
                             <div class="input-group">
-                                        <span class="input-group-prepend">
-                                            <span class="input-group-text"><i class="icon-calendar22"></i></span>
-                                        </span>
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text"><i class="icon-calendar22"></i></span>
+                                </span>
                                 <input type="text" class="form-control daterange-single" value="{{ now()->format('Y-m-d') }}" name="from_date">
                             </div>
                         </div>
@@ -60,9 +60,9 @@
                         <div class="form-group">
                             <label>End Date:</label>
                             <div class="input-group">
-                                        <span class="input-group-prepend">
-                                            <span class="input-group-text"><i class="icon-calendar22"></i></span>
-                                        </span>
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text"><i class="icon-calendar22"></i></span>
+                                </span>
                                 <input type="text" class="form-control daterange-single" value="{{ now()->format('Y-m-d') }}" name="to_date">
                             </div>
                         </div>
@@ -88,136 +88,139 @@
                             <div class="tab-pane fade show active" id="staff" role="tabpanel" aria-labelledby="staff-tab">
                                 <table class="table datatable-basic">
                                     <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>Join Date</th>
-                                        <th>Select</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Join Date</th>
+                                            <th>Select</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($listStaff as $index => $staff)
-                                        <tr>
-                                            <td>{{ $staff->code }}</td>
-                                            <td>{{ $staff->firstname . ' '. $staff->lastname }}</td>
-                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $staff->joinedAt)->format('d/m/Y') }}</td>
-                                            <td>
-                                                <input type="checkbox" name="staffs[{{ $index }}]" value="{{ $staff->id }}" checked>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                        @foreach ($listStaff as $index => $staff)
+                                            <tr>
+                                                <td>{{ $staff->code }}</td>
+                                                <td>{{ $staff->firstname . ' ' . $staff->lastname }}</td>
+                                                <td>
+                                                    {{ \Carbon\Carbon::createFromTimestampMs($staff->joinedAt)->format('d/m/Y') }}
+                                                    {{-- {{ $staff->joinedAt }} --}}
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="staffs[{{ $index }}]" value="{{ $staff->id }}" checked>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="allowance" role="tabpanel" aria-labelledby="allowance-tab">
                                 <table class="table datatable-basic">
                                     <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Taxable</th>
-                                        <th>Unit</th>
-                                        <th>Value</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Taxable</th>
+                                            <th>Unit</th>
+                                            <th>Value</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($listSalaryOption as $index => $item)
-                                        @if($item->type === 'ALLOWANCE')
-                                            <tr>
-                                                <td>{{ $item->name }}</td>
-                                                <td>
-                                                    <input type="checkbox" {{ $item->have_tax ? 'checked' : '' }} disabled>
-                                                </td>
-                                                <td>
-                                                    @if($item->unit == 'NUMBER')
-                                                        VNĐ
-                                                    @elseif($item->unit == 'PERCENT')
-                                                        Percent
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <input type="hidden" name="options[{{ $index }}][type]" value="{{ $item->type }}">
-                                                    <input type="hidden" name="options[{{ $index }}][key]" value="{{ $item->key }}">
-                                                    <input type="hidden" name="options[{{ $index }}][name]" value="{{ $item->name }}">
-                                                    <input type="hidden" name="options[{{ $index }}][have_tax]" value="{{ $item->have_tax ? 1 : 0 }}">
-                                                    <input type="hidden" name="options[{{ $index }}][unit]" value="{{ $item->unit }}">
-                                                    <input type="number" class="form-control" name="options[{{ $index }}][value]" value="{{ $item->value }}">
-                                                    <input type="hidden" name="options[{{ $index }}][min_tax]" value="{{ $item->min_tax }}">
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
+                                        @foreach ($listSalaryOption as $index => $item)
+                                            @if ($item->type === 'ALLOWANCE')
+                                                <tr>
+                                                    <td>{{ $item->name }}</td>
+                                                    <td>
+                                                        <input type="checkbox" {{ $item->have_tax ? 'checked' : '' }} disabled>
+                                                    </td>
+                                                    <td>
+                                                        @if ($item->unit == 'NUMBER')
+                                                            VNĐ
+                                                        @elseif($item->unit == 'PERCENT')
+                                                            Percent
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <input type="hidden" name="options[{{ $index }}][type]" value="{{ $item->type }}">
+                                                        <input type="hidden" name="options[{{ $index }}][key]" value="{{ $item->key }}">
+                                                        <input type="hidden" name="options[{{ $index }}][name]" value="{{ $item->name }}">
+                                                        <input type="hidden" name="options[{{ $index }}][have_tax]" value="{{ $item->have_tax ? 1 : 0 }}">
+                                                        <input type="hidden" name="options[{{ $index }}][unit]" value="{{ $item->unit }}">
+                                                        <input type="number" class="form-control" name="options[{{ $index }}][value]" value="{{ $item->value }}">
+                                                        <input type="hidden" name="options[{{ $index }}][min_tax]" value="{{ $item->min_tax }}">
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="insurance" role="tabpanel" aria-labelledby="insurance-tab">
                                 <table class="table datatable-basic">
                                     <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Unit</th>
-                                        <th>Value</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Unit</th>
+                                            <th>Value</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($listSalaryOption as $index => $item)
-                                        @if($item->type === 'INSURANCE')
-                                            <tr>
-                                                <td>{{ $item->name }}</td>
-                                                <td>
-                                                    @if($item->unit == 'NUMBER')
-                                                        VNĐ
-                                                    @elseif($item->unit == 'PERCENT')
-                                                        Percent
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <input type="hidden" name="options[{{ $index }}][type]" value="{{ $item->type }}">
-                                                    <input type="hidden" name="options[{{ $index }}][key]" value="{{ $item->key }}">
-                                                    <input type="hidden" name="options[{{ $index }}][name]" value="{{ $item->name }}">
-                                                    <input type="hidden" name="options[{{ $index }}][have_tax]" value="{{ $item->have_tax ? 1 : 0 }}">
-                                                    <input type="hidden" name="options[{{ $index }}][unit]" value="{{ $item->unit }}">
-                                                    <input type="number" class="form-control" name="options[{{ $index }}][value]" value="{{ $item->value }}">
-                                                    <input type="hidden" name="options[{{ $index }}][min_tax]" value="{{ $item->min_tax }}">
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
+                                        @foreach ($listSalaryOption as $index => $item)
+                                            @if ($item->type === 'INSURANCE')
+                                                <tr>
+                                                    <td>{{ $item->name }}</td>
+                                                    <td>
+                                                        @if ($item->unit == 'NUMBER')
+                                                            VNĐ
+                                                        @elseif($item->unit == 'PERCENT')
+                                                            Percent
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <input type="hidden" name="options[{{ $index }}][type]" value="{{ $item->type }}">
+                                                        <input type="hidden" name="options[{{ $index }}][key]" value="{{ $item->key }}">
+                                                        <input type="hidden" name="options[{{ $index }}][name]" value="{{ $item->name }}">
+                                                        <input type="hidden" name="options[{{ $index }}][have_tax]" value="{{ $item->have_tax ? 1 : 0 }}">
+                                                        <input type="hidden" name="options[{{ $index }}][unit]" value="{{ $item->unit }}">
+                                                        <input type="number" class="form-control" name="options[{{ $index }}][value]" value="{{ $item->value }}">
+                                                        <input type="hidden" name="options[{{ $index }}][min_tax]" value="{{ $item->min_tax }}">
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="tax" role="tabpanel" aria-labelledby="tax-tab">
                                 <table class="table datatable-basic">
                                     <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Unit</th>
-                                        <th>Value</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Unit</th>
+                                            <th>Value</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($listSalaryOption as $index => $item)
-                                        @if($item->type === 'TAX')
-                                            <tr>
-                                                <td>{{ $item->name }}</td>
-                                                <td>
-                                                    @if($item->unit == 'NUMBER')
-                                                        VNĐ
-                                                    @elseif($item->unit == 'PERCENT')
-                                                        Percent
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <input type="hidden" name="options[{{ $index }}][type]" value="{{ $item->type }}">
-                                                    <input type="hidden" name="options[{{ $index }}][key]" value="{{ $item->key }}">
-                                                    <input type="hidden" name="options[{{ $index }}][name]" value="{{ $item->name }}">
-                                                    <input type="hidden" name="options[{{ $index }}][have_tax]" value="{{ $item->have_tax ? 1 : 0 }}">
-                                                    <input type="hidden" name="options[{{ $index }}][unit]" value="{{ $item->unit }}">
-                                                    <input type="hidden" name="options[{{ $index }}][min_tax]" value="{{ $item->min_tax }}">
-                                                    <input type="number" class="form-control" name="options[{{ $index }}][value]" value="{{ $item->value }}">
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
+                                        @foreach ($listSalaryOption as $index => $item)
+                                            @if ($item->type === 'TAX')
+                                                <tr>
+                                                    <td>{{ $item->name }}</td>
+                                                    <td>
+                                                        @if ($item->unit == 'NUMBER')
+                                                            VNĐ
+                                                        @elseif($item->unit == 'PERCENT')
+                                                            Percent
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <input type="hidden" name="options[{{ $index }}][type]" value="{{ $item->type }}">
+                                                        <input type="hidden" name="options[{{ $index }}][key]" value="{{ $item->key }}">
+                                                        <input type="hidden" name="options[{{ $index }}][name]" value="{{ $item->name }}">
+                                                        <input type="hidden" name="options[{{ $index }}][have_tax]" value="{{ $item->have_tax ? 1 : 0 }}">
+                                                        <input type="hidden" name="options[{{ $index }}][unit]" value="{{ $item->unit }}">
+                                                        <input type="hidden" name="options[{{ $index }}][min_tax]" value="{{ $item->min_tax }}">
+                                                        <input type="number" class="form-control" name="options[{{ $index }}][value]" value="{{ $item->value }}">
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

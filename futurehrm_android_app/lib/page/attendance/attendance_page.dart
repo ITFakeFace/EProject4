@@ -178,19 +178,38 @@ class _AttendancePageState extends State<AttendancePage> {
                 calendarBuilders: CalendarBuilders(
                   defaultBuilder: (context, day, focusedDay) {
                     // print("day: ${day.toLocal()}");
+                    DateTime dateOnly = DateTime(day.year, day.month, day.day);
                     _attendanceStatus.keys.forEach((element) {
                       print(
                           "ele: $element, color: ${_attendanceStatus[element]}");
+                      print("dateOnly: ${dateOnly}");
                     });
-                    DateTime dateOnly = DateTime(day.year, day.month, day.day);
-                    if (_attendanceStatus.containsKey(dateOnly.toLocal()) &&
-                        (day.weekday != DateTime.saturday &&
-                            day.weekday != DateTime.sunday)) {
-                      print("day: ${day.day} legit ${_attendanceStatus[day]}");
+                    late dynamic currentColor = null;
+                    if (day.isBefore(DateTime.now())) {
+                      if (_attendanceStatus.containsKey(dateOnly.toLocal()) &&
+                          (day.weekday != DateTime.saturday &&
+                              day.weekday != DateTime.sunday)) {
+                        // print(
+                        //     "day: ${day.day} legit ${_attendanceStatus[dateOnly.toLocal()]}");
+                        return Container(
+                          margin: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: _attendanceStatus[dateOnly.toLocal()],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${day.day}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }
+                    } else {
                       return Container(
                         margin: const EdgeInsets.all(4.0),
                         decoration: BoxDecoration(
-                          color: _attendanceStatus[day],
+                          color: Colors.black26,
                           shape: BoxShape.circle,
                         ),
                         child: Center(
@@ -201,6 +220,7 @@ class _AttendancePageState extends State<AttendancePage> {
                         ),
                       );
                     }
+                    print("Invalid Date");
                     return null;
                   },
                 ),

@@ -437,7 +437,9 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 @foreach ($data as $time_leave)
                     @if ($time_leave['type'] == 0)
                         <tr>
-                            <td>{{ $time_leave['dayTimeLeave'] }}</td>
+                            <td>
+                                {{ \Carbon\Carbon::createFromTimestampMs($time_leave['dayTimeLeave'])->format('d/m/Y') }}
+                            </td>
                             <td><?php echo $time_leave['time'] == '08:00:00' ? '1 day' : '0.5 day'; ?></td>
                             <td><?php echo $time_leave['type'] == 0 ? 'Additional Attendance' : 'Leave Registration'; ?></td>
                             <td>
@@ -462,8 +464,8 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 <td><span class="badge badge-danger">Closed</span></td>
                             @elseif($time_leave['isApproved'] == 0 || ($time_leave['isApproved'] == 2 && auth()->user()->is_manager == 1))
                                 <?php
-                                $date1 = date_create($time_leave['createdAt']);
-                                $date2 = date_create(date('Y-m-d'));
+                                $date1 = \Carbon\Carbon::parse($time_leave['createdAt']);
+                                $date2 = \Carbon\Carbon::today();
                                 $diff = date_diff($date1, $date2);
                                 ?>
                                 @if ($diff->format('%a') > 1)

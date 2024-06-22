@@ -8,7 +8,7 @@
             @csrf
             <div class="card mb-0">
                 <div class="card-body">
-                    @if($errors->any())
+                    @if ($errors->any())
                         <div class="alert alert-danger alert-styled-left alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                             @foreach ($errors->all() as $error)
@@ -16,7 +16,7 @@
                             @endforeach
                         </div>
                     @endif
-                    @if(session('authentication'))
+                    @if (session('authentication'))
                         <div class="alert alert-danger alert-styled-left alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                             {{ session('authentication') }}
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="form-group form-group-feedback form-group-feedback-left">
-                        <input type="password" class="form-control" placeholder="Mật khẩu" name="password">
+                        <input type="password" class="form-control" placeholder="Password" name="password">
                         <div class="form-control-feedback">
                             <i class="icon-lock2 text-muted"></i>
                         </div>
