@@ -87,7 +87,6 @@
 
             </div>
         @endsection
-
         @section('script-content')
             <script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
             <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
@@ -97,7 +96,6 @@
             <script src="{{ asset('path/to/fontawesome.min.js') }}"></script>
             <!-- Include SweetAlert2 JS -->
             <script src="{{ asset('path/to/sweetalert2.min.js') }}"></script>
-
             <script>
                 $(document).ready(function() {
                     $("#comment").DataTable();
