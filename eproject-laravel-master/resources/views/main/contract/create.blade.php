@@ -18,10 +18,10 @@
     <form action="{{ route('postSaveContract') }}" method="post">
         @csrf
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card">
-                    <h1 class="pt-3 pl-3 pr-3">Create New Contract</h1>
-                    <div>
+                    <h1 class="pt-3 pl-3 pr-3">Tạo Mới Hợp Đồng</h1>
+                    <div class="card-header header-elements-inline">
                     </div>
                     <div class="card-body">
                         @if(session('message'))
@@ -33,7 +33,7 @@
                         @if($errors->any())
                             <div class="alert alert-danger border-0 alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                                <p><b>Incorrect input data:</b></p>
+                                <p><b>Dữ liệu đầu vào không chính xác:</b></p>
                                 <ul>
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -42,7 +42,7 @@
                             </div>
                         @endif
                         <div class="form-group">
-                            <label>Employee ID</label>
+                            <label>Mã nhân viên</label>
                             <select class="form-control select-search" name="staffId">
                                 @foreach($listStaff as $staff)
                                     <option value="{{ $staff->id }}">{{ $staff->firstname .' '. $staff->lastname }}</option>
@@ -52,7 +52,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Contract Start Date:</label>
+                                    <label>Ngày bắt đầu hợp đồng:</label>
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Contract End Date:</label>
+                                    <label>Ngày kết thúc hợp đồng:</label>
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
@@ -76,12 +76,12 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Base Salary:</label>
+                                    <label>Lương cơ bản:</label>
                                     <input type="number" class="form-control" name="baseSalary" value="0">
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-success" type="submit">Save</button>
+                        <button class="btn btn-success" type="submit">Lưu</button>
                     </div>
                 </div>
             </div>

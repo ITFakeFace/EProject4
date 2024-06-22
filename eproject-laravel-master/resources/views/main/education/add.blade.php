@@ -13,15 +13,17 @@
         }
 
         .wrap-select {
-	        width: 302px;
-	        overflow: hidden;
-        }
-        .wrap-select select {
-            width: 320px;
-            margin: 0;
-            background-color: #212121;
-        }
+	width: 302px;
+	overflow: hidden;
+}
+.wrap-select select {
+	width: 320px;
+	margin: 0;
+	background-color: #212121;
+}
     </style>
+
+
 @endsection
 
 @section('js')    
@@ -33,139 +35,141 @@
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('global_assets/js/demo_pages/picker_date.js') }}"></script>
     <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
-    <script src="{{ asset('global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
-    <script src="{{ asset('global_assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
-    <script src="{{ asset('global_assets/js/demo_pages/form_layouts.js') }}"></script>
+    <script src="{{asset('global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+	<script src="{{asset('global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
+    <script src="{{asset('global_assets/js/demo_pages/form_layouts.js')}}"></script>
+
 @endsection
 
+
 @section('content')
-    <!-- Basic datatable -->
-    <!-- 2 columns form -->
-    <div class="card">
-        <div>
-            <h1 class="pt-3 pl-3 pr-3">Add New Certificate</h1>
-            <div class="header-elements">
-                <div class="list-icons">
-                    <a class="list-icons-item" data-action="collapse"></a>
-                    <a class="list-icons-item" data-action="reload"></a>
-                    <a class="list-icons-item" data-action="remove"></a>
-                </div>
-            </div>
-        </div>
+   <!-- Basic datatable -->
+    	<!-- 2 columns form -->
+        <div class="card">
+					<div class="card-header header-elements-inline">
+                    <h1 class="pt-3 pl-3 pr-3">Thêm Mới Văn Bằng Chứng Chỉ</h1>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+                    @if (\Session::has('success'))
+                        <div class="">
+                            <div class="alert alert-success">
+                                {!! \Session::get('success') !!}
+                            </div>
+                        </div>
+                      @endif
 
-        @if (\Session::has('success'))
-            <div class="">
-                <div class="alert alert-success">
-                    {!! \Session::get('success') !!}
-                </div>
-            </div>
-        @endif
-
-        @if (session('message'))
-            <div class="">
-                <div class="alert alert-primary">
-                    {!! session('message') !!}
-                </div>
-            </div>
-        @endif
-
-        <!-- validate  -->
-        @if($errors->any())
-            <div class="alert alert-danger border-0 alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                <p><b>Incorrect input data:</b></p>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <div class="card-body">
-            <form action="{{ route('postEducation') }}" method="post" enctype="multipart/form-data">
-                @csrf
-                <div class="row">
-                    <div class="col-md-12">
-                        <fieldset>
-                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Information</legend>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Employee ID:(*)</label>
-                                    <select class="form-control" name="txtStaffID" color="red">
-                                        @foreach($data_staff as $staff)
-                                            <option value="{{ $staff['id'] }}">{{ $staff['lastname'] }} {{ $staff['firstname'] }} || {{ $staff['id'] }} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Level:</label>
-                                        <input type="text" class="form-control" name="txtLevel" value="{{ old('txtLevel') }}">
-                                    </div>
+                        @if (session('message'))
+                            <div class="">
+                                <div class="alert alert-primary">
+                                    {!! session('message') !!}
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Level Name:</label>
-                                        <input type="text" class="form-control" name="txtLevelName" value="{{ old('txtLevelName') }}">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>School Name:(*)</label>
-                                        <input type="text" class="form-control" name="txtSchool" value="{{ old('txtSchool') }}" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Field of Study:(*)</label>
-                                        <input type="text" class="form-control" name="txtFieldOfStudy" value="{{ old('txtFieldOfStudy') }}" required>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Graduated Year:(*)</label>
-                                        <input type="text" class="form-control" name="txtGraduatedYear" value="{{ old('txtGraduatedYear') }}" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Grade:</label>
-                                        <input type="text" class="form-control" name="txtGrade"  value="{{ old('txtGrade') }}" >
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Mode of Study:</label>
-                                        <input type="text" class="form-control" name="txtModeOf"  value="{{ old('txtModeOf') }}" >
-                                    </div>
-                                </div>
-                            </div>
-
-                        </fieldset>
+                        @endif
+<!-- validate  -->
+                        @if($errors->any())
+                    <div class="alert alert-danger border-0 alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                        <p><b>Dữ liệu đầu vào không chính xác:</b></p>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                </div>
-                <div class="text-left">
-                    <button type="submit" class="btn btn-primary">Save <i class="icon-paperplane ml-2"></i></button>
-                    <button type="reset" class="btn btn-success">Reset <i class="icon-paperplane ml-2"></i></button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- /2 columns form -->
+                @endif
+
+					<div class="card-body">
+						<form action="{{ route('postEducation') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+							<div class="row">
+                            <div class="col-md-6">
+									<fieldset>
+					                	<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Imformation</legend>
+
+										<div class="row">
+											<div class="col-md-6">
+                                            <label>ID Nhân viên:(*)</label>
+                                                <select class="form-control" name="txtStaffID" color="red">
+                                                @foreach($data_staff as $staff)
+                                                <option value="{{ $staff['id'] }}">{{ $staff['lastname'] }} {{ $staff['firstname'] }} || {{ $staff['id'] }} </option>
+                                                @endforeach
+                                                </select>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+                                                    <label>Cấp Bậc:</label>
+                                                   <input type="text" class="form-control" name="txtLevel" value="{{ old('txtLevel') }}">
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+                                                <label>Tên Cấp Bậc:</label>
+                                                
+                                                <input type="text" class="form-control" name="txtLevelName" value="{{ old('txtLevelName') }}">
+												</div>
+											</div>
+
+											<div class="col-md-6">
+												<div class="form-group">
+                                                <label>Tên Trường:(*)</label>
+                                                <input type="text" class="form-control" name="txtSchool" value="{{ old('txtSchool') }}" require>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+                                                <label>Chuyên ngành:(*)</label>
+                                                <input type="text" class="form-control" name="txtFieldOfStudy" value="{{ old('txtFieldOfStudy') }}" require>
+					                            </div>
+											</div>
+
+											<div class="col-md-6">
+												<div class="form-group">
+                                                <label>Năm tốt nghiện:(*)</label>
+                                                <input type="text" class="form-control" name="txtGraduatedYear" value="{{ old('txtGraduatedYear') }}" require>
+												</div>
+											</div>
+										</div>
+
+                                        <div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+                                                <label>Xếp loại:</label>
+                                                <input type="text" class="form-control" name="txtGrade"  value="{{ old('txtGrade') }}" >
+					                            </div>
+											</div>
+
+											<div class="col-md-6">
+												<div class="form-group">
+                                                <label>Hình thức học:</label>
+                                                <input type="text" class="form-control" name="txtModeOf"  value="{{ old('txtModeOf') }}" >
+												</div>
+											</div>
+										</div>
+
+                                       
+									</fieldset>
+								</div>
+							</div>
+							<div class="text-left">
+								<button type="submit" class="btn btn-primary">Lưu <i class="icon-paperplane ml-2"></i></button>
+                                <button type="reset" class="btn btn-success">Làm mới <i class="icon-paperplane ml-2"></i></button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- /2 columns form -->
     <!-- /basic datatable -->
 @endsection
 
@@ -185,7 +189,7 @@
                 cache: false,
                 success: function (data)
                 {
-                    var obj = $.parseJSON(data);
+                    var obj = $.parseJSON( data);
                     $('#district').empty();
                     for (var i = 0; i < obj.length; i++) {
                         $('#district').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
@@ -214,5 +218,9 @@
                 }
             });
         });
+
     </script>
+
+
+
 @endsection
