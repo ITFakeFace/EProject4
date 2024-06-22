@@ -121,8 +121,7 @@
             </div>
         </div>
     
-        <div class="row mt-4" style="border: 1px solid #cb370e">
-            
+        <div class="row mt-4" style="border: 1px solid grey; background-color:white" >
             <div class="col-6 mt-2">
                 <div class="col-lg-12 d-flex justify-content-center">
                     <img src="{{ asset('images/Logo-FutureHRM-index.svg') }}" alt="" width="250" height="auto" class="mr-2">
@@ -133,7 +132,7 @@
                     <p class="des"><i class="icon-location3 mr-2" style="color: #cb370e"></i> 199 Phạm Huy Thông, Phường 6, Quận Gò Vấp Thành Phố Hồ Chí Minh.</p>
                     <p class="des"><i class="icon-mail5 mr-2" style="color: #cb370e"></i>info@hudeco.com.vn </p>
                     <p class="des"><i class="icon-phone2 mr-2" style="color: #cb370e"></i>028.2705.2705 </p>
-                    <p class="des"><i class="icon-display mr-2" style="color: #cb370e"></i><a href="https://hudeco.comv.vn">https://hudeco.comv.vn</a> </p>
+                    <p class="des"><i class="icon-display mr-2" style="color: #cb370e"></i><a href="https://hudeco.comv.vn">https://hudeco.com.vn</a> </p>
                 </div>
             </div>
             <div class="col-6 mt-3">
