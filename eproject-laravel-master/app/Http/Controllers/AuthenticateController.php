@@ -86,7 +86,7 @@ class AuthenticateController extends Controller
     );
 
     Mail::send('auth.email', ['token' => $token], function ($message) use ($request) {
-      $message->from('nfsred2406@gmail.com');
+      $message->from('info-FHRM@gmail.com');
       $message->to($request->email);
       $message->subject('Reset Password Notification');
     });

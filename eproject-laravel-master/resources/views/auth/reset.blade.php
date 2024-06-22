@@ -27,30 +27,30 @@
                 @endif
                 <div class="text-center mb-3">
                     <i class="icon-spinner11 icon-2x border-3 rounded-round p-3 mb-3 mt-1" style="color: #046A38; border-color: #046A38"></i>
-                    <h5 class="mb-0">Reset Password/h5>
+                    <h5 class="mb-0">Reset Password</h5>
                     <span class="d-block text-muted">Enter a new password for your account</span>
                 </div>
 
                 <div class="form-group form-group-feedback form-group-feedback-left">
-                    <input type="password" class="form-control" placeholder="Mật khẩu mới" name="password">
+                    <input type="password" class="form-control" placeholder="Enter new password" name="password">
                     <div class="form-control-feedback">
                         <i class="icon-lock2 text-muted"></i>
                     </div>
                 </div>
 
                 <div class="form-group form-group-feedback form-group-feedback-left">
-                    <input type="password" class="form-control" placeholder="Nhập lại mật khẩu mới" name="password_confirm">
+                    <input type="password" class="form-control" placeholder="Confirm new password" name="password_confirm">
                     <div class="form-control-feedback">
                         <i class="icon-lock2 text-muted"></i>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn bg-blue btn-block"> Reset Password/button>
+                    <button type="submit" class="btn bg-blue btn-block"> Reset Password</button>
                 </div>
 
                 <div class="text-center">
-                    <a href="{{ action('AuthenticateController@getLogin') }}">Login!</a>
+                    Or <a href="{{ action('AuthenticateController@getLogin') }}">Login?</a>
                 </div>
             </div>
         </div>

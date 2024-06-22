@@ -4,7 +4,7 @@
     <div class="content d-flex justify-content-center align-items-center">
 
         <!-- Login form -->
-        <form class="login-form" method="post" action="{{ route('postLogin') }}" style="width: 20rem">
+        <form class="login-form" method="post" action="{{ route('postLogin') }}" style="width: 30rem; height:30rem">
             @csrf
             <div class="card mb-0">
                 <div class="card-body">
@@ -23,8 +23,9 @@
                         </div>
                     @endif
                     <div class="text-center mb-3">
-                        <i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
-                        <h5 class="mb-0">Login</h5>
+                        {{-- <i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i> --}}
+                        <img src="{{ asset('images/Logo-FutureHRM-index.svg') }}" alt="Logo" style="width: 200px; height: 100px;">
+                        <h2 class="mb-0">Login</h2>
                     </div>
 
                     <div class="form-group form-group-feedback form-group-feedback-left">
