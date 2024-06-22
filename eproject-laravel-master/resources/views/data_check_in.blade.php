@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Danh sách chấm công</title>
+    <title>Attendance Check-in List</title>
     <style>
         body {
             font-family: DejaVu Sans
@@ -22,28 +22,28 @@
 </head>
 <body>
     <div class="container-fluid" style="height: 500px">
-        <caption><h1>Danh sách chấm công {{ $date }}</h1></caption>
+        <caption><h1>Check-in List {{ $date }}</h1></caption>
         <div style="width: 100%; display: flex; height: 250px">
             <div style="width: 50%; float: left">
                 <table>
                     <tr>
-                        <th style="text-align: left; vertical-align: text-top;">Mã nhân viên: </th>
+                        <th style="text-align: left; vertical-align: text-top;">Employee Id: </th>
                         <td>{{ auth()->user()->code }}</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left; vertical-align: text-top;">Họ và tên: </th>
+                        <th style="text-align: left; vertical-align: text-top;">Fullname: </th>
                         <td>{{ auth()->user()->firstname }} {{ auth()->user()->lastname }}</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left; vertical-align: text-top;">Phòng ban: </th>
+                        <th style="text-align: left; vertical-align: text-top;">Department: </th>
                         <td> {{ $department_of_staff }}</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left; vertical-align: text-top;">Chức danh: </th>
-                        <td>{{ auth()->user()->is_manager == 1 ? "Quản lý" : "Nhân viên" }}</td>
+                        <th style="text-align: left; vertical-align: text-top;">Position: </th>
+                        <td>{{ auth()->user()->is_manager == 1 ? "Manager" : "Staff" }}</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left; vertical-align: text-top;">Ngày xuất dữ liệu: </th>
+                        <th style="text-align: left; vertical-align: text-top;">Export Date: </th>
                         <td>{{ date("d/m/Y") }}</td>
                     </tr>
                 </table>
@@ -51,20 +51,20 @@
             <div style="width: 50%; float: left">
                 <table>
                     <tr>
-                        <th style="text-align: left; width:100px; vertical-align: text-top;">Công ty: </th>
-                        <td>CÔNG TY TNHH XUẤT NHẬP KHẨU TÂN THÀNH NAM AGRICULTURE</td>
+                        <th style="text-align: left; width:100px; vertical-align: text-top;">Company: </th>
+                        <td>HUDECO Join Stock Company</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left; vertical-align: text-top;">Địa chỉ: </th>
-                        <td>82/1C Hoàng Bật Đạt, Phường 15, Quận Tân Bình, Thành Phố Hồ Chí Minh.</td>
+                        <th style="text-align: left; vertical-align: text-top;">Address: </th>
+                        <td>199 Phạm Huy Thông, Phường 6, Quận Gò Vấp, Thành Phố Hồ Chí Minh.</td>
                     </tr>
                     <tr>
                         <th style="text-align: left; vertical-align: text-top;">Email: </th>
-                        <td>Tanthanhnam.agriculture@gmail.com</td>
+                        <td>info@gmail.com</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left; width:110px; vertical-align: text-top;">Điện thoại: </th>
-                        <td>02633.797.676</td>
+                        <th style="text-align: left; width:110px; vertical-align: text-top;">Phone: </th>
+                        <td>0707997989</td>
                     </tr>
                 </table>
             </div>
@@ -73,12 +73,12 @@
         <table id="results" class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="th">Ngày</th>
-                    <th class="th">Giờ vào</th>
-                    <th class="th">Giờ ra</th>
-                    <th class="th">Làm việc</th>
-                    <th class="th">Công</th>
-                    <th class="th">Ghi chú</th>
+                    <th class="th">Date</th>
+                    <th class="th">Check-in</th>
+                    <th class="th">Check-out</th>
+                    <th class="th">Working</th>
+                    <th class="th">Attendances</th>
+                    <th class="th">Note</th>
                 </tr>
             </thead>
             <tbody>
@@ -109,23 +109,23 @@
                             <?php
                                 if($check_in_out['in_late']){
                                     $date = date_create($check_in_out['in_late']);
-                                    echo 'Đi trễ: ' . date_format($date,"H") . ' giờ';
-                                    echo ' ' . date_format($date,"i") . ' phút';
-                                    echo ' ' . date_format($date,"s") . ' giây';
+                                    echo 'Check-in late: ' . date_format($date,"H") . ' hour';
+                                    echo ' ' . date_format($date,"i") . ' minute';
+                                    echo ' ' . date_format($date,"s") . ' second';
                                     echo "<br>";
                                 }
                                 if($check_in_out['out_soon']){
                                     $date = date_create($check_in_out['out_soon']);
-                                    echo 'Về sớm: ' . date_format($date,"H") . ' giờ';
-                                    echo ' ' . date_format($date,"i") . ' phút';
-                                    echo ' ' . date_format($date,"s") . ' giây';
+                                    echo 'Check-out early: ' . date_format($date,"H") . ' hour';
+                                    echo ' ' . date_format($date,"i") . ' minute';
+                                    echo ' ' . date_format($date,"s") . ' second';
                                     echo "<br>";
                                 }
                                 if($check_in_out['ot']){
                                     $date = date_create($check_in_out['ot']);
-                                    echo 'Tăng ca: ' . date_format($date,"H") . ' giờ';
-                                    echo ' ' . date_format($date,"i") . ' phút';
-                                    echo ' ' . date_format($date,"s") . ' giây';
+                                    echo 'Ovetime: ' . date_format($date,"H") . ' hour';
+                                    echo ' ' . date_format($date,"i") . ' minute';
+                                    echo ' ' . date_format($date,"s") . ' second';
                                     echo "<br>";
                                 }
                             ?>
@@ -150,7 +150,7 @@
                                     echo $item['time'] == "08:00:00" ? '1' * $item['multiply'] : '0.5' * $item['multiply']
                                 ?>
                             </td>
-                            <td class="td"><?php echo $item['type'] == "0" ? 'Bổ sung công' : 'Phép năm tính lương' ?></td>
+                            <td class="td"><?php echo $item['type'] == "0" ? 'Add more attendances' : 'Yearly paid leaves' ?></td>
                         </tr>
                     @endif
                 @endforeach  
@@ -177,22 +177,22 @@
                                 <?php 
                                     switch ($item['type_leave']) {
                                         case 3:
-                                            echo "Phép nghỉ ốm đau ngắn ngày";
+                                            echo "Short-term sick leave";
                                             break;
                                         case 4:
-                                            echo "Phép nghỉ ốm đau dài ngày";
+                                            echo "Long-term sick leave";
                                             break;
                                         case 5:
-                                            echo "Phép thai sản";
+                                            echo "Maternity leave";
                                             break;
                                         case 6:
-                                            echo "Phép kết hôn";
+                                            echo "Marriage leave";
                                             break;
                                         case 7:
-                                            echo "Phép ma chay";
+                                            echo "Funeral leave";
                                             break;
                                         default:
-                                            echo "Phép nghỉ không lương";
+                                            echo "Unpaid leave";
                                             break;
                                     }    
                                 ?>
@@ -217,20 +217,20 @@
                                 1
                             </td>
                             <td class="td">
-                                Công ngày lễ
+                                Holiday work
                             </td>
                         </tr>
                     @endif
                 @endforeach   
 
                 <tr style="background-color: rgb(231, 231, 231)">
-                    <td class="td" colspan="3">Tổng kết</td>
+                    <td class="td" colspan="3">Summary</td>
                     <td class="td">{{ $summary['total_time'] }}</td>
                     <td class="td">{{ $summary['total_number_time_all'] }}</td>
                     <td class="td">
-                        Đi trễ: {{ $summary['total_late'] }} <br>
-                        Về sớm: {{ $summary['total_soon'] }} <br> 
-                        Tăng ca: {{ $summary['total_ot'] }}
+                        Late check-in: {{ $summary['total_late'] }} <br>
+                        Early check-out: {{ $summary['total_soon'] }} <br> 
+                        Overtime: {{ $summary['total_ot'] }}
                     </td>
                 </tr>
             </tbody>

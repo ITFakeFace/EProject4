@@ -108,8 +108,9 @@
         {{-- End Account Information --}}
 
         <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        @include('main._partials.footer')
-        <!-- partial -->
+        
     </div>
+    <!-- partial:partials/_footer.html -->
+    @include('main._partials.footer')
+    <!-- partial -->
 @endsection
