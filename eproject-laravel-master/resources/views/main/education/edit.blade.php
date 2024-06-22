@@ -23,6 +23,8 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             background-color: #212121;
         }
     </style>
+
+
 @endsection
 
 @section('js')
@@ -34,10 +36,12 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('global_assets/js/demo_pages/picker_date.js') }}"></script>
     <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
-    <script src="{{ asset('global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
-    <script src="{{ asset('global_assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
-    <script src="{{ asset('global_assets/js/demo_pages/form_layouts.js') }}"></script>
+    <script src="{{asset('global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+	<script src="{{asset('global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
+    <script src="{{asset('global_assets/js/demo_pages/form_layouts.js')}}"></script>
+
 @endsection
+
 
 @section('content')
     <!-- Basic datatable -->
@@ -54,21 +58,26 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             </div> --}}
         </div>
 
-        @if (\Session::has('success'))
-            <div class="">
-                <div class="alert alert-success">
-                    {!! \Session::get('success') !!}
-                </div>
-            </div>
-        @endif
+                    @if (session('message'))
+                        <div class="">
+                            <div class="alert alert-primary">
+                                {!! session('message') !!}
+                            </div>
+                        </div>
+                    @endif
 
-        @if (session('message'))
-            <div class="">
-                <div class="alert alert-primary">
-                    {!! session('message') !!}
-                </div>
-            </div>
-        @endif
+                    <!-- validate  -->
+                    @if($errors->any())
+                    <div class="alert alert-danger border-0 alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                        <p><b>Dữ liệu đầu vào không chính xác:</b></p>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
         <!-- validate  -->
         @if ($errors->any())
@@ -83,13 +92,11 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             </div>
         @endif
 
-        <div class="card-body">
-            <form action="{{ action('EducationController@postEditEducation') }}" method="post" enctype="multipart/form-data">
-                @csrf
-                <div class="row">
-                    <div class="col-md-12">
-                        <fieldset>
-                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Information</legend>
+										<div class="row">
+											<div class="col-md-6" hidden>
+                                                <label>ID:</label>
+                                                <input type="text" class="form-control" name="txtID" value="{{$data['id']}}" readonly>
+											</div>
 
                             <div class="row">
                                 <div class="col-md-6" hidden>
@@ -224,5 +231,9 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 }
             });
         });
+
     </script>
+
+
+
 @endsection

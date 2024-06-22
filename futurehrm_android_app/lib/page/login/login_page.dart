@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:futurehrm_android_app/models/ApiService.dart';
 import 'package:futurehrm_android_app/models/route_paths.dart';
@@ -32,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       var response = await ApiService.get("staff/login/$email/$password");
+      print(json.encode(response.toMap()));
       print("Login Success 1");
       if (response.status == 200) {
         if (response.data != null) {
@@ -154,10 +157,11 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () {
                               // _login("dthung6604@gmail.com", "123");
-                              if (_formKey.currentState!.validate()) {
-                                _login(_emailController.text,
-                                    _passwordController.text);
-                              }
+                              _login("baylv@gmail.com", "123456");
+                              // if (_formKey.currentState!.validate()) {
+                              //   _login(_emailController.text,
+                              //       _passwordController.text);
+                              // }
                             },
                             child: const Text(
                               'Log in',

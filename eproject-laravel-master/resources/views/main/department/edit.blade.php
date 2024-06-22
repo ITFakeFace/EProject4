@@ -1,3 +1,4 @@
+    
 @extends('main._layouts.master')
 
 <?php
@@ -13,15 +14,17 @@
         }
 
         .wrap-select {
-            width: 5000px;
-            overflow: hidden;
-        }
-        .wrap-select select {
-            width: 5000px;
-            margin: 0;
-            background-color: #212121;
-        }
+	width: 302px;
+	overflow: hidden;
+}
+.wrap-select select {
+	width: 320px;
+	margin: 0;
+	background-color: #212121;
+}
     </style>
+
+
 @endsection
 
 @section('js')    
@@ -33,13 +36,16 @@
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('global_assets/js/demo_pages/picker_date.js') }}"></script>
     <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
+
 @endsection
 
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Update Department</h1>
-        
+    <h1 class="pt-3 pl-3 pr-3">Cập Nhật Phòng Ban</h1>
+        <div class="card-header header-elements-inline">
+ 
+        </div>
         <div class="card-body">
             @if (\Session::has('success'))
                 <div class="">
@@ -57,44 +63,44 @@
                 </div>
             @endif
 
-            <!-- Validation errors -->
+            <!-- validate  -->
             @if($errors->any())
-                <div class="alert alert-danger border-0 alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                    <p><b>Incorrect input data:</b></p>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
+                    <div class="alert alert-danger border-0 alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                        <p><b>Dữ liệu đầu vào không chính xác:</b></p>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+             
             <form action="{{ route('postEditDepartment') }}" method="post">
                 @csrf
-                <div class="row">
-                    <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-3">
                         <div class="form-group">
-                            <label>Department ID:</label>
+                            <label>ID Phòng ban:</label>
                             <input type="text" class="form-control" name="txtID" value="{{$data['id']}}" readonly/>
                         </div>
                         <div class="form-group">
-                            <label>Department Name:</label>
+                            <label>Tên Phòng ban:</label>
                             <input type="text" class="form-control" name="txtName" value="{{$data['name']}}">
                         </div>
                         <div class="form-group">
-                            <label>Department Name in Vietnamese:</label>
+                            <label>Tên Tiếng Việt:</label>
                             <input type="text" class="form-control" name="txtName1" value="{{$data['nameVn']}}" >
                         </div>
-                        <div hidden class="form-group">
-                            <label>Status:</label>
+                        <div class="form-group">
+                            <label>Trạng thái:</label>
                             <select class="form-control" name="txtDel" color="red" >
                                 <option value="0">None</option>
-                                <option value="1">Temporarily Delete</option>
+                                <option value="1">Xóa tạm thời</option>
                             </select>
                         </div>
-                        <a class="btn btn-primary" role="button" href="{{ action('DepartmentController@index') }}" style="color:white;">Back</a>
-                        <button class="btn btn-success" type="submit"> Save <i class="icon-paperplane ml-2"></i></button>&nbsp;&nbsp;
+                        <a class="btn btn-primary" role="button" href="{{ action('DepartmentController@index') }}" style="color:white;">Quay lại</a>
+                        <button class="btn btn-success" type="submit"> Lưu  <i class="icon-paperplane ml-2"></i></button>&nbsp;&nbsp;
                     </div>
                 </div>
             </form>
@@ -144,11 +150,13 @@
                 url: '{{ action('TimeleaveController@detailTime') }}',
                 Type: 'POST',
                 datatype: 'text',
-                data: {
+                data:
+                {
                     id: id,
                 },
                 cache: false,
-                success: function (data) {
+                success: function (data)
+                {
                     console.log(data);
                     $('#html_pending').empty().append(data);
                     $('#bsc-modal').modal();
@@ -163,11 +171,13 @@
                 url: '{{ action('TimeleaveController@detailLeave') }}',
                 Type: 'POST',
                 datatype: 'text',
-                data: {
+                data:
+                {
                     id: id,
                 },
                 cache: false,
-                success: function (data) {
+                success: function (data)
+                {
                     console.log(data);
                     $('#html_pending').empty().append(data);
                     $('#bsc-modal').modal();
@@ -185,7 +195,7 @@
                 }
 
                 // Setting datatable defaults
-                $.extend($.fn.dataTable.defaults, {
+                $.extend( $.fn.dataTable.defaults, {
                     autoWidth: false,
                     columnDefs: [{ 
                         orderable: false,
@@ -250,11 +260,22 @@
                     _componentDatatableBasic();
                     _componentSelect2();
                 }
-            };
+            }
         }();
 
         document.addEventListener('DOMContentLoaded', function() {
             DatatableBasic.init();
         });
+
+});
+
+
+
+
+
+
     </script>
+
+
+
 @endsection

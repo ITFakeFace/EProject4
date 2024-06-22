@@ -184,15 +184,32 @@ class _AttendancePageState extends State<AttendancePage> {
                           "ele: $element, color: ${_attendanceStatus[element]}");
                       print("dateOnly: ${dateOnly}");
                     });
-                    if (_attendanceStatus.containsKey(dateOnly.toLocal()) &&
-                        (day.weekday != DateTime.saturday &&
-                            day.weekday != DateTime.sunday)) {
-                      print(
-                          "day: ${day.day} legit ${_attendanceStatus[dateOnly.toLocal()]}");
+                    late dynamic currentColor = null;
+                    if (day.isBefore(DateTime.now())) {
+                      if (_attendanceStatus.containsKey(dateOnly.toLocal()) &&
+                          (day.weekday != DateTime.saturday &&
+                              day.weekday != DateTime.sunday)) {
+                        // print(
+                        //     "day: ${day.day} legit ${_attendanceStatus[dateOnly.toLocal()]}");
+                        return Container(
+                          margin: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: _attendanceStatus[dateOnly.toLocal()],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${day.day}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }
+                    } else {
                       return Container(
                         margin: const EdgeInsets.all(4.0),
                         decoration: BoxDecoration(
-                          color: _attendanceStatus[dateOnly.toLocal()],
+                          color: Colors.black26,
                           shape: BoxShape.circle,
                         ),
                         child: Center(
