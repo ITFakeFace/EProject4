@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl = "http://26.144.42.43:8888";
-  static const String imgUrl = "http://26.144.42.43:8001";
+  static const String imgUrl = "http://192.168.1.18:8001";
 
   static Future<ResponseData> get(String endpoint,
       {Map<String, String>? headers}) async {
