@@ -207,7 +207,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             </td>
                             <td>
                                 <?php
-                                $date1 = \Carbon\Carbon::parse($time_leave['created_at']);
+                                $date1 = \Carbon\Carbon::createFromTimestampMs($time_leave['created_at']);
                                 $date2 = \Carbon\Carbon::today();
                                 $diff = date_diff($date1, $date2);
                                 ?>
