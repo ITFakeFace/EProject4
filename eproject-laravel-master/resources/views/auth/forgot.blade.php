@@ -27,7 +27,7 @@
                     <div class="text-center mb-3">
                         <i class="icon-spinner11 icon-2x border-3 rounded-round p-3 mb-3 mt-1" style="color: #046A38; border-color: #046A38"></i>
                         <h5 class="mb-0">Reset Password</h5>
-                        <span class="d-block text-muted">An Instruction email would be sent to your email</span>
+                        <span class="d-block text-muted">An Instruction would be sent to your email</span>
                     </div>
 
                     <div class="form-group form-group-feedback form-group-feedback-right">
@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="text-center">
-                        <a href="{{ action('AuthenticateController@getLogin') }}">Login again.</a>
+                        <a href="{{ action('AuthenticateController@getLogin') }}">Login again?</a>
                     </div>
                 </div>
             </div>
