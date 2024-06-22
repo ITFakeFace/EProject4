@@ -6,12 +6,6 @@
 
 @section('css')
     <link href="{{ asset('assets/css/components_datatables.min.css') }}" rel="stylesheet" type="text/css">
-    <!-- Include Bootstrap CSS if not already included -->
-    <link href="{{ asset('path/to/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-    <!-- Include FontAwesome CSS if not already included -->
-    <link href="{{ asset('path/to/fontawesome.min.css') }}" rel="stylesheet" type="text/css">
-    <!-- Include SweetAlert2 CSS -->
-    <link href="{{ asset('path/to/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('content')
