@@ -59,7 +59,7 @@ class DashboardController extends Controller
       // $yob = date_format($date,"Y");
       // $age = $now['year'] - $yob;
 
-      $date = Carbon::createFromTimestamp($value["dob"] / 1000);
+      $date = Carbon::createFromTimestampMs($value["dob"]);
       $yob = $date->year; // Lấy năm sinh từ đối tượng Carbon
       $now = Carbon::now();
       $currentYear = $now->year; // Lấy năm hiện tại từ đối tượng Carbon
