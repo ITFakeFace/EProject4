@@ -1,16 +1,5 @@
 @extends('main._layouts.master')
 
-<?php
-// {{ }} <--- special characters will be replaced
-// {!! !!} <--- special characters will not be replaced
-// {{-- --}} <--- comment code in blade
-/**
- * section('scripts') <--- see in master.blade.php <--- it is @yield('scripts')
- * section must have both opening and closing tags
- * if writing PHP code, it should be at the top to load sequentially more accurately like PHP code placed at the top of section('scripts')
- * */
-?>
-
 @section('css')
     <link href="{{ asset('assets/css/components_datatables.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
@@ -68,8 +57,8 @@
                                 Manager
                             @endif
                         </td>
-                        <td>{{ $staff['joinedAt'] }}</td>
-                        <td>{{ $staff['dob'] }}</td>
+                        <td>{{ \Carbon\Carbon::createFromTimestamp($staff['joinedAt'] / 1000)->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::createFromTimestamp($staff['dob'] / 1000)->format('d/m/Y') }}</td>
                         <td>
                             @if ($staff['gender'] == 1)
                                 Male

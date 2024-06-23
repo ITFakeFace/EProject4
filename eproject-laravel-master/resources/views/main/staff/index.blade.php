@@ -1,16 +1,5 @@
 @extends('main._layouts.master')
 
-<?php
-// {{ }} <--- special characters will be replaced
-// {!! !!} <--- special characters will not be replaced
-// {{-- --}} <--- comment code in blade
-/**
- * section('scripts') <--- see in master.blade.php <--- it is @yield('scripts')
- * a section must have both open and close
- * if you write PHP code, it should be at the top to load sequentially more accurately, similar to the PHP code at the top of section('scripts'), so it's okay
- * */
-?>
-
 @section('css')
     <link href="{{ asset('assets/css/components_datatables.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
@@ -78,7 +67,7 @@
                                         <a href="{{ action('StaffController@getEditStaff') }}?id={{ $staff['id'] }}" class="dropdown-item">Update</a>
                                         <a href="{{ action('StaffController@getDetail') }}?id={{ $staff['id'] }}" class="dropdown-item">Detail</a>
                                         <a href="{{ route('exportWord1', ['id' => $staff['id']]) }}" class="dropdown-item">Export Employee File</a>
-                                        <a href="{{ action('StaffController@getDeleteStaff') }}?id={{ $staff['id'] }}" class="dropdown-item">Delete</a>
+                                        <a href="{{ action('StaffController@getDeleteStaff') }}?id={{ $staff['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
                                     </div>
                                 </div>
                             </div>
