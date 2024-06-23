@@ -1,10 +1,5 @@
 @extends('main._layouts.master')
 
-<?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-?>
-
 @section('css')
     <link href="{{ asset('assets/css/components_datatables.min.css') }}" rel="stylesheet" type="text/css">
     <style>
@@ -23,8 +18,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             background-color: #212121;
         }
     </style>
-
-
 @endsection
 
 @section('js')
@@ -37,15 +30,11 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     <script src="{{ asset('global_assets/js/demo_pages/picker_date.js') }}"></script>
     <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
     <script src="{{asset('global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
-	<script src="{{asset('global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
+    <script src="{{asset('global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
     <script src="{{asset('global_assets/js/demo_pages/form_layouts.js')}}"></script>
-
 @endsection
 
-
 @section('content')
-    <!-- Basic datatable -->
-    <!-- 2 columns form -->
     <div class="card">
         <div class="card-header header-elements-inline">
             <h1 class="pt-3 pl-3 pr-3">Add New Certificate Information</h1>
@@ -74,7 +63,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             </div>
         @endif
 
-        <!-- Validation errors -->
         @if($errors->any())
             <div class="alert alert-danger border-0 alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -101,7 +89,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                         <label>Employee ID:(*)</label>
                                         <select class="form-control" name="txtStaffID" required>
                                             @foreach($data_staff as $staff)
-                                                <option value="{{ $staff['id'] }}">{{ $staff['lastname'] }} {{ $staff['firstname'] }} || {{ $staff['id'] }} </option>
+                                                <option value="{{ $staff['id'] }}">{{ $staff['lastname'] }} {{ $staff['firstname'] }} || {{ $staff['id'] }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -158,106 +146,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                     </div>
                                 </div>
                             </div>
-
-                        </fieldset>
-                    </div>
-                @endif
-
-					<div class="card-body">
-						<form action="{{ route('postEducation') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-							<div class="row">
-                            <div class="col-md-6">
-									<fieldset>
-					                	<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Imformation</legend>
-
-        <!-- validate  -->
-        @if ($errors->any())
-            <div class="alert alert-danger border-0 alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                <p><b>Incorrect input data:</b></p>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-                                                <label>Tên Cấp Bậc:</label>
-                                                
-                                                <input type="text" class="form-control" name="txtLevelName" value="{{ old('txtLevelName') }}">
-												</div>
-											</div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Employee ID:(*)</label>
-                                    <select class="form-control" name="txtStaffID" color="red">
-                                        @foreach ($data_staff as $staff)
-                                            <option value="{{ $staff['id'] }}">{{ $staff['lastname'] }} {{ $staff['firstname'] }} || {{ $staff['id'] }} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Level:</label>
-                                        <input type="text" class="form-control" name="txtLevel" value="{{ old('txtLevel') }}">
-                                    </div>
-                                </div>
-                            </div>
-
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-                                                <label>Chuyên ngành:(*)</label>
-                                                <input type="text" class="form-control" name="txtFieldOfStudy" value="{{ old('txtFieldOfStudy') }}" require>
-					                            </div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-                                                <label>Năm tốt nghiện:(*)</label>
-                                                <input type="text" class="form-control" name="txtGraduatedYear" value="{{ old('txtGraduatedYear') }}" require>
-												</div>
-											</div>
-										</div>
-
-                                        <div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-                                                <label>Xếp loại:</label>
-                                                <input type="text" class="form-control" name="txtGrade"  value="{{ old('txtGrade') }}" >
-					                            </div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-                                                <label>Hình thức học:</label>
-                                                <input type="text" class="form-control" name="txtModeOf"  value="{{ old('txtModeOf') }}" >
-												</div>
-											</div>
-										</div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Grade:</label>
-                                        <input type="text" class="form-control" name="txtGrade" value="{{ old('txtGrade') }}">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Mode of Study:</label>
-                                        <input type="text" class="form-control" name="txtModeOf" value="{{ old('txtModeOf') }}">
-                                    </div>
-                                </div>
-                            </div>
-
                         </fieldset>
                     </div>
                 </div>
@@ -268,8 +156,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             </form>
         </div>
     </div>
-    <!-- /2 columns form -->
-    <!-- /basic datatable -->
 @endsection
 
 @section('scripts')
@@ -313,7 +199,5 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 }
             });
         });
-
     </script>
-
 @endsection
