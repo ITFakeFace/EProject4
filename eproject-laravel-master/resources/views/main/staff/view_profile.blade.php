@@ -49,7 +49,7 @@
                                                         <!-- Form Group (Account type)-->
                                                         <div class="col-md-6">
                                                             <label class="small mb-1" for="dob">Date of Birth</label>
-                                                            <input class="form-control" name="dob" type="text" value="@php use Carbon\Carbon;  $date = Carbon::parse($staff['dob'],"Asia/Ho_Chi_Minh")->format('d/m/Y');
+                                                            <input class="form-control" name="dob" type="text" value="@php use Carbon\Carbon;  $date = Carbon::createFromTimestampMs((float)$staff['dob'],"Asia/Ho_Chi_Minh")->format('d/m/Y');
                                                echo $date; @endphp" readonly>
                                                         </div>
                                                     </div>
@@ -84,7 +84,7 @@
                                                         <!-- Form Group (organization name)-->
                                                         <div class="col-md-6">
                                                             <label class="small mb-1" for="joinedAt">Joined Date</label>
-                                                            <input class="form-control" name="joinedAt" type="text" value="@php $joinedDate = Carbon::parse($staff['joined_at'],"Asia/Ho_Chi_Minh")->format('d/m/Y');
+                                                            <input class="form-control" name="joinedAt" type="text" value="@php $joinedDate = Carbon::createFromTimestampMs((float)$staff['joined_at'],"Asia/Ho_Chi_Minh")->format('d/m/Y');
                                                echo $joinedDate; @endphp" readonly>
                                                         </div>
                                                         <!-- Form Group (location)-->
@@ -108,8 +108,9 @@
         {{-- End Account Information --}}
 
         <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        @include('main._partials.footer')
-        <!-- partial -->
+        
     </div>
+    <!-- partial:partials/_footer.html -->
+    @include('main._partials.footer')
+    <!-- partial -->
 @endsection
