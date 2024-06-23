@@ -49,10 +49,10 @@ class EducationController extends Controller
             'txtGraduatedYear' => 'bail|required',
         ];
         $message = [
-            'txtSchool.required' => 'Tên trường không để rỗng',
-            'txtSchool.max' => 'Tên Trường tối đa 100 ký tự',
-            'txtFieldOfStudy.required' => 'Chuyên ngành không để rổng',
-            'txtGraduatedYear.required' => 'Năm tốt nghiệp không để rỗng',
+            'txtSchool.required' => 'School name cannot be empty',
+            'txtSchool.max' => 'School name can be maximum 100 characters',
+            'txtFieldOfStudy.required' => 'Field of study cannot be empty',
+            'txtGraduatedYear.required' => 'Graduation year cannot be empty',
         ];
         $data = $request->all();
         $validate = Validator::make($data, $rule, $message);
@@ -85,9 +85,9 @@ class EducationController extends Controller
         $body = json_decode($response->body(), true);
         //   dd($body);
         if ($body['isSuccess'] == "Update success") {
-            return redirect()->back()->with('message', 'Thêm thành công!');
+            return redirect()->back()->with('message', 'Add complete!');
         }
-        return redirect()->back()->with('message', 'Thêm thất bại');
+        return redirect()->back()->with('message', 'Add fail');
     }
 
     //Update
@@ -110,7 +110,7 @@ class EducationController extends Controller
                 'breadcrumbs' => [['text' => 'Bằng cấp', 'url' => '../view-menu/education'], ['text' => 'Danh sách bằng cấp', 'url' => '../education/index'], ['text' => 'Cập nhật bằng cấp', 'url' => '#']]
             ]);
         }
-        return redirect()->back()->with('message', 'Khong tim thay phong ban');
+        return redirect()->back()->with('message', 'Not found');
     }
 
     public function postEditEducation(Request $request)
@@ -160,9 +160,9 @@ class EducationController extends Controller
         $body = json_decode($response->body(), true);
         //   dd($body);
         if ($body['isSuccess']) {
-            return redirect()->back()->with('message', 'Cập nhật thành công!');
+            return redirect()->back()->with('message', 'Update complete!');
         }
-        return redirect()->back()->with('message', 'Cập nhật thất bại');
+        return redirect()->back()->with('message', 'Update fail');
     }
 
 //Delete
@@ -177,6 +177,6 @@ class EducationController extends Controller
 
         Http::post('http://localhost:8888/education/delete', $data_request);
 
-        return redirect()->back()->with('success', 'Xóa thành công!');
+        return redirect()->back()->with('success', 'Delete complete!');
     }
 }

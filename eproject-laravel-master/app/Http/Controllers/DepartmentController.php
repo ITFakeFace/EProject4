@@ -39,7 +39,15 @@ class DepartmentController extends Controller
         ];
 
         Http::post('http://localhost:8888/department/delete', $data_request);
-        return redirect()->back()->with('success', 'Xóa thành công!');
+        return redirect()->back()->with('success', 'Delete complete');
+        // $body = json_decode($response->body(), true);
+
+        // if($body['message'] == "Delete complete") {
+        //     return redirect()->back()->with('success', 'Delete complete!');
+        // } 
+        // else {
+        //     return redirect()->back()->with('error', 'Delete fail');
+        // }
     }
 
     public function add() {
@@ -53,14 +61,14 @@ class DepartmentController extends Controller
             'txtName1' => 'bail|required|unique:department,name_vn|min:2|max:50',
         ];
         $message = [
-            'txtName.required' => 'Tên Phòng Ban không để rỗng',
-            'txtName.unique' => 'Tên Phòng Ban đã tồn tại',
-            'txtName.max' => 'Tên Phòng Ban tối đa 20 ký tự',
-            'txtName.min' => 'Tên Phòng Ban tối thiểu 2 ký tự',
-            'txtName1.required' => 'Tên Phòng Ban Tiếng Việt không để rỗng',
-            'txtName1.unique' => 'Tên Phòng Ban Tiếng Việt đã tồn tại',
-            'txtName1.max' => 'Tên Phòng Ban Tiếng Việt tối đa 20 ký tự',
-            'txtName1.min' => 'Tên Phòng Ban Tiếng Việt tối thiểu 2 ký tự',
+            'txtName.required' => 'Department Name cannot be empty',
+            'txtName.unique' => 'Department Name already exists',
+            'txtName.max' => 'Department Name can be maximum 20 characters',
+            'txtName.min' => 'Department Name must be at least 2 characters',
+            'txtName1.required' => 'Vietnamese Department Name cannot be empty',
+            'txtName1.unique' => 'Vietnamese Department Name already exists',
+            'txtName1.max' => 'Vietnamese Department Name can be maximum 20 characters',
+            'txtName1.min' => 'Vietnamese Department Name must be at least 2 characters',
         ];
         $data = $request->all();
         $validate = Validator::make($data, $rule, $message);
@@ -82,10 +90,10 @@ class DepartmentController extends Controller
         $body = json_decode($response->body(), true);
 
         if($body['message'] == "Save success") {
-            return redirect()->back()->with('success', 'Thêm thành công!');
+            return redirect()->back()->with('success', 'Add complete!');
         } 
         else {
-            return redirect()->back()->with('error', 'Thêm thất bại');
+            return redirect()->back()->with('error', 'Add fail');
         }
     }
 
@@ -103,7 +111,7 @@ class DepartmentController extends Controller
 
             
         }
-        return redirect()->back()->with('message','Khong tim thay phong ban');
+        return redirect()->back()->with('message','not found');
     }
 
     public function postEditDep(Request $request) {
@@ -113,13 +121,13 @@ class DepartmentController extends Controller
             'txtName1' => 'bail|required|min:2|max:50',
         ];
         $message = [
-            'txtName.required' => 'Tên Phòng Ban không để rỗng',
+            'txtName.required' => 'Department cannot null',
             // 'txtName.unique' => 'Tên Phòng Ban đã tồn tại',
-            'txtName.max' => 'Tên Phòng Ban tối đa 20 ký tự',
-            'txtName.min' => 'Tên Phòng Ban tối thiểu 2 ký tự',
-            'txtName1.required' => 'Tên Phòng Ban Tiếng Việt không để rỗng',
-            'txtName1.max' => 'Tên Phòng Ban Tiếng Việt tối đa 20 ký tự',
-            'txtName1.min' => 'Tên Phòng Ban Tiếng Việt tối thiểu 2 ký tự',
+            'txtName.max' => 'Department Name can be maximum 20 characters',
+            'txtName.min' => 'Department Name must be at least 2 characters',
+            'txtName1.required' => 'Vietnamese Department Name cannot be empty',
+            'txtName1.max' => 'Vietnamese Department Name can be maximum 20 characters',
+            'txtName1.min' => 'Vietnamese Department Name must be at least 2 characters',
         ];
         $data = $request->all();
         $validate = Validator::make($data, $rule, $message);
@@ -144,7 +152,7 @@ class DepartmentController extends Controller
         $departments = json_decode($response_check->body(), true);
 
         if($departments['data']) {
-            return redirect()->back()->withErrors('Tên phòng ban/tên phòng ban tiếng việt đã tồn tại')->withInput();
+            return redirect()->back()->withErrors('Department name already exists')->withInput();
         }
         
         $data_request = [
@@ -159,9 +167,9 @@ class DepartmentController extends Controller
         $body = json_decode($response->body(), true);
         
         if( $body['isSuccess'] == "Update success"){
-            return redirect()->back()->with('message', 'Cập nhật thành công!');
+            return redirect()->back()->with('message', 'Update complete!');
         }
-        return redirect()->back()->with('message','Cập nhật thất bại');
+        return redirect()->back()->with('message','Update fail');
     }
 
 
@@ -172,9 +180,9 @@ class DepartmentController extends Controller
         $body = json_decode($response->body(), false);
       // dd($body);
         if ($body->isSuccess) {
-            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Xóa Phòng ban thành công.']);
+            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Delete department complete.']);
         }
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Xóa Phòng ban thất bại.']);
+        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Delete department fail.']);
     }
 
     public function getUndoDep(Request $request)
@@ -183,9 +191,9 @@ class DepartmentController extends Controller
         $response = Http::get(config('app.api_url') . '/department/undo', ['id' => $id]);
         $body = json_decode($response->body(), false);
         if ($body->isSuccess) {
-            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Khôi phục phòng ban thành công.']);
+            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Undo department complete']);
         }
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Khôi phục phòng ban thất bại.']);
+        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Undo department fail.']);
     }
    
 }

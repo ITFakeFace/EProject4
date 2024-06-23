@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use ZipArchive;
 use PhpOffice\PhpWord\TemplateProcessor;
-
+use Illuminate\Support\Facades\Log;
 
 class ContractController extends Controller
 {
@@ -73,15 +73,15 @@ class ContractController extends Controller
             'baseSalary' => 'required|numeric|min:0',
         ];
         $message = [
-            'staffId.required' => 'Mã nhân viên không để rỗng',
-            'startDate.required' => 'Ngày bắt đầu không để rỗng',
-            'endDate.required' => 'Ngày kết thúc không để rỗng',
-            'startDate.date_format' => 'Ngày bắt đầu sai định dạng: YYYY-MM-DD',
-            'endDate.date_format' => 'Ngày kết thúc sai định dạng: YYYY-MM-DD',
-            'endDate.after_or_equal' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu',
-            'baseSalary.required' => 'Lương không để rỗng',
-            'baseSalary.numeric' => 'lương chỉ chấp nhận số',
-            'baseSalary.min' => 'Lương không nhỏ hơn :min'
+            'staffId.required' => 'Staff ID cannot be empty',
+            'startDate.required' => 'Start date cannot be empty',
+            'endDate.required' => 'End date cannot be empty',
+            'startDate.date_format' => 'Start date is in the wrong format: YYYY-MM-DD',
+            'endDate.date_format' => 'End date is in the wrong format: YYYY-MM-DD',
+            'endDate.after_or_equal' => 'End date must be greater than or equal to start date',
+            'baseSalary.required' => 'Base salary cannot be empty',
+            'baseSalary.numeric' => 'Base salary must be a number',
+            'baseSalary.min' => 'Base salary cannot be less than :min'
         ];
         $data = $request->all();
         $validate = Validator::make($data, $rule, $message);
@@ -95,10 +95,10 @@ class ContractController extends Controller
         if ($body->isSuccess) {
             return redirect()->back()->with('message', [
                 'type' => 'success',
-                'message' => 'Lưu hợp đồng thành công.'
+                'message' => 'Save Contract complete.'
             ]);
         }
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => "Lưu hợp đồng thất bại."]);
+        return redirect()->back()->with('message', ['type' => 'danger', 'message' => "Failed to save the contract."]);
     }
 
     public function stopContract($id)
@@ -110,230 +110,117 @@ class ContractController extends Controller
             $contract = $editContractResponse->data;
         }
         if (!$contract) {
-            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không tìm thấy hợp đồng']);
+            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Contract not found']);
         }
-        return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Chấm dứt hợp đồng thành công']);
+        
+        return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Contract terminated successfully']);
     }
 
     public function getDelete($id)
     {
         $response = Http::get(config('app.api_url') . '/contract/delete', ['id' => $id]);
         $body = json_decode($response->body(), false);
+        
         if ($body->isSuccess) {
-            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Xóa hợp đồng thành công.']);
+            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Contract deleted successfully.']);
+        } else {
+            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Failed to delete the contract.']);
         }
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Xóa hợp đồng thất bại.']);
     }
 
   
 
-//     public function exportWord($id)
-// {
-//     $template = 'HDLD.docx';
-//     $disk = Storage::disk('public_folder');
-//     $zip_val = new ZipArchive;
-
-//     if ($disk->exists($template)) {
-//         $random_name = Str::uuid() . '.docx';
-//         $disk->copy($template, 'contract_words/' . $random_name);
-
-//         $filePath = public_path('storage/contract_words/' . $random_name); // Đảm bảo bạn đang lưu trữ trong thư mục public/storage
-//         if ($zip_val->open($filePath) === TRUE) {
-
-//             $response = Http::get(config('app.api_url') . '/contract/detail', ['id' => $id]);
-//             $contract_json = json_decode($response->body());
-//             $contract = $contract_json->data;
-
-//             $key_file_name = 'word/document.xml';
-//             $message = $zip_val->getFromName($key_file_name);
-
-//             if ($message === FALSE) {
-//                 return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không thể đọc tệp mẫu.']);
-//             }
-
-//             $contract_startdate = Carbon::createFromFormat('Y-m-d', $contract->startDate);
-//             $contract_enddate = Carbon::createFromFormat('Y-m-d', $contract->endDate);
-
-//             $response = Http::get(config('app.api_url') . '/department/detail', ['id' => $contract->staff->department]);
-//             $department_json = json_decode($response->body());
-//             $department = $department_json->data;
-
-//             $responseCity = Http::get('http://localhost:8888/regional/get-one', ['id' => $contract->staff->regional]);
-//             $bodyCity = json_decode($responseCity->body());
-
-//             $responseDistrict = Http::get('http://localhost:8888/regional/get-one', ['id' => $bodyCity->data->parent]);
-//             $bodyDistrict = json_decode($responseDistrict->body());
-
-//             $replacements = [
-//                 '[STAFF_NAME]' => $contract->staff->firstname . ' ' . $contract->staff->lastname,
-//                 '[STAFF_BIRTHDAY]' => Carbon::createFromFormat('Y-m-d', $contract->staff->dob)->format('d/m/Y'),
-//                 '[STAFF_ADDRESS1]' => '',
-//                 '[STAFF_PHONE]' => $contract->staff->phoneNumber,
-//                 '[STAFF_EMAIL]' => $contract->staff->email,
-//                 '[STAFF_ID_NUMBER]' => $contract->staff->idNumber,
-//                 '[STAFF_ID_DATE]' => Carbon::createFromFormat('Y-m-d', $contract->staff->identity_issue_date)->format('d/m/Y'),
-//                 '[STAFF_ID_ADDRESS]' => $bodyDistrict->data->name . ', ' . $bodyCity->data->name,
-//                 '[CONTRACT_EXPIRE]' => $contract_startdate->diffInMonths($contract_enddate),
-//                 '[CONTRACT_FROM]' => $contract_startdate->format('d/m/Y'),
-//                 '[CONTRACT_TO]' => $contract_enddate->format('d/m/Y'),
-//                 '[DEPARTMENT_NAME]' => $department->nameVn,
-//                 '[POSITION]' => $contract->staff->isManager ? 'Trưởng nhóm' : 'Nhân viên',
-//                 '[SALARY_BASE]' => number_format($contract->baseSalary),
-//             ];
-
-//             foreach ($replacements as $key => $value) {
-//                 $message = str_replace($key, $value, $message);
-//             }
-
-//             $zip_val->addFromString($key_file_name, $message);
-//             $zip_val->close();
-
-//             // Kiểm tra nếu tệp tồn tại trước khi tải xuống
-//             if (file_exists($filePath)) {
-//                 return response()->download($filePath)->deleteFileAfterSend(true);
-//             } else {
-//                 return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không thể tìm thấy tệp đã tạo.']);
-//             }
-//         } else {
-//             return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không thể mở tệp mẫu hợp đồng.']);
-//         }
-//     } else {
-//         return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không tìm thấy mẫu hợp đồng.']);
-//     }
-// }
-
-    // public function exportWord($id)
-    // {
-    //     $template = 'HDLD.docx';
-    //     $disk = Storage::disk('public_folder');
-    //     $zip_val = new ZipArchive;
-
-    //     if ($disk->exists($template)) {
-    //         //copy ra file khác để replace
-    //         $random_name = ((string)Str::uuid()) . '.docx';
-    //         $disk->copy($template, 'contract_words/' . $random_name);
-
-    //         // mở file vừa copy ra để replace keyword
-    //         if ($zip_val->open($disk->path('contract_words/' . $random_name))) {
-
-    //             $response = Http::get(config('app.api_url') . '/contract/detail', [
-    //                 'id' => $id
-    //             ]);
-
-    //             $contract_json = json_decode($response->body(), false);
-    //             $contract = $contract_json->data;
-
-    //             $key_file_name = 'word/document.xml';
-    //             $message = $zip_val->getFromName($key_file_name);
-    //     //    dd($message);
-
-    //             $contract_startdate = Carbon::createFromFormat('Y-m-d', $contract->startDate);
-    //             $contract_enddate = Carbon::createFromFormat('Y-m-d', $contract->endDate);
-
-    //             // department
-    //             $response = Http::get(config('app.api_url') . '/department/detail', [
-    //                 'id' => $contract->staff->department
-    //             ]);
-
-    //             // phòng ban
-    //             $department_json = json_decode($response->body(), false);
-    //             $department = $department_json->data;
-
-    //             $responseCity = Http::get('http://localhost:8888/regional/get-one', ['id' => $contract->staff->regional]);
-    //             $bodyCity = json_decode($responseCity->body(), false);
-
-    //             $responseDistrict = Http::get('http://localhost:8888/regional/get-one', ['id' => $bodyCity->data->parent]);
-    //             $bodyDistrict = json_decode($responseDistrict->body(), false);
-
-    //             $message = str_replace('[STAFF_NAME]', $contract->staff->firstname . ' ' . $contract->staff->lastname, $message);
-    //             $message = str_replace('[STAFF_BIRTHDAY]', Carbon::createFromFormat('Y-m-d', $contract->staff->dob)->format('d/m/Y'), $message);
-    //             $message = str_replace('[STAFF_ADDRESS1]', '', $message);
-    //             $message = str_replace('[STAFF_PHONE]', $contract->staff->phoneNumber, $message);
-    //             $message = str_replace('[STAFF_EMAIL]', $contract->staff->email, $message);
-    //             $message = str_replace('[STAFF_ID_NUMBER]', $contract->staff->idNumber, $message);
-    //             $message = str_replace('[STAFF_ID_DATE]', Carbon::createFromFormat('Y-m-d', $contract->staff->identity_issue_date)->format('d/m/Y'), $message);
-    //             $message = str_replace('[STAFF_ID_ADDRESS]', $bodyDistrict->data->name . ', ' . $bodyCity->data->name, $message);
-    //             $message = str_replace('[CONTRACT_EXPIRE]', $contract_startdate->diffInMonths($contract_enddate), $message);
-    //             $message = str_replace('[CONTRACT_FROM]', $contract_startdate->format('d/m/Y'), $message);
-    //             $message = str_replace('[CONTRACT_TO]', $contract_enddate->format('d/m/Y'), $message);
-    //             $message = str_replace('[DEPARTMENT_NAME]', $department->nameVn, $message);
-    //             $message = str_replace('[POSITION]', $contract->staff->isManager ? 'Trưởng nhóm' : 'Nhân viên', $message);
-    //             $message = str_replace('[SALARY_BASE]', number_format($contract->baseSalary), $message);
-
-    //             $zip_val->addFromString($key_file_name, $message);
-    //             $zip_val->close();
-
-    //             return $disk->download('contract_words/' . $random_name);
-    //         } else {
-    //             return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không tìm thấy mẫu hợp đồng.']);
-    //         }
-    //     } else {
-    //         return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không tìm thấy mẫu hợp đồng.']);
-    //     }
-    // }
-
-
-public function exportWord($id)
+    public function exportWord($id)
 {
     $template = 'HDLD.docx';
     $disk = Storage::disk('public_folder');
+    
+    if (!$disk->exists($template)) {
+        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Contract template not found.']);
+    }
 
-    if ($disk->exists($template)) {
-        // Copy file template để tránh chỉnh sửa file gốc
-        $random_name = ((string)Str::uuid()) . '.docx';
-        $disk->copy($template, 'contract_words/' . $random_name);
+    // Generate a unique file name for the modified document
+    $random_name = (string) Str::uuid() . '.docx';
+    $destinationPath = 'contract_words/' . $random_name;
 
-        // Đường dẫn tới file vừa copy
-        $filePath = $disk->path('contract_words/' . $random_name);
+    // Copy the template file to the new location
+    $disk->copy($template, $destinationPath);
 
-        // Khởi tạo TemplateProcessor với file template
-        $templateProcessor = new TemplateProcessor($filePath);
+    // Path to the newly created document
+    $filePath = $disk->path($destinationPath);
 
-        // Lấy thông tin hợp đồng từ API
-        $response = Http::get(config('app.api_url') . '/contract/detail', [
-            'id' => $id
-        ]);
+    // Initialize ZipArchive to modify the document
+    $zip_val = new ZipArchive;
+    if ($zip_val->open($filePath) === true) {
+        try {
+            // Fetch contract details from API
+            $response = Http::get(config('app.api_url') . '/contract/detail', ['id' => $id]);
+            $contract_json = json_decode($response->body());
+            if (!$contract_json || !isset($contract_json->data)) {
+                throw new \Exception('Failed to fetch contract details.');
+            }
+            $contract = $contract_json->data;
 
-        $contract_json = json_decode($response->body(), false);
-        $contract = $contract_json->data;
+            // Fetch department details from API
+            $response = Http::get(config('app.api_url') . '/department/detail', ['id' => $contract->staff->department]);
+            $department_json = json_decode($response->body());
+            if (!$department_json || !isset($department_json->data)) {
+                throw new \Exception('Failed to fetch department details.');
+            }
+            $department = $department_json->data;
 
-        // Lấy thông tin phòng ban từ API
-        $response = Http::get(config('app.api_url') . '/department/detail', [
-            'id' => $contract->staff->department
-        ]);
-        $department_json = json_decode($response->body(), false);
-        $department = $department_json->data;
+            // Fetch regional and district details
+            $responseCity = Http::get('http://localhost:8888/regional/get-one', ['id' => $contract->staff->regional]);
+            $bodyCity = json_decode($responseCity->body());
+            $responseDistrict = Http::get('http://localhost:8888/regional/get-one', ['id' => $bodyCity->data->parent]);
+            $bodyDistrict = json_decode($responseDistrict->body());
 
-        // Lấy thông tin thành phố và quận từ API
-        $responseCity = Http::get('http://localhost:8888/regional/get-one', ['id' => $contract->staff->regional]);
-        $bodyCity = json_decode($responseCity->body(), false);
+            // Prepare replacements for placeholders in the document
+            $replacements = [
+                '[STAFF_NAME]' => $contract->staff->firstname . ' ' . $contract->staff->lastname,
+                '[STAFF_BIRTHDAY]' => Carbon::createFromTimestampMs($contract->staff->dob)->format('d/m/Y'),
+                '[STAFF_ADDRESS1]' => '', // Replace with actual address if available
+                '[STAFF_PHONE]' => $contract->staff->phoneNumber,
+                '[STAFF_EMAIL]' => $contract->staff->email,
+                '[STAFF_ID_NUMBER]' => $contract->staff->idNumber,
+                '[STAFF_ID_DATE]' => Carbon::createFromTimestampMs($contract->staff->identity_issue_date)->format('d/m/Y'),
+                '[STAFF_ID_ADDRESS]' => $bodyDistrict->data->name . ', ' . $bodyCity->data->name,
+                '[CONTRACT_EXPIRE]' => Carbon::createFromTimestampMs($contract->startDate)->diffInMonths($contract->endDate),
+                '[CONTRACT_FROM]' => Carbon::createFromTimestampMs($contract->startDate)->format('d/m/Y'),
+                '[CONTRACT_TO]' => Carbon::createFromTimestampMs($contract->endDate)->format('d/m/Y'),
+                '[DEPARTMENT_NAME]' => $department->nameVn,
+                '[POSITION]' => $contract->staff->isManager ? 'Trưởng nhóm' : 'Nhân viên',
+                '[SALARY_BASE]' => number_format($contract->baseSalary),
 
-        $responseDistrict = Http::get('http://localhost:8888/regional/get-one', ['id' => $bodyCity->data->parent]);
-        $bodyDistrict = json_decode($responseDistrict->body(), false);
+        
 
-        // Thay thế các từ khóa trong template
-        $templateProcessor->setValue('[STAFF_NAME]', $contract->staff->firstname . ' ' . $contract->staff->lastname);
-        $templateProcessor->setValue('[STAFF_BIRTHDAY]', Carbon::createFromFormat('Y-m-d', $contract->staff->dob)->format('d/m/Y'));
-        $templateProcessor->setValue('[STAFF_ADDRESS1]', '');
-        $templateProcessor->setValue('[STAFF_PHONE]', $contract->staff->phoneNumber);
-        $templateProcessor->setValue('[STAFF_EMAIL]', $contract->staff->email);
-        $templateProcessor->setValue('[STAFF_ID_NUMBER]', $contract->staff->idNumber);
-        $templateProcessor->setValue('[STAFF_ID_DATE]', Carbon::createFromFormat('Y-m-d', $contract->staff->identity_issue_date)->format('d/m/Y'));
-        $templateProcessor->setValue('[STAFF_ID_ADDRESS]', $bodyDistrict->data->name . ', ' . $bodyCity->data->name);
-        $templateProcessor->setValue('[CONTRACT_EXPIRE]', $contract_startdate->diffInMonths($contract_enddate));
-        $templateProcessor->setValue('[CONTRACT_FROM]', $contract_startdate->format('d/m/Y'));
-        $templateProcessor->setValue('[CONTRACT_TO]', $contract_enddate->format('d/m/Y'));
-        $templateProcessor->setValue('[DEPARTMENT_NAME]', $department->nameVn);
-        $templateProcessor->setValue('[POSITION]', $contract->staff->isManager ? 'Trưởng nhóm' : 'Nhân viên');
-        $templateProcessor->setValue('[SALARY_BASE]', number_format($contract->baseSalary));
+            ];
 
-        // Lưu tài liệu Word đã chỉnh sửa
-        $templateProcessor->saveAs($filePath);
+            // Read the document content from the archive
+            $documentContent = $zip_val->getFromName('word/document.xml');
 
-        // Trả về file đã chỉnh sửa để download
-        return $disk->download('contract_words/' . $random_name);
+            // Replace placeholders in the document content
+            foreach ($replacements as $placeholder => $value) {
+                $documentContent = str_replace($placeholder, $value, $documentContent);
+            }
+
+            // Update the document with modified content
+            $zip_val->addFromString('word/document.xml', $documentContent);
+            $zip_val->close();
+
+            // Download the modified document
+            if (file_exists($filePath)) {
+                return $disk->download($destinationPath);
+            } else {
+                throw new \Exception('Failed to create or locate the modified document.');
+            }
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error exporting contract document: ' . $e->getMessage());
+            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'An error occurred while creating the contract document.']);
+        }
     } else {
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không tìm thấy mẫu hợp đồng.']);
+        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Unable to open contract template file.']);
     }
 }
 

@@ -31,6 +31,7 @@
                 <th>Employee</th>
                 <th>Contract Start Date</th>
                 <th>Contract End Date</th>
+                <th>Date terminate contract early</th>
                 <th>Salary</th>
                 <th>Created At</th>
                 <th class="text-center">Actions</th>
@@ -43,6 +44,7 @@
                     <td>{{ $item->staff->firstname . ' ' . $item->staff->lastname}}</td>
                     <td>{{ $item->startDate }}</td>
                     <td>{{ $item->endDate }}</td>
+                    <td>{{ $item->stopDate }}</td>
                     <td>{{ number_format($item->baseSalary) }}</td>
                     <td>{{ $item->createAt }}</td>
                     <td class="text-center">
