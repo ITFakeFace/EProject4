@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
-use Mail;
-use DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AuthenticateController extends Controller
@@ -131,7 +131,7 @@ class AuthenticateController extends Controller
     $body = json_decode($response->body(), true);
 
     if ($body['data'] == "Change password Success") {
-      return redirect()->back()->with('success', 'Successfully change password');
+      return redirect()->back()->with('success', 'Successfully changed password');
     } else {
       return redirect()->back()->with('success', 'Failed to change password');
     }
