@@ -23,7 +23,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Phòng Ban Tạm Xóa</h1>
+        <h1 class="pt-3 pl-3 pr-3">Temporarily Deleted Departments</h1>
         <div class="card-header header-elements-inline">
             <div class="header-elements">
              
@@ -38,33 +38,34 @@
         <table class="table datatable-basic">
             <thead>
                 <tr>
-                    <th>Mã ID</th>
-                    <th>Tên Phòng Ban</th>
-                    <th>Tên Tiếng Việt</th>
-                    <th>Thao tác</th>
+                    <th>ID</th>
+                    <th>Department Name</th>
+                    <th>Department Name (Vietnamese)</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                    @foreach($data_department as $department)
+                @foreach($data_department as $department)
                     <tr>
                         <td>{{ $department['id'] }}</td>
                         <td>{{ $department['name'] }}</td>
                         <td>{{ $department['nameVn'] }}</td>
                         <!-- <td>
                             @if($department['del'] == 0)
-                                Hiện
+                                Show
                             @else
-                                Ẩn
+                                Hide
                             @endif    
                         </td> -->
-                    <td class="center"><i class="btn-btn-success"></i><a href="{{ action('DepartmentController@getUndoDep') }}?id={{ $department['id'] }}">Hoàn tác</a>&nbsp;
+                        <td class="center">
+                            <a href="{{ action('DepartmentController@getUndoDep') }}?id={{ $department['id'] }}" onclick="return confirm('Are you sure?')">Restore</a>&nbsp;
+                        </td>
                     </tr>
-                    @endforeach
+                @endforeach
             </tbody>
         </table>
     </div>
     <!-- /basic datatable -->
-
 @endsection
 @section('scripts')
 @endsection

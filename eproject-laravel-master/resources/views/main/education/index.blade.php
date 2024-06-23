@@ -23,9 +23,8 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-      
         <div class="card-header header-elements-inline">
-        <h1 class="pt-3 pl-3 pr-3">Danh Sách Thông Tin Bằng Cấp</h1>
+            <h1 class="pt-3 pl-3 pr-3">List of Educational Qualifications</h1>
             <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
@@ -44,25 +43,25 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Họ tên Nhân viên</th>
-                    <th>Bậc</th>
-                    <th>Hạng Bậc</th>
-                    <th>Tên Trường</th>
-                    <th>Chuyên Ngành</th>
-                    <th>Năm học</th>
-                    <th>Xếp loại</th>
-                    <th>Phương thức</th>
-                    <th>Thao tác</th>
+                    <th>Full Name</th>
+                    <th>Level</th>
+                    <th>Level Name</th>
+                    <th>School Name</th>
+                    <th>Field of Study</th>
+                    <th>Graduation Year</th>
+                    <th>Grade</th>
+                    <th>Study Mode</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                    @foreach($data_education as $education)
+                @foreach($data_education as $education)
                     <tr>
                         <td>{{ $education['id'] }}</td>
                         @foreach ($data_staff as $staff)
-                                    @if ($education['staffId'] == $staff['id'])
-                                        <td>{{$staff['firstname']}} {{$staff['lastname']}} </td>
-                                    @endif
+                            @if ($education['staffId'] == $staff['id'])
+                                <td>{{ $staff['firstname'] }} {{ $staff['lastname'] }}</td>
+                            @endif
                         @endforeach
                         <td>{{ $education['level'] }}</td>
                         <td>{{ $education['levelName'] }}</td>
@@ -72,27 +71,24 @@
                         <td>{{ $education['grade'] }}</td>
                         <td>{{ $education['modeOfStudy'] }}</td>
                         <td class="text-center">
-                        <div class="list-icons">
-                            <div class="dropdown">
-                                <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                    <i class="icon-menu9"></i>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="{{ action('EducationController@getEditEducation') }}?id={{ $education['id'] }}" class="dropdown-item">Cập nhật</a>
-                                        <a href="{{ action('EducationController@deleteEducation') }}?id={{ $education['id'] }}" class="dropdown-item" onclick="return confirm('Bạn chắc chắn muốn xóa?')">Xóa</a>
+                            <div class="list-icons">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                        <i class="icon-menu9"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="{{ action('EducationController@getEditEducation') }}?id={{ $education['id'] }}" class="dropdown-item">Edit</a>
+                                        <a href="{{ action('EducationController@deleteEducation') }}?id={{ $education['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                   
+                        </td>
                     </tr>
-                    @endforeach
+                @endforeach
             </tbody>
         </table>
     </div>
     <!-- /basic datatable -->
-
 @endsection
 
 @section('scripts')
