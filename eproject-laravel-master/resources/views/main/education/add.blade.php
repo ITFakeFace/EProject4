@@ -47,35 +47,132 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     <!-- Basic datatable -->
     <!-- 2 columns form -->
     <div class="card">
+<<<<<<< HEAD
+        <div class="card-header header-elements-inline">
+            <h1 class="pt-3 pl-3 pr-3">Add New Certificate Information</h1>
+            <div class="header-elements">
+=======
         <div>
             <h1 class="pt-3 pl-3 pr-3">Add New Certificate</h1>
             {{-- <div class="header-elements">
+>>>>>>> aff2dfa4c26c785a8246db9992238ebd9579d5d1
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
                     <a class="list-icons-item" data-action="reload"></a>
                     <a class="list-icons-item" data-action="remove"></a>
                 </div>
+<<<<<<< HEAD
+            </div>
+=======
             </div> --}}
+>>>>>>> aff2dfa4c26c785a8246db9992238ebd9579d5d1
         </div>
 
-                        @if (session('message'))
-                            <div class="">
-                                <div class="alert alert-primary">
-                                    {!! session('message') !!}
+        @if (\Session::has('success'))
+            <div class="">
+                <div class="alert alert-success">
+                    {!! \Session::get('success') !!}
+                </div>
+            </div>
+        @endif
+
+        @if (session('message'))
+            <div class="">
+                <div class="alert alert-primary">
+                    {!! session('message') !!}
+                </div>
+            </div>
+        @endif
+
+        <!-- Validation errors -->
+        @if($errors->any())
+            <div class="alert alert-danger border-0 alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                <p><b>Invalid input data:</b></p>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div class="card-body">
+            <form action="{{ route('postEducation') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="row">
+                    <div class="col-md-6">
+                        <fieldset>
+                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Information</legend>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Employee ID:(*)</label>
+                                        <select class="form-control" name="txtStaffID" required>
+                                            @foreach($data_staff as $staff)
+                                                <option value="{{ $staff['id'] }}">{{ $staff['lastname'] }} {{ $staff['firstname'] }} || {{ $staff['id'] }} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Level:</label>
+                                        <input type="text" class="form-control" name="txtLevel" value="{{ old('txtLevel') }}">
+                                    </div>
                                 </div>
                             </div>
-                        @endif
-<!-- validate  -->
-                        @if($errors->any())
-                    <div class="alert alert-danger border-0 alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                        <p><b>Dữ liệu đầu vào không chính xác:</b></p>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Level Name:</label>
+                                        <input type="text" class="form-control" name="txtLevelName" value="{{ old('txtLevelName') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>School Name:(*)</label>
+                                        <input type="text" class="form-control" name="txtSchool" value="{{ old('txtSchool') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Field of Study:(*)</label>
+                                        <input type="text" class="form-control" name="txtFieldOfStudy" value="{{ old('txtFieldOfStudy') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Graduation Year:(*)</label>
+                                        <input type="text" class="form-control" name="txtGraduatedYear" value="{{ old('txtGraduatedYear') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Grade:</label>
+                                        <input type="text" class="form-control" name="txtGrade" value="{{ old('txtGrade') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Study Mode:</label>
+                                        <input type="text" class="form-control" name="txtModeOf" value="{{ old('txtModeOf') }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
                     </div>
+<<<<<<< HEAD
+=======
                 @endif
 
 					<div class="card-body">
@@ -175,6 +272,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                         </fieldset>
                     </div>
+>>>>>>> aff2dfa4c26c785a8246db9992238ebd9579d5d1
                 </div>
                 <div class="text-left">
                     <button type="submit" class="btn btn-primary">Save <i class="icon-paperplane ml-2"></i></button>

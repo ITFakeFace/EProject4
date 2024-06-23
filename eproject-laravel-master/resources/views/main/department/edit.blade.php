@@ -42,7 +42,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-    <h1 class="pt-3 pl-3 pr-3">Cập Nhật Phòng Ban</h1>
+        <h1 class="pt-3 pl-3 pr-3">Update Department</h1>
         <div class="card-header header-elements-inline">
  
         </div>
@@ -63,44 +63,44 @@
                 </div>
             @endif
 
-            <!-- validate  -->
+            <!-- validation -->
             @if($errors->any())
-                    <div class="alert alert-danger border-0 alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                        <p><b>Dữ liệu đầu vào không chính xác:</b></p>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <div class="alert alert-danger border-0 alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                    <p><b>Invalid Input Data:</b></p>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
              
             <form action="{{ route('postEditDepartment') }}" method="post">
                 @csrf
-            <div class="row">
-                <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label>ID Phòng ban:</label>
+                            <label>Department ID:</label>
                             <input type="text" class="form-control" name="txtID" value="{{$data['id']}}" readonly/>
                         </div>
                         <div class="form-group">
-                            <label>Tên Phòng ban:</label>
+                            <label>Department Name:</label>
                             <input type="text" class="form-control" name="txtName" value="{{$data['name']}}">
                         </div>
                         <div class="form-group">
-                            <label>Tên Tiếng Việt:</label>
+                            <label>Department Name (Vietnamese):</label>
                             <input type="text" class="form-control" name="txtName1" value="{{$data['nameVn']}}" >
                         </div>
-                        <div class="form-group">
-                            <label>Trạng thái:</label>
+                        <div hidden class="form-group">
+                            <label>Status:</label>
                             <select class="form-control" name="txtDel" color="red" >
                                 <option value="0">None</option>
-                                <option value="1">Xóa tạm thời</option>
+                                <option value="1">Temporarily Delete</option>
                             </select>
                         </div>
-                        <a class="btn btn-primary" role="button" href="{{ action('DepartmentController@index') }}" style="color:white;">Quay lại</a>
-                        <button class="btn btn-success" type="submit"> Lưu  <i class="icon-paperplane ml-2"></i></button>&nbsp;&nbsp;
+                        <a class="btn btn-primary" role="button" href="{{ action('DepartmentController@index') }}" style="color:white;">Back</a>
+                        <button class="btn btn-success" type="submit"> Save  <i class="icon-paperplane ml-2"></i></button>&nbsp;&nbsp;
                     </div>
                 </div>
             </form>
@@ -266,16 +266,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             DatatableBasic.init();
         });
-
 });
-
-
-
-
-
-
     </script>
-
-
-
 @endsection

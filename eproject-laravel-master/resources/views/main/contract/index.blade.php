@@ -12,7 +12,7 @@
 @section('content')
 
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Danh Sách Hợp Đồng</h1>
+        <h1 class="pt-3 pl-3 pr-3">Contract List</h1>
         <div class="card-header header-elements-inline">
             
         </div>
@@ -27,13 +27,13 @@
         <table class="table datatable-basic">
             <thead>
             <tr>
-                <th>Mã nhân viên</th>
-                <th>Nhân viên</th>
-                <th>Ngày bắt đầu HĐ</th>
-                <th>Ngày kết thúc HĐ</th>
-                <th>Lương</th>
-                <th>Ngày tạo</th>
-                <th class="text-center">Thao tác</th>
+                <th>Employee ID</th>
+                <th>Employee</th>
+                <th>Contract Start Date</th>
+                <th>Contract End Date</th>
+                <th>Salary</th>
+                <th>Created At</th>
+                <th class="text-center">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -53,18 +53,15 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="{{ route('getDetailContract', ['id' => $item->id]) }}" class="dropdown-item">Chi tiết</a>
-                                    <a href="{{ route('exportWord', ['id' => $item->id]) }}" class="dropdown-item">Xuất hợp đồng</a>
+                                    <a href="{{ route('getDetailContract', ['id' => $item->id]) }}" class="dropdown-item">Detail</a>
+                                    <a href="{{ route('exportWord', ['id' => $item->id]) }}" class="dropdown-item">Export Contract</a>
                                     @php
                                         $endDate = Carbon\Carbon::createFromFormat('Y-m-d', $item->endDate);
                                         $stopDate = Carbon\Carbon::createFromFormat('Y-m-d', $item->stopDate);
                                     @endphp
-                                    {{-- <input class="form-control" name="joinedAt" type="text"
-                                     value="@php $joinedDate = Carbon::parse($staff['joined_at'],"Asia/Ho_Chi_Minh")->format('d/m/Y'); --}}
                                     @if($stopDate->eq($endDate))
-                                        <a href="javascript:void(0);" onclick="stopContract({{ $item->id }})" class="dropdown-item">Chấm dứt hợp đồng trước kì hạn</a>
+                                        <a href="javascript:void(0);" onclick="stopContract({{ $item->id }})" class="dropdown-item">Terminate Contract Early</a>
                                     @endif
-                                    {{--                                    <a href="{{ route('getDeleteContract',['id' => $item->id]) }}" class="dropdown-item">Xóa</a>--}}
                                 </div>
                             </div>
                         </div>
