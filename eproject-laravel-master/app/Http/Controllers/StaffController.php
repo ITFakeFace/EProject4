@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
@@ -697,8 +696,8 @@ class StaffController extends Controller
       $disk->copy($template, 'staff_words/' . $random_name);
 
       // mở file vừa copy ra để replace keyword
-      // if ($zip_val->open($disk->path('staff_words/' . $random_name))) { //old code
-      if ($zip_val->open(storage_path('staff_words/' . $random_name))) {
+      if ($zip_val->open($disk->path('staff_words/' . $random_name))) {
+
         $response = Http::get(config('app.api_url') . '/staff/one', [
           'id' => $id
         ]);
@@ -708,7 +707,7 @@ class StaffController extends Controller
 
         $key_file_name = 'word/document.xml';
         $message = $zip_val->getFromName($key_file_name);
-        //  dd($message);
+        //                dd($message);
 
         // department
         $response = Http::get(config('app.api_url') . '/department/detail', [
@@ -750,24 +749,30 @@ class StaffController extends Controller
         $bodyDistrict = json_decode($responseDistrict->body(), false);
 
         $message = str_replace('[STAFF_NAME]', $staff->firstname . ' ' . $staff->lastname, $message);
-        $message = str_replace('[STAFF_BIRTHDAY]', Carbon::createFromFormat('Y-m-d', $staff->dob)->format('d/m/Y'), $message);
+        // dd($message);
+        $message = str_replace('[STAFF_BIRTHDAY]', $staff->dob, $message);
         $message = str_replace('[STAFF_ADDRESS1]', '', $message);
         $message = str_replace('[STAFF_PHONE]', $staff->phoneNumber, $message);
         $message = str_replace('[STAFF_EMAIL]', $staff->email, $message);
         $message = str_replace('[STAFF_ID_NUMBER]', $staff->idNumber, $message);
-        $message = str_replace('[STAFF_ID_DATE]', Carbon::createFromFormat('Y-m-d', $staff->identity_issue_date)->format('d/m/Y'), $message);
+        $message = str_replace('[STAFF_ID_DATE]', Carbon::createFromTimestampMs($staff->identity_issue_date)->format('Y-m-d'), $message);
         $message = str_replace('[STAFF_ID_ADDRESS]', $bodyDistrict->data->name . ', ' . $bodyCity->data->name, $message);
         $message = str_replace('[DEPARTMENT_NAME]', $department->nameVn, $message);
-        $message = str_replace('[POSITION]', $staff->isManager ? 'Trưởng nhóm' : 'Nhân viên', $message);
+        $message = str_replace('[POSITION]', $staff->isManager ? 'Quản lý' : 'Nhân viên', $message);
         $message = str_replace('[SCHOOL]', $edu->school, $message);
         $message = str_replace('[CODE]', $staff->code, $message);
-        $message = str_replace('[DATEJOIN]', $staff->joinedAt, $message);
+        $message = str_replace('[DATEJOIN]',Carbon::createFromTimestampMs($staff->joinedAt)->format('Y-m-d'), $message);
         $message = str_replace('[LEVEL_NAME]', $edu->levelName, $message);
         $message = str_replace('[STUDY]', $edu->fieldOfStudy, $message);
         $message = str_replace('[GRAND]', $edu->grade, $message);
+        $message = str_replace('[YEAR]', $edu->graduatedYear, $message);
+
+
+
 
         $zip_val->addFromString($key_file_name, $message);
         $zip_val->close();
+
         return $disk->download('staff_words/' . $random_name);
       } else {
         return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Contract template not found.']);

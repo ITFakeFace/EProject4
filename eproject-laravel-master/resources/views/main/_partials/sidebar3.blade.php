@@ -96,7 +96,7 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                             <li class="nav-item">
                                 <a href="{{ action('StaffController@listUndo') }}" class="nav-link">
                                     <i class="icon-trash"></i>
-                                    <span>Trash</span>
+                                    <span>Ex-Employee</span>
                                 </a>
                             </li>
 
