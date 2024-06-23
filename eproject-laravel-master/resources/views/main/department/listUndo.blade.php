@@ -26,10 +26,17 @@
         <h1 class="pt-3 pl-3 pr-3">Temporarily Deleted Departments</h1>
         <div class="card-header header-elements-inline">
             <div class="header-elements">
-             
+                @if (\Session::has('success'))
+                <div class="">
+                    <div class="alert alert-success">
+                        {!! \Session::get('success') !!}
+                    </div>
+                </div>
+            @endif
             </div>
         </div>
         <div class="card-body">
+            
             <form action="#" method="GET">
 
             </form>

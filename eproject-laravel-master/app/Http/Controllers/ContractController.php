@@ -73,15 +73,15 @@ class ContractController extends Controller
             'baseSalary' => 'required|numeric|min:0',
         ];
         $message = [
-            'staffId.required' => 'Mã nhân viên không để rỗng',
-            'startDate.required' => 'Ngày bắt đầu không để rỗng',
-            'endDate.required' => 'Ngày kết thúc không để rỗng',
-            'startDate.date_format' => 'Ngày bắt đầu sai định dạng: YYYY-MM-DD',
-            'endDate.date_format' => 'Ngày kết thúc sai định dạng: YYYY-MM-DD',
-            'endDate.after_or_equal' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu',
-            'baseSalary.required' => 'Lương không để rỗng',
-            'baseSalary.numeric' => 'lương chỉ chấp nhận số',
-            'baseSalary.min' => 'Lương không nhỏ hơn :min'
+            'staffId.required' => 'Staff ID cannot be empty',
+            'startDate.required' => 'Start date cannot be empty',
+            'endDate.required' => 'End date cannot be empty',
+            'startDate.date_format' => 'Start date is in the wrong format: YYYY-MM-DD',
+            'endDate.date_format' => 'End date is in the wrong format: YYYY-MM-DD',
+            'endDate.after_or_equal' => 'End date must be greater than or equal to start date',
+            'baseSalary.required' => 'Base salary cannot be empty',
+            'baseSalary.numeric' => 'Base salary must be a number',
+            'baseSalary.min' => 'Base salary cannot be less than :min'
         ];
         $data = $request->all();
         $validate = Validator::make($data, $rule, $message);
@@ -95,10 +95,10 @@ class ContractController extends Controller
         if ($body->isSuccess) {
             return redirect()->back()->with('message', [
                 'type' => 'success',
-                'message' => 'Lưu hợp đồng thành công.'
+                'message' => 'Save Contract complete.'
             ]);
         }
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => "Lưu hợp đồng thất bại."]);
+        return redirect()->back()->with('message', ['type' => 'danger', 'message' => "Failed to save the contract."]);
     }
 
     public function stopContract($id)
@@ -110,19 +110,22 @@ class ContractController extends Controller
             $contract = $editContractResponse->data;
         }
         if (!$contract) {
-            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không tìm thấy hợp đồng']);
+            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Contract not found']);
         }
-        return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Chấm dứt hợp đồng thành công']);
+        
+        return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Contract terminated successfully']);
     }
 
     public function getDelete($id)
     {
         $response = Http::get(config('app.api_url') . '/contract/delete', ['id' => $id]);
         $body = json_decode($response->body(), false);
+        
         if ($body->isSuccess) {
-            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Xóa hợp đồng thành công.']);
+            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Contract deleted successfully.']);
+        } else {
+            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Failed to delete the contract.']);
         }
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Xóa hợp đồng thất bại.']);
     }
 
   
@@ -133,7 +136,7 @@ class ContractController extends Controller
     $disk = Storage::disk('public_folder');
     
     if (!$disk->exists($template)) {
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không tìm thấy mẫu hợp đồng.']);
+        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Contract template not found.']);
     }
 
     // Generate a unique file name for the modified document
@@ -214,10 +217,10 @@ class ContractController extends Controller
         } catch (\Exception $e) {
             // Log the error
             Log::error('Error exporting contract document: ' . $e->getMessage());
-            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Có lỗi xảy ra khi tạo tài liệu hợp đồng.']);
+            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'An error occurred while creating the contract document.']);
         }
     } else {
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Không thể mở tệp mẫu hợp đồng.']);
+        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Unable to open contract template file.']);
     }
 }
 

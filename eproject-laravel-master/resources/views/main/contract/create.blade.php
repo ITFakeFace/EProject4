@@ -57,10 +57,11 @@
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
                                         </span>
-                                        <input type="text" class="form-control daterange-single" value="2021-01-01" name="startDate">
+                                        <input type="text" class="form-control daterange-single" <?php $today = date('Y-m-d')  ?> value="<?php echo $today; ?>" name="startDate">
                                     </div>
                                 </div>
                             </div>
+                               
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Contract End Date:</label>
@@ -68,7 +69,7 @@
                                         <span class="input-group-prepend">
                                             <span class="input-group-text"><i class="icon-calendar22"></i></span>
                                         </span>
-                                        <input type="text" class="form-control daterange-single" value="2021-01-01" name="endDate">
+                                        <input type="text" class="form-control daterange-single" <?php $today = date('Y-m-d')  ?> value="<?php echo $today; ?>" name="endDate">
                                     </div>
                                 </div>
                             </div>
