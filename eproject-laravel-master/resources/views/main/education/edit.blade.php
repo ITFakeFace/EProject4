@@ -47,25 +47,15 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     <!-- Basic datatable -->
     <!-- 2 columns form -->
     <div class="card">
-<<<<<<< HEAD
         <div class="card-header header-elements-inline">
             <h1 class="pt-3 pl-3 pr-3">Update Certificates Information</h1>
             <div class="header-elements">
-=======
-        <div>
-            <h1 class="pt-3 pl-3 pr-3">Update Certificate</h1>
-            {{-- <div class="header-elements">
->>>>>>> aff2dfa4c26c785a8246db9992238ebd9579d5d1
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
                     <a class="list-icons-item" data-action="reload"></a>
                     <a class="list-icons-item" data-action="remove"></a>
                 </div>
-<<<<<<< HEAD
-            </div>
-=======
             </div> --}}
->>>>>>> aff2dfa4c26c785a8246db9992238ebd9579d5d1
         </div>
 
         @if (\Session::has('success'))
@@ -185,8 +175,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                         </fieldset>
                     </div>
-<<<<<<< HEAD
-=======
                 @endif
 
         <!-- validate  -->
@@ -288,7 +276,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                         </fieldset>
                     </div>
->>>>>>> aff2dfa4c26c785a8246db9992238ebd9579d5d1
                 </div>
                 <div class="text-left">
                     <a class="btn btn-primary" role="button" href="{{ action('EducationController@index') }}" style="color:white;">Back</a>
