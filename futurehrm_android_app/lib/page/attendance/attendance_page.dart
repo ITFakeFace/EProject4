@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:futurehrm_android_app/models/ApiService.dart';
+import 'package:futurehrm_android_app/models/check_in_out_history.dart';
+import 'package:futurehrm_android_app/models/staff.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -8,64 +12,27 @@ class AttendancePage extends StatefulWidget {
 }
 
 class _AttendancePageState extends State<AttendancePage> {
+  String _formatMDY(DateTime date) {
+    return "${date.month}-${date.day}-${date.year}";
+  }
+
+  String _formatYM(DateTime date) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(date);
+  }
+
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime? _selectedDay;
 
-  final List<Map<String, dynamic>> attendanceData = [
-    {
-      "check_in_day": "17-06-2024",
-      "in_late_diff": "10:53:42",
-      "check_out_rand": "2024-06-17 17:00:00",
-      "department_id": 1,
-      "ot": null,
-      "image_check_out": "null",
-      "time": "00:00:00",
-      "out_soon_diff": null,
-      "multiply": "1",
-      "number_time": 1,
-      "check_out": "18:53:47",
-      "in_late": null,
-      "check_in_day_y_m_d": 1718557200000,
-      "check_in": "18:53:42",
-      "special_date_id": null,
-      "out_soon": null,
-      "check_in_day_no_format": 1718557200000,
-      "check_in_rand": "2024-06-17 18:53:42",
-      "ot_time": "01:53:47",
-      "image_check_in": "null",
-      "day_of_week": 2
-    },
-    {
-      "department_id": 1,
-      "ot": null,
-      "in_late_diff": "02:40:14",
-      "check_in_day": "18-06-2024",
-      "check_in_day_y_m_d": 1718643600000,
-      "check_out": "10:40:16",
-      "out_soon_diff": "06:19:44",
-      "image_check_out": "null",
-      "check_in_day_no_format": 1718643600000,
-      "multiply": "1",
-      "in_late": "02:40:14.000000",
-      "time": "00:00:02",
-      "check_in": "10:40:14",
-      "ot_time": null,
-      "check_in_rand": "2024-06-18 10:40:14",
-      "special_date_id": null,
-      "number_time": 0,
-      "image_check_in": "null",
-      "out_soon": "01:19:44",
-      "day_of_week": 3,
-      "check_out_rand": "2024-06-18 10:40:16"
-    }
-  ];
+  List<CheckInOutHistory> attendanceData = [];
 
   Map<DateTime, Color> _attendanceStatus = {};
 
   @override
   void initState() {
-    _parseAttendanceData();
+    currentAuth = Hive.box("Auth").get("CurrentAuth");
+    getHistory(DateTime.now());
     super.initState();
   }
 
@@ -73,10 +40,9 @@ class _AttendancePageState extends State<AttendancePage> {
     final dateFormatter = DateFormat('dd-MM-yyyy');
 
     for (var data in attendanceData) {
-      DateTime checkInDay = dateFormatter.parse(data['check_in_day']);
-      bool hasCheckOut =
-          data['check_out'] != null && data['check_out'] != "null";
-      bool hasCheckIn = data['check_in'] != null && data['check_in'] != "null";
+      DateTime checkInDay = data.checkInDay!;
+      bool hasCheckOut = data.checkOut != null && data.checkOut != "null";
+      bool hasCheckIn = data.checkIn != null && data.checkIn != "null";
       if (hasCheckIn && hasCheckOut) {
         _attendanceStatus[checkInDay] = Colors.green;
       } else if (hasCheckIn && !hasCheckOut) {
@@ -85,11 +51,46 @@ class _AttendancePageState extends State<AttendancePage> {
         _attendanceStatus[checkInDay] = Colors.red;
       }
     }
+    setState(() {});
   }
+
+  Future<void> getHistory(DateTime selectedMonth) async {
+    if (currentAuth == null) {
+      throw Exception("User not authenticated");
+    }
+
+    final data = {
+      "staff_id": currentAuth!.id,
+      "y_m": _formatYM(selectedMonth),
+    };
+
+    // try {
+    var response = await ApiService.post(
+      "check-in-out/get-staff-time",
+      data,
+    );
+
+    var responseData = response.data;
+    setState(() {
+      if (response.data.length > 0) {
+        attendanceData?.clear();
+      }
+      for (var item in response.data) {
+        attendanceData?.add(CheckInOutHistory.fromMap(item));
+      }
+      _parseAttendanceData();
+    });
+    // } catch (e) {
+    //   print('Error fetching attendance data: $e');
+    // }
+  }
+
+  Staff? currentAuth;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Column(
         children: [
           // Top section with the profile image and attendance info
@@ -134,15 +135,15 @@ class _AttendancePageState extends State<AttendancePage> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildStatusCard('Leave', '03', Colors.purple),
-                      _buildStatusCard('Present', '15', Colors.green),
-                      _buildStatusCard('W.F.H', '00', Colors.orange),
-                      _buildStatusCard('Absent', '01', Colors.red),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //   children: [
+                  //     _buildStatusCard('Leave', '03', Colors.purple),
+                  //     _buildStatusCard('Present', '15', Colors.green),
+                  //     _buildStatusCard('W.F.H', '00', Colors.orange),
+                  //     _buildStatusCard('Absent', '01', Colors.red),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -174,6 +175,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 },
                 onPageChanged: (focusedDay) {
                   _focusedDay = focusedDay;
+                  getHistory(focusedDay); // Fetch data for the new month
                 },
                 calendarBuilders: CalendarBuilders(
                   defaultBuilder: (context, day, focusedDay) {
@@ -189,8 +191,8 @@ class _AttendancePageState extends State<AttendancePage> {
                       if (_attendanceStatus.containsKey(dateOnly.toLocal()) &&
                           (day.weekday != DateTime.saturday &&
                               day.weekday != DateTime.sunday)) {
-                        // print(
-                        //     "day: ${day.day} legit ${_attendanceStatus[dateOnly.toLocal()]}");
+                        print(
+                            "day: ${day.day} legit ${_attendanceStatus[dateOnly.toLocal()]}");
                         return Container(
                           margin: const EdgeInsets.all(4.0),
                           decoration: BoxDecoration(
@@ -204,8 +206,24 @@ class _AttendancePageState extends State<AttendancePage> {
                             ),
                           ),
                         );
+                      } else if ((day.weekday != DateTime.saturday &&
+                          day.weekday != DateTime.sunday)) {
+                        return Container(
+                          margin: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${day.day}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
                       }
-                    } else {
+                    } else if ((day.weekday != DateTime.saturday &&
+                        day.weekday != DateTime.sunday)) {
                       return Container(
                         margin: const EdgeInsets.all(4.0),
                         decoration: BoxDecoration(
@@ -226,7 +244,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 ),
                 calendarStyle: CalendarStyle(
                   todayDecoration: BoxDecoration(
-                    color: Colors.red,
+                    color: Colors.deepPurpleAccent,
                     shape: BoxShape.circle,
                   ),
                   selectedDecoration: BoxDecoration(

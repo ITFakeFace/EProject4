@@ -4,6 +4,7 @@ import 'package:futurehrm_android_app/page/attendance/attendance_page.dart';
 import 'package:futurehrm_android_app/page/check_in/check_in_page.dart';
 import 'package:futurehrm_android_app/page/login/login_page.dart';
 import 'package:futurehrm_android_app/page/menu_page.dart';
+import 'package:futurehrm_android_app/page/profile/profile_page.dart';
 
 class RouterHelper {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -34,7 +35,11 @@ class RouterHelper {
         return MaterialPageRoute(
           builder: (_) => AttendancePage(),
         );
-
+      case RoutePaths.profilePage:
+        // you can do things like pass arguments to screens
+        return MaterialPageRoute(
+          builder: (_) => ProfilePage(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
