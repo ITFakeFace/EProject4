@@ -672,13 +672,13 @@ class TransferController extends Controller
             <div class="form-group row">
             <label class="col-lg-3 col-form-label">Employee Created Date:</label>
             <div class="col-lg-9" >
-                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . $body['data']['createdAt'] . '</textarea>
+                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . \Carbon\Carbon::createFromTimestampMs($body['data']['createdAt'])->format('d/m/Y') . '</textarea>
             </div>
              </div>
             <div class="form-group row">
             <label class="col-lg-3 col-form-label">Director Approval Date:</label>
             <div class="col-lg-9" >
-                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . $body['data']['updateAt'] . '</textarea>
+                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . \Carbon\Carbon::createFromTimestampMs($body['data']['updateAt'])->format('d/m/Y') . '</textarea>
             </div>
              </div>
 

@@ -184,7 +184,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     <th>Current Manager Approval</th>
                     <th>New Manager Approval</th>
                     <th>Director Approval</th>
-                    <th class="text-center">Edit / Delete</th>
+                    <th class="text-center">Status</th>
                     <th>Action</th>
                     <th>Director</th>
                 </tr>

@@ -46,28 +46,28 @@ class Education extends HiveObject {
   factory Education.fromMap(Map<String, dynamic> map) {
     return Education(
       id: map['id'],
-      staffId: map['staff_id'],
+      staffId: map['staffId'],
       level: map['level'],
-      levelName: map['level_name'],
+      levelName: map['levelName'],
       school: map['school'],
-      fieldOfStudy: map['field_of_study'],
-      graduatedYear: map['graduated_year'],
+      fieldOfStudy: map['fieldOfStudy'],
+      graduatedYear: map['graduatedYear'],
       grade: map['grade'],
-      modeOfStudy: map['mode_of_study'],
+      modeOfStudy: map['modeOfStudy'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "staff_id": staffId,
+      "staffId": staffId,
       "level": level,
-      "level_name": levelName,
+      "levelName": levelName,
       "school": school,
-      "field_of_study": fieldOfStudy,
-      "graduated_year": graduatedYear,
+      "fieldOfStudy": fieldOfStudy,
+      "graduatedYear": graduatedYear,
       "grade": grade,
-      "mode_of_study": modeOfStudy,
+      "modeOfStudy": modeOfStudy,
     };
   }
 }

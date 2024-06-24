@@ -6,12 +6,12 @@ class InfoLineIcon extends StatelessWidget {
   String title;
   String content;
 
-  TextStyle titleStyle = const TextStyle(
+  static TextStyle titleStyle = const TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
   );
 
-  TextStyle contentStyle = const TextStyle(
+  static TextStyle contentStyle = const TextStyle(
     fontSize: 16,
   );
 

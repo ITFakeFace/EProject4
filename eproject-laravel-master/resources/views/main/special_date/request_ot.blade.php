@@ -1,8 +1,8 @@
 @extends('main._layouts.master')
 
 <?php
-    header("Access-Control-Allow-Origin: *");
-    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 ?>
 
 @section('css')
@@ -14,7 +14,7 @@
     </style>
 @endsection
 
-@section('js')    
+@section('js')
     <script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/notifications/jgrowl.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.js') }}"></script>
@@ -22,26 +22,26 @@
     <script src="{{ asset('global_assets/js/plugins/pickers/daterangepicker.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('global_assets/js/demo_pages/picker_date.js') }}"></script>
-    
-	<!-- Theme JS files -->
-	<script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/core/main.min.js') }}"></script>
-	<script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/daygrid/main.min.js') }}"></script>
+
+    <!-- Theme JS files -->
+    <script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/core/main.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/daygrid/main.min.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatable_init.js') }}"></script>
 
     <script src="{{ asset('global_assets/js/plugins/extensions/jquery_ui/interactions.min.js') }}"></script>
-	<script src="{{ asset('global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
-	<script src="{{ asset('global_assets/js/demo_pages/form_select2.js') }}"></script>
+    <script src="{{ asset('global_assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/demo_pages/form_select2.js') }}"></script>
 
     <!-- Theme JS files -->
-	<script src="{{ asset('global_assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
-	<script src="{{ asset('global_assets/js/plugins/notifications/pnotify.min.js') }}"></script>
-	<script src="{{ asset('global_assets/js/plugins/forms/selects/bootstrap_multiselect.js') }}"></script>
+    <script src="{{ asset('global_assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/plugins/notifications/pnotify.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/plugins/forms/selects/bootstrap_multiselect.js') }}"></script>
 
-	<script src="{{ asset('global_assets/js/demo_pages/form_multiselect.js') }}"></script>
-	<!-- /theme JS files -->
+    <script src="{{ asset('global_assets/js/demo_pages/form_multiselect.js') }}"></script>
+    <!-- /theme JS files -->
 
-	<!-- /theme JS files -->
+    <!-- /theme JS files -->
 @endsection
 
 @section('content')
@@ -49,7 +49,7 @@
     <div class="card">
         <h1 class="pt-3 pl-3 pr-3">List of Overtime Requests</h1>
         <div class="card-header header-elements-inline">
-            
+
         </div>
         <div class="card-body">
             @if (\Session::has('success'))
@@ -71,7 +71,7 @@
                 @csrf
                 <div class="form-group d-flex">
                     <div class="">
-                        <input class="form-control" type="number" value="<?php echo $year ?>" name="year" id="year">
+                        <input class="form-control" type="number" value="<?php echo $year; ?>" name="year" id="year">
                     </div>
                     <div class="ml-3">
                         <input class="form-control btn btn-primary" type="submit" value="Search">
@@ -80,16 +80,16 @@
             </form>
 
             <div class="form-group d-flex">
-                @if(auth()->user()->id !== 7)
+                @if (auth()->user()->id !== 7)
                     <div class="">
-                        <button class="btn btn-primary" style="background-color: #046A38" data-toggle="modal" data-target="#exampleModalCenter2">Create New Overtime Request</button>
+                        <button class="btn btn-primary" style="background-color: #4B49AC" data-toggle="modal" data-target="#exampleModalCenter2">Create New Overtime Request</button>
                     </div>
                 @endif
             </div>
         </div>
 
-         <!-- Modal bsc -->
-         <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <!-- Modal bsc -->
+        <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <form action="{{ action('SpecialDateController@createSpecialDate') }}" method="post">
@@ -149,7 +149,7 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Create Request</button>
                         </div>
-                    </form>  
+                    </form>
                 </div>
             </div>
         </div>
@@ -164,7 +164,7 @@
                     <th>To Date</th>
                     <th>Status</th>
                     <th>Edit / Delete</th>
-                    @if(auth()->user()->id != 7)
+                    @if (auth()->user()->id != 7)
                         <th>Details</th>
                     @endif
                 </tr>
@@ -172,29 +172,30 @@
             <tbody>
                 <?php $count = 1; ?>
                 @foreach ($data as $special_date)
-                    @if($special_date['type_day'] == 2)
+                    @if ($special_date['type_day'] == 2)
                         <tr>
-                            <td><?php echo $count; $count++ ?></td>
-                            <td><?php echo $special_date['full_name_staff_request'] ?></td>
-                            <td><?php echo $special_date['name_department_request'] ?></td>
-                            <td><?php echo $special_date['day_special_from'] ?></td>
-                            <td><?php echo $special_date['day_special_to'] ?></td>
+                            <td><?php echo $count;
+                            $count++; ?></td>
+                            <td><?php echo $special_date['full_name_staff_request']; ?></td>
+                            <td><?php echo $special_date['name_department_request']; ?></td>
+                            <td><?php echo $special_date['day_special_from']; ?></td>
+                            <td><?php echo $special_date['day_special_to']; ?></td>
                             <td>
-                                @if($special_date['is_approved'] == 0)
+                                @if ($special_date['is_approved'] == 0)
                                     <span class="badge badge-warning">Pending</span>
                                 @elseif($special_date['is_approved'] == -1)
                                     <span class="badge badge-danger">Rejected</span>
                                 @else
-                                    <span class="badge badge-primary" style="background-color: #046A38">Approved</span>
+                                    <span class="badge badge-primary" style="background-color: #4B49AC">Approved</span>
                                 @endif
                             </td>
                             <td>
-                                @if(auth()->user()->id != 7)
-                                    @if($special_date['is_approved'] == 1)
+                                @if (auth()->user()->id != 7)
+                                    @if ($special_date['is_approved'] == 1)
                                         <span class="badge badge-primary">Approved. Cannot Edit!</span>
                                     @elseif($special_date['is_approved'] == -1)
                                         <span class="badge badge-danger">Rejected!</span>
-                                    @elseif(date("Y-m-d") <= $special_date['day_special_from'])
+                                    @elseif(date('Y-m-d') <= $special_date['day_special_from'])
                                         <div class="from-group d-flex">
                                             <a class="btn btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Edit</a>
                                             <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
@@ -203,11 +204,11 @@
                                         <span class="badge badge-warning">Expired!</span>
                                     @endif
                                 @else
-                                    @if($special_date['is_approved'] == 1)
+                                    @if ($special_date['is_approved'] == 1)
                                         <span class="badge badge-primary">Approved!</span>
                                     @elseif($special_date['is_approved'] == -1)
                                         <span class="badge badge-danger">Rejected!</span>
-                                    @elseif(date("Y-m-d") <= $special_date['day_special_from'])
+                                    @elseif(date('Y-m-d') <= $special_date['day_special_from'])
                                         <div class="from-group d-flex">
                                             <a class="btn btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Details</a>
                                         </div>
@@ -216,7 +217,7 @@
                                     @endif
                                 @endif
                             </td>
-                            @if(auth()->user()->id != 7)
+                            @if (auth()->user()->id != 7)
                                 <td>
                                     <div class="from-group d-flex">
                                         <a class="btn btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Details</a>
@@ -225,33 +226,33 @@
                             @endif
                         </tr>
                     @endif
-                @endforeach   
+                @endforeach
             </tbody>
         </table>
 
         <div id="bsc-modal" class="modal fade" role="dialog"> <!-- modal bsc -->
             <div class="modal-dialog">
-              <div class="modal-content">
-                @if(auth()->user()->id != 7)
-                    <form action="{{ action('SpecialDateController@updateSpecialDate') }}" method="post" class="form-horizontal">
-                    @csrf
-                        <div id="html_pending">
-                            
-                        </div>
-                    </form> <!-- end form -->
-                @else
-                    <form action="{{ action('SpecialDateController@approveOverTime') }}" method="post" class="form-horizontal">
-                    @csrf
-                        <div id="html_pending">
-                            
-                        </div>
-                    </form> <!-- end form -->
-                @endif
-              </div>
+                <div class="modal-content">
+                    @if (auth()->user()->id != 7)
+                        <form action="{{ action('SpecialDateController@updateSpecialDate') }}" method="post" class="form-horizontal">
+                            @csrf
+                            <div id="html_pending">
+
+                            </div>
+                        </form> <!-- end form -->
+                    @else
+                        <form action="{{ action('SpecialDateController@approveOverTime') }}" method="post" class="form-horizontal">
+                            @csrf
+                            <div id="html_pending">
+
+                            </div>
+                        </form> <!-- end form -->
+                    @endif
+                </div>
             </div>
         </div> <!-- end modal bsc -->
 
-          
+
     </div>
     <!-- /basic datatable -->
 
@@ -260,10 +261,10 @@
         <div class="card-header header-elements-inline">
             <h5 class="card-title"></h5>
             <div class="header-elements">
-      
+
             </div>
         </div>
-        
+
         <div class="card-body">
 
             <div class="fullcalendar-basic"></div>
@@ -288,13 +289,11 @@
                 url: '{{ action('SpecialDateController@detailSpecialDate') }}',
                 Type: 'POST',
                 datatype: 'text',
-                data:
-                {
+                data: {
                     id: id,
                 },
                 cache: false,
-                success: function (data)
-                {
+                success: function(data) {
                     console.log(data);
                     $('#html_pending').empty().append(data);
                     $('#bsc-modal').modal();
@@ -309,13 +308,11 @@
                 url: '{{ action('SpecialDateController@detailOverTime') }}',
                 Type: 'POST',
                 datatype: 'text',
-                data:
-                {
+                data: {
                     id: id,
                 },
                 cache: false,
-                success: function (data)
-                {
+                success: function(data) {
                     console.log(data);
                     $('#html_pending').empty().append(data);
                     $('#bsc-modal').modal();
@@ -332,22 +329,22 @@
                     return;
                 }
 
-                events = <?php echo $calendar ?>;
+                events = <?php echo $calendar; ?>;
 
                 var dt = new Date();
                 let now = new Date().toISOString().split('T')[0];
 
                 now = now.slice(4);
                 date_now = '';
-                date_now += <?php echo $year?> + now;
+                date_now += <?php echo $year; ?> + now;
 
                 // Define element
                 var calendarBasicViewElement = document.querySelector('.fullcalendar-basic');
 
                 // Initialize
-                if(calendarBasicViewElement) {
+                if (calendarBasicViewElement) {
                     var calendarBasicViewInit = new FullCalendar.Calendar(calendarBasicViewElement, {
-                        plugins: [ 'dayGrid', 'interaction' ],
+                        plugins: ['dayGrid', 'interaction'],
                         header: {
                             left: 'prev,next today',
                             center: 'title',
@@ -371,7 +368,5 @@
         document.addEventListener('DOMContentLoaded', function() {
             FullCalendarBasic.init();
         });
-
-
     </script>
 @endsection
