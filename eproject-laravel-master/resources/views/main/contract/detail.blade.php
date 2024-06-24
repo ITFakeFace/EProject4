@@ -20,14 +20,14 @@
             <div class="card">
                 <h1 class="pt-3 pl-3 pr-3">Contract Details</h1>
                 <div class="card-header header-elements-inline">
-                    
+
                 </div>
                 <div class="card-body">
                     <div class="form-group">
                         <label>Employee ID</label>
                         <select class="form-control select-search" name="staffId" readonly>
-                            @foreach($listStaff as $staff)
-                                <option value="{{ $staff->id }}" @if($contract->staffId == $staff->id) selected @endif>{{ $staff->firstname .' '. $staff->lastname }}</option>
+                            @foreach ($listStaff as $staff)
+                                <option value="{{ $staff->id }}" @if ($contract->staffId == $staff->id) selected @endif>{{ $staff->firstname . ' ' . $staff->lastname }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -39,7 +39,7 @@
                                     <span class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-calendar22"></i></span>
                                     </span>
-                                    <input type="text" class="form-control daterange-single" value="{{ $contract->startDate }}" name="startDate" readonly>
+                                    <input type="text" class="form-control daterange-single" value="{{ \Carbon\Carbon::createFromTimestampMs($contract->startDate)->format('d/m/Y') }}" name="startDate" readonly>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                                     <span class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-calendar22"></i></span>
                                     </span>
-                                    <input type="text" class="form-control daterange-single" value="{{ $contract->endDate }}" name="endDate" readonly>
+                                    <input type="text" class="form-control daterange-single" value="{{ \Carbon\Carbon::createFromTimestampMs($contract->endDate)->format('d/m/Y') }}" name="endDate" readonly>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                             $endDate = \Carbon\Carbon::createFromFormat('Y-m-d', $contract->endDate);
                             $stopDate = \Carbon\Carbon::createFromFormat('Y-m-d', $contract->stopDate);
                         @endphp
-                        @if($stopDate->lt($endDate))
+                        @if ($stopDate->lt($endDate))
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Termination Date:</label>

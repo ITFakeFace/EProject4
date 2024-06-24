@@ -20,9 +20,9 @@ class _MenuPageState extends State<MenuPage> {
   var actions = [
     {"name": "Check In", "image": "none", "path": RoutePaths.checkInPage},
     {"name": "Attendance", "image": "none", "path": RoutePaths.attendancePage},
-    {"name": "Payroll", "image": "none", "path": "/payroll"},
-    {"name": "Request Leave", "image": "none", "path": "/request-leave"},
-    {"name": "Logout", "image": "none", "path": RoutePaths.loginPage},
+    // {"name": "Payroll", "image": "none", "path": "/payroll"},
+    // {"name": "Request Leave", "image": "none", "path": "/request-leave"},
+    // {"name": "Logout", "image": "none", "path": RoutePaths.loginPage},
   ];
 
   @override

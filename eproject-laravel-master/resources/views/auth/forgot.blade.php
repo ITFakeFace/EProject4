@@ -25,7 +25,7 @@
                         </div>
                     @endif
                     <div class="text-center mb-3">
-                        <i class="icon-spinner11 icon-2x border-3 rounded-round p-3 mb-3 mt-1" style="color: #046A38; border-color: #046A38"></i>
+                        <i class="icon-spinner11 icon-2x border-3 rounded-round p-3 mb-3 mt-1" style="color: #4B49AC; border-color: #4B49AC"></i>
                         <h5 class="mb-0">Reset Password</h5>
                         <span class="d-block text-muted">An Instruction would be sent to your email</span>
                     </div>

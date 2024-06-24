@@ -13,7 +13,7 @@
             }
 
             .back-link {
-                color: #046A38;
+                color: #4B49AC;
                 font-weight: bold;
                 font-size: 16px;
                 padding-left: 50px;
@@ -44,7 +44,7 @@
             margin: 0 auto;
             text-align: center;
             border-radius: 10px;
-            color: #008B56;
+            color: #4B49AC;
             box-shadow: 0 0 11px rgba(33, 33, 33, .2);
             transition: box-shadow .3s;
             background: #FFF;
@@ -62,7 +62,7 @@
 
         .outer p {
             padding-top: 10px;
-            color: #008B56;
+            color: #4B49AC;
             cursor: pointer;
             font-weight: bold;
             margin-bottom: 0px;
@@ -79,11 +79,11 @@
             text-align: center;
             margin-top: 30px;
             margin-bottom: 30px;
-            color: #008B56;
+            color: #4B49AC;
         }
 
         .icon-8x {
-            color: #046A38;
+            color: #4B49AC;
             font-size: 9vw !important;
         }
 
@@ -105,7 +105,7 @@
             }
 
             .back-link {
-                color: #046A38;
+                color: #4B49AC;
                 font-weight: bold;
                 font-size: 16px;
                 padding-left: 30px;
@@ -182,7 +182,7 @@
             }
 
             .back-link {
-                color: #046A38;
+                color: #4B49AC;
                 font-size: 16px;
             }
 
