@@ -145,6 +145,10 @@ class TransferController extends Controller
       return redirect()->back()->with('error', 'Transfer creation failed! This staff is currently in transfer status.');
     }
 
+    if ($new_salary == null || $new_salary <= 0 || $new_salary == "null") {
+      return redirect()->back()->with('error', 'New Salary must be larger than 500,000');
+    }
+
     $data_request = [
       'staff_id' => $id_staff_transfer,
       'old_department' => $old_department,
