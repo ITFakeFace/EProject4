@@ -157,11 +157,11 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () {
                               // _login("dthung6604@gmail.com", "123");
-                              _login("baylv@gmail.com", "123456");
-                              // if (_formKey.currentState!.validate()) {
-                              //   _login(_emailController.text,
-                              //       _passwordController.text);
-                              // }
+                              // _login("baylv@gmail.com", "123456");
+                              if (_formKey.currentState!.validate()) {
+                                _login(_emailController.text,
+                                    _passwordController.text);
+                              }
                             },
                             child: const Text(
                               'Log in',

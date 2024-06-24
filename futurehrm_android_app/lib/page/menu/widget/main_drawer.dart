@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:futurehrm_android_app/models/route_paths.dart';
+import 'package:hive/hive.dart';
 
 class MainDrawer extends StatelessWidget {
   final String firstname;
@@ -40,12 +42,23 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('Profile'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                RoutePaths.profilePage!,
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
-            onTap: () {},
+            onTap: () {
+              Hive.box("Auth").delete("CurrentAuth");
+              Navigator.pushNamed(
+                context,
+                RoutePaths.loginPage!,
+              );
+            },
           ),
         ],
       ),

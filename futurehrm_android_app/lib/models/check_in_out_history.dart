@@ -66,7 +66,7 @@ class CheckInOutHistory {
       inLateDiff: map['in_late_diff'] != null
           ? _parseDuration(map['in_late_diff'])
           : null,
-      time: _parseDuration(map['time']),
+      time: map['time'] != null ? _parseDuration(map['time']) : null,
       checkInDayYMD:
           DateTime.fromMillisecondsSinceEpoch(map['check_in_day_y_m_d']),
       checkInRand: map['check_in_rand'] != null
@@ -87,7 +87,8 @@ class CheckInOutHistory {
           : null,
       imageCheckIn:
           map['image_check_in'] != "null" ? map['image_check_in'] : null,
-      checkIn: timeFormatter.parse(map['check_in']),
+      checkIn:
+          map['check_in'] != null ? timeFormatter.parse(map['check_in']) : null,
       dayOfWeek: map['day_of_week'],
     );
   }

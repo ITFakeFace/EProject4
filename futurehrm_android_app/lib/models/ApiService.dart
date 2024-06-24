@@ -8,10 +8,42 @@ class ApiService {
   static const String imgUrl = "http://26.144.42.43:8001";
 
   static Future<ResponseData> get(String endpoint,
-      {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint');
-    final response = await http.get(url, headers: headers);
+      {Map<String, String>? headers,
+      Map<String, dynamic>? queryParams,
+      Map<String, dynamic>? body}) async {
+    print("GET: $endpoint");
+    print("Query Parameters: ${json.encode(queryParams)}");
+    print("Headers: ${json.encode(headers)}");
+    print("Body: ${json.encode(body)}");
 
+    // Create the base URL
+    final url = Uri.parse('$baseUrl/$endpoint');
+
+    // Add query parameters to the URL
+    final uri = url.replace(
+        queryParameters:
+            queryParams?.map((key, value) => MapEntry(key, value.toString())));
+
+    // Create the GET request
+    final request = http.Request('GET', uri);
+
+    // Add headers to the request if they exist
+    if (headers != null) {
+      request.headers.addAll(headers);
+    }
+
+    // Add body to the request if it exists (not standard for GET requests)
+    if (body != null) {
+      request.body = json.encode(body);
+      request.headers['Content-Type'] = 'application/json';
+    }
+
+    // Send the request and get the streamed response
+    final streamedResponse = await request.send();
+    // Convert the streamed response to a regular HTTP response
+    final response = await http.Response.fromStream(streamedResponse);
+
+    // Check the status code and process the response accordingly
     if (response.statusCode == 200) {
       return ResponseData.fromMap(json.decode(response.body));
     } else {
