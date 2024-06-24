@@ -117,7 +117,7 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Taxable</th>
+                                            {{-- <th>Taxable</th> --}}
                                             <th>Unit</th>
                                             <th>Value</th>
                                         </tr>
@@ -127,9 +127,9 @@
                                             @if ($item->type === 'ALLOWANCE')
                                                 <tr>
                                                     <td>{{ $item->name }}</td>
-                                                    <td>
+                                                    {{-- <td>
                                                         <input type="checkbox" {{ $item->have_tax ? 'checked' : '' }} disabled>
-                                                    </td>
+                                                    </td> --}}
                                                     <td>
                                                         @if ($item->unit == 'NUMBER')
                                                             VNĐ
