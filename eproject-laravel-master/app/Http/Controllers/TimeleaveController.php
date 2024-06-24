@@ -1127,30 +1127,30 @@ class TimeleaveController extends Controller
     $body = json_decode($response->body(), true);
 
     if ($body['data'][0][3] == 0) {
-      $title = 'Nhân Viên Bổ Sung Công';
-      $day_time_leave = 'Ngày bổ sung công';
+      $title = 'Employee\'s additional attendance';
+      $day_time_leave = 'Date of additional attendance';
     } else {
-      $title = 'Nhân Viên Đăng Kí Phép Năm Tính Lương';
-      $day_time_leave = 'Ngày đăng kí phép';
+      $title = 'Employee\'s Paid leave';
+      $day_time_leave = 'Date of leave';
     }
 
     if ($body['data'][0][2] == '08:00:00') {
-      $time = 'Một ngày công';
+      $time = 'One day';
     } else {
-      $time = 'Nửa ngày công';
+      $time = 'half day';
     }
 
     if ($body['data'][0][5] == 1) {
       $approved = '
-                Giám đốc đã duyệt
+                Director has approved
             ';
     } else if ($body['data'][0][5] == 2) {
       $approved = '
-                Quản lý đã duyệt
+                Manager has approved
             ';
     } else {
       $approved = '
-                Chưa duyệt
+                Pending approval
             ';
     }
 
@@ -1158,77 +1158,78 @@ class TimeleaveController extends Controller
     $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">' . $title . '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
     $html .= '<span aria-hidden="true">&times;</span></button></div>';
     $html .= '
-            <div class="modal-body">
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Tên nhân viên:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][6] . ' ' . $body['data'][0][7] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Mã nhân viên:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][8] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Phòng ban:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][11] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Loại phép:</label>
-                    <div class="col-lg-9 col-form-label">
-                        Phép năm tính lương
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">' . $day_time_leave . ':</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][1] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Yêu cầu:</label>
-                    <div class="col-lg-9 col-form-label">
-                         ' . $time . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Hình ảnh:</label>
-                    <div class="col-lg-9">
-                        <img src="..' . $body['data'][0][12] . '" alt=""  style="max-height: 250px; max-width: 200px">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Trạng thái:</label>
-                    <div class="col-lg-9">
-                        ' . $approved . '
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Lý do:</label>
-                    <div class="col-lg-9">
-                        <textarea class="form-control" name="note_bsc_update" id="note_bsc_update" cols="20" rows="5" placeholder="VD: Bận việc gia đình, Đi học, ..." readonly>' . $body['data'][0][4] . '</textarea>
-                    </div>
+        <div class="modal-body">
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Employee Name:</label>
+                <div class="col-lg-9 col-form-label">
+                    ' . $body['data'][0][6] . ' ' . $body['data'][0][7] . '
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-primary">Duyệt</button>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Employee ID:</label>
+                <div class="col-lg-9 col-form-label">
+                    ' . $body['data'][0][8] . '
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Department:</label>
+                <div class="col-lg-9 col-form-label">
+                    ' . $body['data'][0][11] . '
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Leave Type:</label>
+                <div class="col-lg-9 col-form-label">
+                    Paid Annual Leave
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">' . $day_time_leave . ':</label>
+                <div class="col-lg-9 col-form-label">
+                    ' . $body['data'][0][1] . '
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Request:</label>
+                <div class="col-lg-9 col-form-label">
+                     ' . $time . '
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Image:</label>
+                <div class="col-lg-9">
+                    <img src="..' . $body['data'][0][12] . '" alt=""  style="max-height: 250px; max-width: 200px">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Status:</label>
+                <div class="col-lg-9">
+                    ' . $approved . '
+                </div>
             </div>
 
-            <script>
-                $(".day_leave_update").daterangepicker({
-                    singleDatePicker: true,
-                    locale: {
-                        format: "YYYY-MM-DD"
-                    }
-                });
-            </script>
-        ';
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Reason:</label>
+                <div class="col-lg-9">
+                    <textarea class="form-control" name="note_bsc_update" id="note_bsc_update" cols="20" rows="5" placeholder="e.g., Family matters, School, ..." readonly>' . $body['data'][0][4] . '</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Approve</button>
+        </div>
+
+        <script>
+            $(".day_leave_update").daterangepicker({
+                singleDatePicker: true,
+                locale: {
+                    format: "YYYY-MM-DD"
+                }
+            });
+        </script>
+    ';
+
 
     echo $html;
     die;
@@ -1236,122 +1237,123 @@ class TimeleaveController extends Controller
 
   public function detailOtherLeaveApprove(Request $request)
   {
-    $id = $request->input('id');
-
-    $data_request = [
-      "id" => $id
-    ];
-
-    $response = Http::get('http://localhost:8888/leave-other/detail-time-staff-approve', $data_request);
-    $body = json_decode($response->body(), true);
-
-    if ($body['data'][0][3] == 2) {
-      $type_leave = 'Nghỉ không lương';
-    } else if ($body['data'][0][3] == 3) {
-      $type_leave = 'Nghỉ chữa bệnh ngắn ngày';
-    } else if ($body['data'][0][3] == 4) {
-      $type_leave = 'Nghỉ chữa bệnh dài ngày';
-    } else if ($body['data'][0][3] == 5) {
-      $type_leave = 'Nghỉ thai sản';
-    } else if ($body['data'][0][3] == 6) {
-      $type_leave = 'Nghỉ kết hôn';
-    } else if ($body['data'][0][3] == 7) {
-      $type_leave = 'Nghỉ ma chay';
-    }
-
-    if ($body['data'][0][5] == 1) {
-      $approved = '
-                Giám đốc đã duyệt
-            ';
-    } else if ($body['data'][0][5] == 2) {
-      $approved = '
-                Quản lý đã duyệt
-            ';
-    } else {
-      $approved = '
-                Chưa duyệt
-            ';
-    }
-
-    $html = "<input type='hidden' name='id' value='" . $id . "'>";
-    $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Nhân Viên Đăng Kí Phép</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
-    $html .= '<span aria-hidden="true">&times;</span></button></div>';
-    $html .= '
-            <div class="modal-body">
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Tên nhân viên:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][6] . ' ' . $body['data'][0][7] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Mã nhân viên:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][8] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Phòng ban:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][11] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Loại phép:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $type_leave . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Từ ngày:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][1] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Đến ngày:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $body['data'][0][2] . '
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Hình ảnh:</label>
-                    <div class="col-lg-9">
-                        <img src="..' . $body['data'][0][12] . '" alt=""  style="max-height: 250px; max-width: 200px">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Trạng thái:</label>
-                    <div class="col-lg-9 col-form-label">
-                        ' . $approved . '
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Lý do:</label>
-                    <div class="col-lg-9">
-                        <textarea class="form-control" name="note_bsc_update" id="note_bsc_update" cols="20" rows="5" placeholder="VD: Bận việc gia đình, Đi học, ..." readonly>' . $body['data'][0][4] . '</textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-primary">Duyệt</button>
-            </div>
-
-            <script>
-                $(".day_leave_update").daterangepicker({
-                    singleDatePicker: true,
-                    locale: {
-                        format: "YYYY-MM-DD"
-                    }
-                });
-            </script>
-        ';
-
-    echo $html;
-    die;
+      $id = $request->input('id');
+  
+      $data_request = [
+          "id" => $id
+      ];
+  
+      $response = Http::get('http://localhost:8888/leave-other/detail-time-staff-approve', $data_request);
+      $body = json_decode($response->body(), true);
+  
+      if ($body['data'][0][3] == 2) {
+          $type_leave = 'Unpaid Leave';
+      } else if ($body['data'][0][3] == 3) {
+          $type_leave = 'Short-term Sick Leave';
+      } else if ($body['data'][0][3] == 4) {
+          $type_leave = 'Long-term Sick Leave';
+      } else if ($body['data'][0][3] == 5) {
+          $type_leave = 'Maternity Leave';
+      } else if ($body['data'][0][3] == 6) {
+          $type_leave = 'Marriage Leave';
+      } else if ($body['data'][0][3] == 7) {
+          $type_leave = 'Funeral Leave';
+      }
+  
+      if ($body['data'][0][5] == 1) {
+          $approved = '
+                  Approved by Director
+              ';
+      } else if ($body['data'][0][5] == 2) {
+          $approved = '
+                  Approved by Manager
+              ';
+      } else {
+          $approved = '
+                  Not Approved
+              ';
+      }
+  
+      $html = "<input type='hidden' name='id' value='" . $id . "'>";
+      $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Employee Leave Request</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+      $html .= '<span aria-hidden="true">&times;</span></button></div>';
+      $html .= '
+              <div class="modal-body">
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">Employee Name:</label>
+                      <div class="col-lg-9 col-form-label">
+                          ' . $body['data'][0][6] . ' ' . $body['data'][0][7] . '
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">Employee ID:</label>
+                      <div class="col-lg-9 col-form-label">
+                          ' . $body['data'][0][8] . '
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">Department:</label>
+                      <div class="col-lg-9 col-form-label">
+                          ' . $body['data'][0][11] . '
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">Leave Type:</label>
+                      <div class="col-lg-9 col-form-label">
+                          ' . $type_leave . '
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">From Date:</label>
+                      <div class="col-lg-9 col-form-label">
+                          ' . $body['data'][0][1] . '
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">To Date:</label>
+                      <div class="col-lg-9 col-form-label">
+                          ' . $body['data'][0][2] . '
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">Image:</label>
+                      <div class="col-lg-9">
+                          <img src="..' . $body['data'][0][12] . '" alt=""  style="max-height: 250px; max-width: 200px">
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">Status:</label>
+                      <div class="col-lg-9 col-form-label">
+                          ' . $approved . '
+                      </div>
+                  </div>
+  
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label">Reason:</label>
+                      <div class="col-lg-9">
+                          <textarea class="form-control" name="note_bsc_update" id="note_bsc_update" cols="20" rows="5" placeholder="e.g., Family matters, School, ..." readonly>' . $body['data'][0][4] . '</textarea>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Approve</button>
+              </div>
+  
+              <script>
+                  $(".day_leave_update").daterangepicker({
+                      singleDatePicker: true,
+                      locale: {
+                          format: "YYYY-MM-DD"
+                      }
+                  });
+              </script>
+          ';
+  
+      echo $html;
+      die;
   }
+  
 
   public function approvedTimeLeave(Request $request)
   {
@@ -1374,9 +1376,9 @@ class TimeleaveController extends Controller
     $body = json_decode($response->body(), true);
 
     if ($body['message'] == "Approve success") {
-      return redirect()->back()->with('success', 'Duyệt thành công!');
+      return redirect()->back()->with('success', 'Approved successfully!');
     } else {
-      return redirect()->back()->with('error', 'Duyệt thất bại');
+      return redirect()->back()->with('error', 'Approval failed');
     }
   }
 
@@ -1401,9 +1403,9 @@ class TimeleaveController extends Controller
     $body = json_decode($response->body(), true);
 
     if ($body['message'] == "Approve success") {
-      return redirect()->back()->with('success', 'Duyệt thành công!');
+      return redirect()->back()->with('success', 'Approved successfully!');
     } else {
-      return redirect()->back()->with('error', 'Duyệt thất bại');
+      return redirect()->back()->with('error', 'Approval failed');
     }
   }
 
@@ -1433,7 +1435,7 @@ class TimeleaveController extends Controller
       ->with('year', $year)
       ->with('month', $month)
       ->with('y_m', $date)
-      ->with('breadcrumbs', [['text' => 'Công phép', 'url' => '../view-menu/time-leave'], ['text' => 'Tổng hợp chấm công', 'url' => '#']]);
+      ->with('breadcrumbs', [['text' => 'Paid Leave', 'url' => '../view-menu/time-leave'], ['text' => 'Attendance Overview', 'url' => '#']]);
   }
 
   public function getDetailStaffTime(Request $request)
@@ -1460,9 +1462,9 @@ class TimeleaveController extends Controller
         else if ($check_in_out['day_of_week'] == 1 or $check_in_out['day_of_week'] == 7) $color = "#d3ffd4";
         else $color = "";
 
-        $check_in_out['is_manager'] == 1 ? $manager = "Quản lý" : $manager = "Nhân viên";
-        $check_in_out['day_of_week'] !== 1 ? $day_of_week = "Thứ " . $check_in_out['day_of_week'] : $day_of_week = "Chủ Nhật";
-        $check_in_out['special_date_id'] !== null ? $day_of_week .= "(Ngày lễ)" : '';
+        $check_in_out['is_manager'] == 1 ? $manager = "Manager" : $manager = "Staff";
+        $check_in_out['day_of_week'] !== 1 ? $day_of_week = "Day" . $check_in_out['day_of_week'] : $day_of_week = "Chủ Nhật";
+        $check_in_out['special_date_id'] !== null ? $day_of_week .= "(Holiday)" : '';
         $check_in_img = $check_in_out['image_check_in'] != null && $check_in_out['image_check_in'] != "null" ? "<img width='80px' src='../images/check_in/" . $check_in_out['image_check_in'] . "'/>" : "";
         $check_out_img = $check_in_out['image_check_out'] != null && $check_in_out['image_check_out'] != "null" ? "<img width='80px' src='../images/check_in/" . $check_in_out['image_check_out'] . "'/>" : "";
 
@@ -1511,134 +1513,136 @@ class TimeleaveController extends Controller
       ->with('year', $year)
       ->with('month', $month)
       ->with('y_m', $date)
-      ->with('breadcrumbs', [['text' => 'Công phép', 'url' => '../view-menu/time-leave'], ['text' => 'Tổng hợp công phép', 'url' => '#']]);
+      ->with('breadcrumbs', [['text' => 'Paid Leave', 'url' => '../view-menu/time-leave'], ['text' => 'Attendance Overview', 'url' => '#']]);
   }
 
   public function getDetailTimeLeave(Request $request)
   {
-    $staff_id = $request->input('staff_id');
-    $month = $request->input('month');
-    $year = $request->input('year');
-    if (!$month) {
-      $month = date("m");
-    }
-    if (!$year) {
-      $year = date("Y");
-    }
-    $date = $year . '-' . $month . '-' . '01';
-    $data_request = ['y_m' => $date];
-
-    $data_request = ['month_get' => $date, 'staff_id' => $staff_id];
-
-    $response = Http::get('http://localhost:8888/time-leave/detail-time-leave-all', $data_request);
-    $body = json_decode($response->body(), true);
-
-    $html = "";
-    foreach ($body['data'] as $time_leave) {
-      if ($time_leave['staff_id'] == $staff_id) {
-        if ($time_leave['special_date_id'] !== null) $color = "#ffe7e7";
-        else if ($time_leave['day_of_week'] == 1 or $time_leave['day_of_week'] == 7) $color = "#d3ffd4";
-        else $color = "";
-
-        $time_leave['is_manager'] == 1 ? $manager = "Quản lý" : $manager = "Nhân viên";
-        $time_leave['day_of_week'] !== 1 ? $day_of_week = "Thứ " . $time_leave['day_of_week'] : $day_of_week = "Chủ Nhật";
-        $time_leave['day_of_week'] == null ? $day_of_week = "" : $day_of_week = $day_of_week;
-        $time_leave['special_date_id'] !== null ? $day_of_week .= "(Ngày lễ)" : '';
-        $time_leave['time'] == "08:00:00" ? $time = '1' : $time = '0.5';
-        $time_leave['time'] == null ? $time = '0' : $time = $time;
-        $time_leave['time'] == "08:00:00" ? $time_multi = 1 * $time_leave['multiply'] . '' : $time_multi = 0.5 * $time_leave['multiply'];
-        $time_leave['time'] == null ? $time_multi = '0' : $time_multi = $time_multi;
-
-        switch ($time_leave['type']) {
-          case '1':
-            $type = "Đăng kí phép (Phép năm tính lương)";
-            break;
-          case '2':
-            $type = "Đăng kí phép (Nghỉ không lương)";
-            break;
-          case '3':
-            $type = "Đăng kí phép (Nghỉ ốm đau ngắn ngày)";
-            break;
-          case '4':
-            $type = "Đăng kí phép (Nghỉ ốm dài ngày)";
-            break;
-          case '5':
-            $type = "Đăng kí phép (Nghỉ thai sản)";
-            break;
-          case '6':
-            $type = "Đăng kí phép (Nghỉ kết hôn)";
-
-            $arr_from_to = explode(' đến ', $time_leave['day_time_leave']);
-
-            $day_from_check = $arr_from_to[0];
-            $time = 0;
-            $time_multi = 0;
-            while ($day_from_check <= $arr_from_to[1]) {
-              $time += 1;
-              $time_multi += 1;
-              $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
-            }
-            break;
-          case '7':
-            $type = "Đăng kí phép (Nghỉ ma chay)";
-
-            $arr_from_to = explode(' đến ', $time_leave['day_time_leave']);
-
-            $day_from_check = $arr_from_to[0];
-            $time = 0;
-            $time_multi = 0;
-            while ($day_from_check <= $arr_from_to[1]) {
-              $time += 1;
-              $time_multi += 1;
-              $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
-            }
-            break;
-          default:
-            $type = "Bổ sung công";
-            break;
-        }
-
-        if ($time_leave['is_approved'] == 0)
-          $approve = '<span class="badge badge-warning">Chưa phê duyệt</span>';
-        elseif ($time_leave['is_approved'] == 2)
-          $approve = '<span class="badge badge-success">Quản lý đã phê duyệt</span>';
-        else
-          $approve = '<span class="badge badge-primary">Giám đốc đã phê duyệt</span>';
-
-        $html .= "
-                <tr style='background-color: " . $color . "'>
-                    <td>" . $time_leave['firstname'] . ' ' . $time_leave['lastname'] . "</td>
-                    <td>" . $time_leave['name_vn'] . "</td>
-                    <td>" . $manager . "</td>
-                    <td>" . $time_leave['day_time_leave'] . "</td>
-                    <td>" . $day_of_week . "</td>
-                    <td>" . $type . "</td>
-                    <td>" . $time . "</td>
-                    <td>" . $time_multi . "</td>
-                    <td>" . $approve . "</td>
-                </tr>";
+      $staff_id = $request->input('staff_id');
+      $month = $request->input('month');
+      $year = $request->input('year');
+      if (!$month) {
+          $month = date("m");
       }
-    }
-
-    echo $html;
-    die;
+      if (!$year) {
+          $year = date("Y");
+      }
+      $date = $year . '-' . $month . '-' . '01';
+      $data_request = ['y_m' => $date];
+  
+      $data_request = ['month_get' => $date, 'staff_id' => $staff_id];
+  
+      $response = Http::get('http://localhost:8888/time-leave/detail-time-leave-all', $data_request);
+      $body = json_decode($response->body(), true);
+  
+      $html = "";
+      foreach ($body['data'] as $time_leave) {
+          if ($time_leave['staff_id'] == $staff_id) {
+              if ($time_leave['special_date_id'] !== null) $color = "#ffe7e7";
+              else if ($time_leave['day_of_week'] == 1 or $time_leave['day_of_week'] == 7) $color = "#d3ffd4";
+              else $color = "";
+  
+              $time_leave['is_manager'] == 1 ? $manager = "Manager" : $manager = "Employee";
+              $time_leave['day_of_week'] !== 1 ? $day_of_week = "Day " . $time_leave['day_of_week'] : $day_of_week = "Sunday";
+              $time_leave['day_of_week'] == null ? $day_of_week = "" : $day_of_week = $day_of_week;
+              $time_leave['special_date_id'] !== null ? $day_of_week .= "(Holiday)" : '';
+              $time_leave['time'] == "08:00:00" ? $time = '1' : $time = '0.5';
+              $time_leave['time'] == null ? $time = '0' : $time = $time;
+              $time_leave['time'] == "08:00:00" ? $time_multi = 1 * $time_leave['multiply'] . '' : $time_multi = 0.5 * $time_leave['multiply'];
+              $time_leave['time'] == null ? $time_multi = '0' : $time_multi = $time_multi;
+  
+              switch ($time_leave['type']) {
+                  case '1':
+                      $type = "Leave Registration (Paid Leave)";
+                      break;
+                  case '2':
+                      $type = "Leave Registration (Unpaid Leave)";
+                      break;
+                  case '3':
+                      $type = "Leave Registration (Short-term Sick Leave)";
+                      break;
+                  case '4':
+                      $type = "Leave Registration (Long-term Sick Leave)";
+                      break;
+                  case '5':
+                      $type = "Leave Registration (Maternity Leave)";
+                      break;
+                  case '6':
+                      $type = "Leave Registration (Marriage Leave)";
+  
+                      $arr_from_to = explode(' to ', $time_leave['day_time_leave']);
+  
+                      $day_from_check = $arr_from_to[0];
+                      $time = 0;
+                      $time_multi = 0;
+                      while ($day_from_check <= $arr_from_to[1]) {
+                          $time += 1;
+                          $time_multi += 1;
+                          $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
+                      }
+                      break;
+                  case '7':
+                      $type = "Leave Registration (Funeral Leave)";
+  
+                      $arr_from_to = explode(' to ', $time_leave['day_time_leave']);
+  
+                      $day_from_check = $arr_from_to[0];
+                      $time = 0;
+                      $time_multi = 0;
+                      while ($day_from_check <= $arr_from_to[1]) {
+                          $time += 1;
+                          $time_multi += 1;
+                          $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
+                      }
+                      break;
+                  default:
+                      $type = "Additional Attendance";
+                      break;
+              }
+  
+              if ($time_leave['is_approved'] == 0)
+                  $approve = '<span class="badge badge-warning">Not approved</span>';
+              elseif ($time_leave['is_approved'] == 2)
+                  $approve = '<span class="badge badge-success">Manager approved</span>';
+              else
+                  $approve = '<span class="badge badge-primary">Director approved</span>';
+  
+              $html .= "
+                  <tr style='background-color: " . $color . "'>
+                      <td>" . $time_leave['firstname'] . ' ' . $time_leave['lastname'] . "</td>
+                      <td>" . $time_leave['name_vn'] . "</td>
+                      <td>" . $manager . "</td>
+                      <td>" . $time_leave['day_time_leave'] . "</td>
+                      <td>" . $day_of_week . "</td>
+                      <td>" . $type . "</td>
+                      <td>" . $time . "</td>
+                      <td>" . $time_multi . "</td>
+                      <td>" . $approve . "</td>
+                  </tr>";
+          }
+      }
+  
+      echo $html;
+      die;
   }
+  
 
   public function doneLeave(Request $request)
   {
-    $from_date = $request->input('from_date');
-    $to_date = $request->input('to_date');
-
-    if ($from_date > $to_date) {
-      return redirect()->back()->with('error', 'Từ ngày không được lớn hơn đến ngày! Vui lòng thử lại');
-    }
-
-    $data_request = ['from_date' => $from_date, 'to_date' => $to_date];
-
-    Http::get('http://localhost:8888/time-leave/done-leave', $data_request);
-
-    return redirect()->back()->with('success', 'Chốt phép thành công');
+      $from_date = $request->input('from_date');
+      $to_date = $request->input('to_date');
+  
+      if ($from_date > $to_date) {
+          return redirect()->back()->with('error', 'From date cannot be greater than to date! Please try again');
+      }
+  
+      $data_request = ['from_date' => $from_date, 'to_date' => $to_date];
+  
+      Http::get('http://localhost:8888/time-leave/done-leave', $data_request);
+  
+      return redirect()->back()->with('success', 'Leave closed successfully');
   }
+  
 
   public function getAllTimeInMonth(Request $request)
   {
@@ -1723,6 +1727,6 @@ class TimeleaveController extends Controller
       ->with('summary_time_leave', $summary_time_leave['data'])
       ->with('year', $year)
       ->with('month', $month)
-      ->with('breadcrumbs', [['text' => 'Công phép', 'url' => '../view-menu/time-leave'], ['text' => 'Tổng công theo tháng', 'url' => '#']]);
+      ->with('breadcrumbs', [['text' => 'Paid Leave', 'url' => '../view-menu/time-leave'], ['text' => 'Monthly Overview', 'url' => '#']]);
   }
 }
