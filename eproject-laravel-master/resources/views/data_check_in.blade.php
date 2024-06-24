@@ -138,8 +138,8 @@
                         <tr style="background-color: #ffffe7">
                             <td class="td">
                                 <?php
-                                    $date = date_create($item['day_time_leave']);
-                                    echo date_format($date,"d-m-Y")
+                                    $date = Carbon\Carbon::createFromTimestampMs($item['day_time_leave'],'Asia/Ho_Chi_Minh')->format('d-m-Y');
+                                    echo $date;
                                 ?>
                             </td>
                             <td class="td"></td>
