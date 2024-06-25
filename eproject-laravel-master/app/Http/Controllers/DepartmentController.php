@@ -17,7 +17,7 @@ class DepartmentController extends Controller
 
         return view('main.department.index')
         ->with('data_department', $data_department)
-        ->with('breadcrumbs', [['text' => 'Phòng ban', 'url' => '../view-menu/department'], ['text' => 'Danh sách phòng ban', 'url' => '#']]);
+        ->with('breadcrumbs', [['text' => 'Department', 'url' => '../view-menu/department'], ['text' => 'Department List', 'url' => '#']]);
     }
 
     public function listUndo(){

@@ -10,10 +10,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- *
- * @author nfsre
- */
+
 public interface KpiDetailChildRepository extends CrudRepository<KpiDetailChild, Integer>{
     @Query(value = "SELECT * FROM kpi_detail_child WHERE kpi_detail_id = ?1", nativeQuery=true)
     List<KpiDetailChild> findKpiDetailChild(int kpi_detail_id);

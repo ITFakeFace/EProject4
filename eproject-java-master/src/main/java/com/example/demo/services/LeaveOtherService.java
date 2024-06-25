@@ -13,10 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- *
- * @author Red
- */
+
 public interface LeaveOtherService {
     void add(LeaveOther leaveOther);
     List<LeaveOther> list(int staff_id, Date month_get);

@@ -5,10 +5,7 @@
  */
 package com.example.demo.entities;
 
-/**
- *
- * @author tonamson
- */
+
 public class ContractDetail {
 
     String name;

@@ -13,10 +13,7 @@ import java.util.Map;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- *
- * @author Red
- */
+
 public interface TimeSpecialRepository extends CrudRepository<TimeSpecial, Integer>{
     @Query(value = "SELECT * FROM time_special WHERE special_date_id = ?1", nativeQuery=true)
     List<TimeSpecial> getListTimeSpecial(int id_special_date);

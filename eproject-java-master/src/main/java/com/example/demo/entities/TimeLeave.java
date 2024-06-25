@@ -23,10 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author Red
- */
+
 @Entity
 @Table(name = "time_leave")
 @XmlRootElement

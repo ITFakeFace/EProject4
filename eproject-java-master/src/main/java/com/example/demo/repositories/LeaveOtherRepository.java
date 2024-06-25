@@ -13,10 +13,7 @@ import java.util.Map;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- *
- * @author Red
- */
+
 public interface LeaveOtherRepository extends CrudRepository<LeaveOther, Integer>{
     @Query(value = "SELECT * FROM leave_other WHERE staff_id = ?1 AND date_format(?2,'%Y-%m') BETWEEN DATE_FORMAT(from_date,'%Y-%m') AND DATE_FORMAT(to_date,'%Y-%m')", nativeQuery=true)
     List<LeaveOther> getListLeaveOther(int staff_id, Date month_get);

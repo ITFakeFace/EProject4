@@ -14,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * @author DELL
- */
+
 public interface DepartmentRepository extends CrudRepository<Department, Integer> {
 
     @Query(value = "SELECT * FROM department WHERE name like ?1", nativeQuery = true)

@@ -13,10 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author tonamson
- */
+
 public interface IContractRepository extends JpaRepository<Contract, Integer> {
 
     Contract findById(int id);

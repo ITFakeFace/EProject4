@@ -1,16 +1,5 @@
 @extends('main._layouts.master')
 
-<?php
-    // {{ }} <--- special characters will be replaced
-    // {!! !!} <--- special characters will not be replaced
-    // {{-- --}} <--- comment code in Blade
-    /**
-     * section('scripts') <--- check in master.blade.php <--- it is @yield('scripts')
-     * section must have a closing tag
-     * if writing PHP code, place it above to load sequentially, similar to PHP code in section('scripts')
-     * */
-?>
-
 @section('css')
     <link href="{{ asset('assets/css/components_datatables.min.css') }}" rel="stylesheet" type="text/css">
 @endsection

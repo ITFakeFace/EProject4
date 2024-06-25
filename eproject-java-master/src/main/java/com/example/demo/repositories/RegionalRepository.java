@@ -11,9 +11,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-/**
- * @author DELL
- */
+
 public interface RegionalRepository extends CrudRepository<Regional, Integer> {
 
     @Query(value = "SELECT o FROM Regional o WHERE o.parent = 0")

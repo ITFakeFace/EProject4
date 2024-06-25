@@ -14,10 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- *
- * @author tonamson
- */
+
 @Entity
 @Table(name = "salary_options")
 public class SalaryOption implements Serializable {

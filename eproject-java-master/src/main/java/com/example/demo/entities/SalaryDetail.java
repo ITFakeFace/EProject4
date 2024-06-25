@@ -30,10 +30,7 @@ import javax.validation.constraints.Null;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.CreationTimestamp;
 
-/**
- *
- * @author nfsre
- */
+
 @Entity
 @Table(name = "salary_detail")
 @XmlRootElement

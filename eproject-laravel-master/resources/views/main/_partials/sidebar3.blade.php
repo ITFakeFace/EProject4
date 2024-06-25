@@ -46,19 +46,13 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
 
                 <!-- Main -->
                 <li class="nav-item">
-                    <a href="{{ action('ViewmenuController@index') }}" class="nav-link">
+                    <a href="{{ action('DashboardController@index') }}" class="nav-link">
                         <i class="icon-home2"></i>
-                        <span>Home</span>
+                        <span>Dashboard</span>
                     </a>
                 </li>
 
                 @if (auth()->user()->department == 2 or auth()->user()->department == 5)
-                    <li class="nav-item">
-                        <a href="{{ action('DashboardController@index') }}" class="nav-link">
-                            <i class="icon-stats-growth"></i>
-                            <span>Charts</span>
-                        </a>
-                    </li>
 
                     <li class="nav-item nav-item-submenu <?php echo $url[0] == 'deparment' || $url[1] == 'department' ? 'nav-item-open' : ''; ?>">
                         <a href="#" class="nav-link"><i class="icon-credit-card"></i> <span>Department</span></a>
@@ -72,7 +66,7 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                             <li class="nav-item">
                                 <a href="{{ action('DepartmentController@listUndo') }}" class="nav-link">
                                     <i class="icon-trash"></i>
-                                    <span>Trash</span>
+                                    <span>Former Department</span>
                                 </a>
                             </li>
                         </ul>
@@ -165,7 +159,7 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                 
                 ?>
                 <li class="nav-item nav-item-submenu <?php echo $active; ?>">
-                    <a href="#" class="nav-link"><i class="icon-stack"></i> <span>Leave</span></a>
+                    <a href="#" class="nav-link"><i class="icon-stack"></i> <span>Tools</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Leave" style="display: <?php echo $display; ?>">
                         @if (auth()->user()->department == 2 or auth()->user()->id == 7 or auth()->user()->department == 5)
@@ -190,7 +184,7 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                             <li class="nav-item">
                                 <a href="{{ action('CheckInOutController@index') }}" class="nav-link">
                                     <i class="icon-clipboard5"></i>
-                                    <span>GPS Check-in</span>
+                                    <span>Check-in</span>
                                 </a>
                             </li>
                             <li class="nav-item">

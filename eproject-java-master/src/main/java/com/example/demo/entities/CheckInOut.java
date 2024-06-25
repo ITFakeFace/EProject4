@@ -12,9 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author Red
- */
+
 @Entity
 @Table(name = "check_in_out")
 @XmlRootElement

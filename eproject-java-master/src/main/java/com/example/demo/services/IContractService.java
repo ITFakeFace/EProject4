@@ -8,10 +8,7 @@ package com.example.demo.services;
 import com.example.demo.entities.Contract;
 import java.util.List;
 
-/**
- *
- * @author tonamson
- */
+
 public interface IContractService {
 
     List<Contract> findAll();

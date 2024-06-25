@@ -14,10 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author DELL
- */
+
 @Service
 public class RegionalImpl implements RegionalService{
 

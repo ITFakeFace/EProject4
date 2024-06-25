@@ -10,10 +10,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- *
- * @author Red
- */
 public interface KpiDetailRepository extends CrudRepository<KpiDetail, Integer>{
     @Query(value = "SELECT * FROM kpi_detail WHERE kpi_id = ?1 AND del = 0", nativeQuery=true)
     List<KpiDetail> findKpiDetail(int kpi_id);

@@ -20,9 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author tonamson
- */
+
 @RestController
 @RequestMapping("/contract")
 public class ContractController {

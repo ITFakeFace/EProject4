@@ -5,10 +5,6 @@
  */
 package com.example.demo.services;
 
-/**
- * @author nguyenngocanhtam
- */
-
 import com.example.demo.entities.Staff;
 
 import java.util.ArrayList;

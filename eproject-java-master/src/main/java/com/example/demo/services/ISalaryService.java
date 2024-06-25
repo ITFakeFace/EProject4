@@ -11,10 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author tonamson
- */
+
 public interface ISalaryService {
 
     List<Salary> findAll();

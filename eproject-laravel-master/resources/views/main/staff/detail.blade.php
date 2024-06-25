@@ -79,13 +79,13 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Employee ID:(*)</label>
+                                        <label>Employee ID:</label>
                                         <b><label>{{ $data['id'] }}</label></b>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Employee Code:(*)</label>
+                                        <label>Employee Code:</label>
                                         <b><label>{{ $data['code'] }}</label></b>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>ID Number:(*)</label>
+                                        <label>ID Number:</label>
                                         <b><label>{{ $data['idNumber'] }}</label></b>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Role:(*)</label>
+                                        <label>Role:</label>
                                         <b>
                                             @if ($data['isManager'] == 1)
                                                 Manager
@@ -121,7 +121,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 </div>
                                 <div class="col-md-6" hidden>
                                     <div class="form-group">
-                                        <label>Department:(*)</label>
+                                        <label>Department:</label>
                                         <b>
                                             @foreach ($data_department as $dep)
                                                 @if ($data['department'] == $dep['id'])
@@ -133,7 +133,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Gender:(*)</label>
+                                        <label>Gender:</label>
                                         <b>
                                             @if ($data['isManager'] == 1)
                                                 Male
@@ -154,7 +154,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Joining Date:(*)</label>
+                                        <label>Joining Date:</label>
                                         <b><label>{{ \Carbon\Carbon::createFromTimestampMs($data['joinedAt'])->format('d/m/Y') }}</label></b>
                                     </div>
                                 </div>
@@ -163,7 +163,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Province:(*)</label>
+                                        <label>Province:</label>
                                         <label id="province" class="form-group">
                                             @foreach ($data_reg as $reg)
                                                 @if ($reg['id'] == $district_selected['parent'])
@@ -175,7 +175,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>District/Town:(*)</label>
+                                        <label>District/Town:</label>
                                         <b><label id="district" class="form-group" name="txtRegional" color="red" data-fouc>
                                                 @foreach ($data_district as $district)
                                                     @if ($district['id'] == $district_selected['id'])

@@ -8,10 +8,7 @@ package com.example.demo.services;
 import com.example.demo.entities.Department;
 import java.util.List;
 
-/**
- *
- * @author DELL
- */
+
 public interface DepartmentService {
     
     List<Department> findAll();

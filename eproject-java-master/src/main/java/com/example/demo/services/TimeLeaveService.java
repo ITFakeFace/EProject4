@@ -12,10 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author Red
- */
 public interface TimeLeaveService {
     TimeLeave findOne(int id);
     List<TimeLeave> getListTimeLeave(int staff_id, String day_time_leave);

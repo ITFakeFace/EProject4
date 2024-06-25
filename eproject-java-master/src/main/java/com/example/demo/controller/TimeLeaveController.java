@@ -20,9 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author Red
- */
+
 @RestController
 @RequestMapping("/time-leave")
 public class TimeLeaveController {

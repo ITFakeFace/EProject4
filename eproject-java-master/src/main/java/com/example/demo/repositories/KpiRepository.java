@@ -11,10 +11,7 @@ import java.util.Map;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- *
- * @author Red
- */
+
 public interface KpiRepository extends CrudRepository<Kpi, Integer>{
     @Query(value = "SELECT * FROM kpi WHERE staff_id = ?1 AND kpi_name LIKE ?2", nativeQuery=true)
     Kpi findKpiStaff(int staff_id, String kpi_name);

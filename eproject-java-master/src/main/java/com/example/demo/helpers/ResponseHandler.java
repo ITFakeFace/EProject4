@@ -10,10 +10,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-/**
- *
- * @author tonamson
- */
+
 public class ResponseHandler {
 
     public static ResponseEntity<Object> generateResponse(HttpStatus status, boolean error, String message, Object responseObj) {

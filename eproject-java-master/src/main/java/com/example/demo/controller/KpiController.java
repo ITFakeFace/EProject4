@@ -25,9 +25,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author Red
- */
+
 @RestController
 @RequestMapping("/kpi")
 public class KpiController {

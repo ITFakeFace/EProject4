@@ -24,10 +24,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.UpdateTimestamp;
 
-/**
- *
- * @author Red
- */
+
 @Entity
 @Table(name = "transfer")
 @XmlRootElement

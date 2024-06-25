@@ -5,10 +5,7 @@
  */
 package com.example.demo.services;
 
-/**
- *
- * @author Red
- */
+
 import com.example.demo.entities.Education;
 import java.util.ArrayList;
 import java.util.List;

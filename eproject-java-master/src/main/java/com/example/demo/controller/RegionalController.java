@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @author DELL
- */
 @RestController // This means that this class is a Controller
 @RequestMapping(path = "/regional") // This means URL's start with /demo (after Application path)
 public class RegionalController {

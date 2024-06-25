@@ -16,10 +16,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author Red
- */
+
 public interface TimeLeaveRepository extends CrudRepository<TimeLeave, Integer>{
     @Query(value = "SELECT * FROM time_leave WHERE staff_id = ?1 and DATE_FORMAT(day_time_leave, '%Y-%m') = DATE_FORMAT(?2, '%Y-%m') ORDER BY day_time_leave", nativeQuery=true)
     List<TimeLeave> getListTimeLeave(int staff_id, Date day_time_leave);

@@ -8,10 +8,7 @@ package com.example.demo.services;
 import com.example.demo.entities.SalaryOption;
 import java.util.List;
 
-/**
- *
- * @author tonamson
- */
+
 public interface ISalaryOptionService {
 
     List<SalaryOption> findByType(String type);
