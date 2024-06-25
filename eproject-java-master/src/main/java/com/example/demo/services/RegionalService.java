@@ -9,10 +9,7 @@ import com.example.demo.entities.Regional;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author DELL
- */
+
 public interface RegionalService {
     List<Regional> findAll();
     List<Regional> findDistrict(int parent);

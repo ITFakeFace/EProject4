@@ -8,10 +8,7 @@ package com.example.demo.entities;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- *
- * @author tonamson
- */
+
 public class TimeWorking {
 
     private int staff_id;

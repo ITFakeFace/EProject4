@@ -80,7 +80,7 @@
 @section('scripts')
     <script>
         function stopContract(id) {
-            let conf = confirm('Bạn có chắc muốn chấm dứt hợp đồng này?');
+            let conf = confirm('Are you sure to terminate this contract?');
             if (conf) {
                 window.location.href = '{{ route('stopContractContract') }}/' + id;
             }

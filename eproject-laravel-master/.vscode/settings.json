@@ -1,0 +1,16 @@
+{
+    "favorites.resources": [
+        {
+            "filePath": "app\\Http\\Controllers",
+            "group": "Default"
+        },
+        {
+            "filePath": "resources\\views",
+            "group": "Default"
+        },
+        {
+            "filePath": "routes",
+            "group": "Default"
+        }
+    ]
+}

@@ -12,9 +12,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * @author Red
- */
 public interface TransferService {
     ArrayList<Map<String, Object>> getListTransfer(Date month_get, int department);
 

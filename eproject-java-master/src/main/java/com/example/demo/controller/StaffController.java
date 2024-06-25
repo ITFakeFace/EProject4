@@ -24,9 +24,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-/**
- * @author nguyenngocanhtam
- */
+
 @RestController // This means that this class is a Controller
 @RequestMapping(path = "/staff") // This means URL's start with /demo (after Application path)
 public class StaffController {

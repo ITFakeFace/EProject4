@@ -22,10 +22,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.*;
 
-/**
- *
- * @author Red
- */
+
 @Entity
 @Table(name = "staff")
 @XmlRootElement

@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
-/**
- * @author Red
- */
+
 public interface KpiService {
     Kpi findKpiStaff(int staff_id, String kpi_name);
 

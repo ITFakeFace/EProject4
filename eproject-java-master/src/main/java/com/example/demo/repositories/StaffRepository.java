@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author nguyenngocanhtam
- */
+
 public interface StaffRepository extends CrudRepository<Staff, Integer> {
 
     @Query(value = "SELECT * FROM staff WHERE firstname like ?1 and lastname like ?2", nativeQuery = true)

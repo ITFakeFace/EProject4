@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
-/**
- * @author Red
- */
+
 public interface CheckInOutRepository extends CrudRepository<CheckInOut, Integer> {
     @Query(value = "SELECT o FROM CheckInOut o WHERE o.staffId = ?1 and o.checkInDay = ?2")
     CheckInOut checkCheckIn(Integer staff_id, Date check_in_day);

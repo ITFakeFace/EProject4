@@ -11,10 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author Red
- */
+
 public interface SpecialDateService {
     List<SpecialDate> getAllSpecialDate(Date special_date_from);
     void addSpecialDate(SpecialDate specialDate);

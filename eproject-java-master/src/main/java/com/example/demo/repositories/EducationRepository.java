@@ -11,10 +11,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- *
- * @author Red
- */
+
 public interface EducationRepository extends CrudRepository<Education, Integer> {
     @Query(value = "CALL GetCountLevelEducation();", nativeQuery = true)
     ArrayList getCountLevelEducation();

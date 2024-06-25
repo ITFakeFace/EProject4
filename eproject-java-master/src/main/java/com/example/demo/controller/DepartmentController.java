@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author DELL
- */
+
 @RestController
 @RequestMapping(path = "/department")
 public class DepartmentController {

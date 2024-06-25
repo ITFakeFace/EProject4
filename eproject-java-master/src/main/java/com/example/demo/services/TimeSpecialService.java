@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
-/**
- *
- * @author Red
- */
 public interface TimeSpecialService {
     void saveTimeSpecial(TimeSpecial timeSpecial);
     ArrayList<Map<String, Object>> GetTimeSpecial(Integer id_special_date);

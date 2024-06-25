@@ -15,10 +15,6 @@ import javax.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author Red
- */
 @Service
 public class TimeSpecialImpl implements TimeSpecialService{
     @Autowired

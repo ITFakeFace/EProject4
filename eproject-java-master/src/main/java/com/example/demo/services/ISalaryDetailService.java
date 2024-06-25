@@ -8,10 +8,7 @@ package com.example.demo.services;
 import com.example.demo.entities.SalaryDetail;
 import java.util.List;
 
-/**
- *
- * @author tonamson
- */
+
 public interface ISalaryDetailService {
 
     SalaryDetail save(SalaryDetail detail);

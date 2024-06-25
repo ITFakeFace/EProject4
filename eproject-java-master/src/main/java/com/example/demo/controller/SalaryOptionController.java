@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @author tonamson
- */
+
 
 @RestController
 @RequestMapping("/salary-option")

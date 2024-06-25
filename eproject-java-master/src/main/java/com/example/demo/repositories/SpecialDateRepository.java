@@ -13,10 +13,7 @@ import java.util.Map;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- *
- * @author Red
- */
+
 public interface SpecialDateRepository extends CrudRepository<SpecialDate, Integer> {
 
     @Query(value = "SELECT * FROM special_date WHERE DATE_FORMAT(day_special_from, '%Y') = DATE_FORMAT(?1, '%Y')", nativeQuery = true)

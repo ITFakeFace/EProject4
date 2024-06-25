@@ -21,9 +21,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author Red
- */
+
 @RestController
 @RequestMapping("/check-in-out")
 public class CheckInOutController {

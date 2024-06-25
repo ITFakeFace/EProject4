@@ -18,9 +18,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author Red
- */
+
 @Service
 public class CheckInOutImpl implements CheckInOutService {
     @Autowired

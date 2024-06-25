@@ -8,10 +8,7 @@ package com.example.demo.services;
 import com.example.demo.entities.KpiDetailChild;
 import java.util.List;
 
-/**
- *
- * @author nfsre
- */
+
 public interface KpiDetailChildService {
     List<KpiDetailChild> getKpiDetailChild(int kpi_detail_id);
     void clearAllDetailChild(int kpi_detail_id);

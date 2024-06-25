@@ -14,10 +14,7 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author nfsre
- */
+
 @Service
 public class KpiDetailChildImpl implements KpiDetailChildService{
     @Autowired

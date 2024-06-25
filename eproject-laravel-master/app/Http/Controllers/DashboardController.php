@@ -17,6 +17,10 @@ class DashboardController extends Controller
     $body = json_decode($response->body(), true);
     $data_staffs = $body['data'];
 
+    $response = Http::get('http://localhost:8888/department/list');
+    $body = json_decode($response->body(), true);
+    $data_department = $body['data'];
+
     $response_count = Http::get('http://localhost:8888/staff/getStaffMonth');
     $body_staffs_count = json_decode($response_count->body(), true);
     $data_staffs_count = $body_staffs_count['data'];
@@ -135,6 +139,8 @@ class DashboardController extends Controller
       ->with('staffs_month', $staffs_month)
       ->with('last_year', $last_year)
       ->with('staffs_off', $staffs_off)
+      ->with('data_staffs', $data_staffs)
+      ->with('data_department', $data_department)
       ->with('breadcrumbs', [
         ['text' => 'Charts', 'url' => '#']
       ]);

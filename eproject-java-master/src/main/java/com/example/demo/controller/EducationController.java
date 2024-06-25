@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author Red
- */
+
 @RestController
 @RequestMapping("/education")
 public class EducationController {

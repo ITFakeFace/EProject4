@@ -18,9 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @author tonamson
- */
+
 @RestController
 @RequestMapping("/salary")
 public class SalaryController {

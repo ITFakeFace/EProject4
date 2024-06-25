@@ -14,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * @author tonamson
- */
+
 public interface ISalaryDetailRepository extends JpaRepository<SalaryDetail, Integer> {
 
     SalaryDetail save(SalaryDetail detail);

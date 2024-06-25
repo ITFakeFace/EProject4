@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author tonamson
- */
+
 @Service
 public class ContractService implements IContractService {
 

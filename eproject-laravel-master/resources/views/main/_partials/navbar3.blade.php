@@ -3,7 +3,7 @@
         <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-inline-block" style="padding: 5px; margin-right: 20px;">
             <i class="icon-paragraph-justify3"></i>
         </a>
-        <a href="{{ action('ViewmenuController@index') }}" class="d-inline-block">
+        <a href="{{ action('DashboardController@index') }}" class="d-inline-block">
             <img src="{{ asset('images/Logo-FutureHRM-index.svg') }}" alt="" style="height: 3rem;width: auto;">
         </a>
     </div>

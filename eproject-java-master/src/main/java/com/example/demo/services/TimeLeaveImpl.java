@@ -19,9 +19,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author Red
- */
 @Service
 public class TimeLeaveImpl implements TimeLeaveService {
     @Autowired

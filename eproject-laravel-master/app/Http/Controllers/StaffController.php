@@ -27,7 +27,7 @@ class StaffController extends Controller
     return view('main.staff.index', [
       'data_staff' => $data_staff,
       'data_department' => $dsPhongBan,
-      'breadcrumbs' => [['text' => 'Nhân viên', 'url' => '../view-menu/staff'], ['text' => 'Danh sách nhân viên', 'url' => '#']]
+      'breadcrumbs' => [['text' => 'Staff', 'url' => '../view-menu/staff'], ['text' => 'Employee List', 'url' => '#']]
     ]);
   }
 

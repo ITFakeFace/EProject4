@@ -19,10 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author nfsre
- */
+
 @Entity
 @Table(name = "kpi_detail_child")
 @XmlRootElement

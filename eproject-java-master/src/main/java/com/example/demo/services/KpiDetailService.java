@@ -9,10 +9,7 @@ import com.example.demo.entities.KpiDetail;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author Red
- */
+
 public interface KpiDetailService {
     List<KpiDetail> getKpiDetailByKpiId(int kpi_id);
     void saveKpiDetail(KpiDetail kpiDetail);

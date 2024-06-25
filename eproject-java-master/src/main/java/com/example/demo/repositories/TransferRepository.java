@@ -16,10 +16,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author Red
- */
+
 public interface TransferRepository extends CrudRepository<Transfer, Integer>{
     @Query(value = "CALL GetListTransfer(?1, ?2)", nativeQuery=true)
     ArrayList<Map<String, Object>> getListTransfer(Date month_get, int department);

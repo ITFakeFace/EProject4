@@ -19,10 +19,7 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author Red
- */
+
 @Service
 public class KpiServiceImpl implements KpiService{
     @Autowired
