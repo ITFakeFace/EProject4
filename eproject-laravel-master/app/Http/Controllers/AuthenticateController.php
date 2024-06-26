@@ -66,7 +66,7 @@ class AuthenticateController extends Controller
   public function getForgot()
   {
     if (auth()->user()) {
-      return redirect('/forgot-password');
+      return view('auth.change_password');
     }
     return view('auth.forgot');
   }
@@ -76,7 +76,7 @@ class AuthenticateController extends Controller
     $email = $request->input('email');
 
     if (!DB::table('staff')->where('email', $email)->value('id')) {
-      return redirect()->back()->with('error', 'Email is not an email of Staff');
+      return redirect()->back()->with('error', 'Input email is not registered in the system');
     }
 
     $token = Str::random(60);
@@ -88,7 +88,10 @@ class AuthenticateController extends Controller
     Mail::send('auth.email', ['token' => $token], function ($message) use ($request) {
       $message->from('info-FHRM@gmail.com');
       $message->to($request->email);
-      $message->subject('Reset Password Notification');
+      if(Auth::user())
+        $message->subject('Change Password Notification');
+      else
+        $message->subject('Reset Password Notification');
     });
     return back()->with('success', 'Message has been sent to your email !');
   }
@@ -111,7 +114,7 @@ class AuthenticateController extends Controller
     }
 
     if (strlen($request->input('pass_new')) > 20) {
-      return redirect()->back()->with('error', 'New passwrod cannot be longer than 20 characters');
+      return redirect()->back()->with('error', 'New password cannot be longer than 20 characters');
     }
 
     $email = DB::table('reset_password')->where('token', $token)->value('email');

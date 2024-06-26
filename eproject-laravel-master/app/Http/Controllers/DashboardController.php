@@ -31,6 +31,7 @@ class DashboardController extends Controller
 
     $response_count_tn = Http::get('http://localhost:8888/staff/getTN');
     $body_tn = json_decode($response_count_tn->body(), true);
+    // dd($body_tn);
     $data_tn = $body_tn['data'];
 
     $response_count_off = Http::get('http://localhost:8888/staff/getStaffOffDateMonth');

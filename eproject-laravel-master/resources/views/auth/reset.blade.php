@@ -5,7 +5,7 @@
 <div class="content d-flex justify-content-center align-items-center">
 
     <!-- Password recovery form -->
-    <form class="login-form" action="{{ action('AuthenticateController@postReset') }}" method="POST">
+    <form class="login-form" action="{{ action('AuthenticateController@postReset') }}" method="POST" style="width: 30rem; height:30rem">
         @csrf
         <input type="hidden" name="token" value="{{ $token }}">
         <div class="card mb-0">

@@ -23,7 +23,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">Temporarily Deleted Departments</h1>
+        <h1 class="pt-3 pl-3 pr-3">Former Departments</h1>
         <div class="card-header header-elements-inline">
             <div class="header-elements">
                 @if (\Session::has('success'))

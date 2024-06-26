@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function () {
   Route::get('forgot', 'AuthenticateController@getForgot');
   Route::post('forgot', 'AuthenticateController@postForgot');
+  Route::get('change_password', 'AuthenticateController@getForgot');
+  // Route::get('change_password', 'AuthenticateController@postForgot');
   Route::get('reset', 'AuthenticateController@getReset');
   Route::post('reset', 'AuthenticateController@postReset');
 });
@@ -211,7 +213,7 @@ Route::group(['prefix' => 'salary'], function () {
 });
 //-------------------------
 //Department
-Route::group(['prefix' => 'deparment'], function () {
+Route::group(['prefix' => 'department'], function () {
   Route::get('/index', 'DepartmentController@index')->name('getListDeparment');
   Route::get('/detail', 'DepartmentController@detailDep')->name('detailDepartment');
   Route::post('/add', 'DepartmentController@CreateDepartment')->name('postAddDepartment');

@@ -2,19 +2,10 @@
 @section('content')
     <div class="content-wrapper">
         <div class="row">
-            <div class="col-md-12 grid-margin">
-                <div class="row">
-                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                        <h3 class="font-weight-bold">Account Information</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title text-center text-uppercase">Welcome <?php echo $staff['firstname'] . ' ' . $staff['lastname']; ?></h4>
+                        <h4 class="card-title text-left text-uppercase mx-3">Welcome <?php echo $staff['firstname'] . ' ' . $staff['lastname'].'!'; ?></h4>
                         <form class="forms-sample">
                             @csrf
                             <div class="container-xl px-4 mt-4">
@@ -23,7 +14,7 @@
                                     <div class="col-xl-4">
                                         <!-- Profile picture card-->
                                         <div class="card mb-4 mb-xl-0">
-                                            <div class="card-header">Photo</div>
+                                            <div class="card-header h4">Photo</div>
                                             <div class="card-body text-center">
                                                 <!-- Profile picture image-->
                                                 @if (!empty($staff['photo']))
@@ -37,7 +28,7 @@
                                     <div class="col-xl-8">
                                         <!-- Account details card-->
                                         <div class="card mb-4">
-                                            <div class="card-header">Employee's Information</div>
+                                            <div class="card-header h4">Employee's Information</div>
                                             <div class="card-body">
                                                 <form>
                                                     <div class="row gx-3 mb-3">

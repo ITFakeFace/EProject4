@@ -12,7 +12,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">List of Temporarily Deleted Employees</h1>
+        <h1 class="pt-3 pl-3 pr-3">Ex-Employees</h1>
         <div class="card-header header-elements-inline">
             <div class="header-elements">
 
@@ -31,7 +31,7 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Department</th>
-                    <th>Is Manager</th>
+                    <th>Position</th>
                     <th>Join Date</th>
                     <th>Date of Birth</th>
                     <th>Gender</th>
