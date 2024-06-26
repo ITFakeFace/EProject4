@@ -33,6 +33,15 @@
                     </div>
                 </div>
             @endif
+
+            @if (\Session::has('message'))
+                @php
+                    $message = \Session::get('message');
+                @endphp
+                <div class="alert alert-{{ $message['type'] }}">
+                    {{ $message['message'] }}
+                </div>
+            @endif
             </div>
         </div>
         <div class="card-body">
