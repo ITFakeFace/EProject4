@@ -31,24 +31,20 @@ class DepartmentController extends Controller
         ->with('breadcrumbs', [['text' => 'Phòng ban', 'url' => '../view-menu/department'], ['text' => 'Phòng ban đã xóa', 'url' => '#']]);
     }
 
-    public function delete(Request $request){
-        $id = $request->input('id');
+    // public function delete(Request $request){
+    //     $id = $request->input('id');
         
-        $data_request = [
-            "id" => $id
-        ];
+    //     $data_request = [
+    //         "id" => $id
+    //     ];
 
-        Http::post('http://localhost:8888/department/delete', $data_request);
-        return redirect()->back()->with('success', 'Delete complete');
-        // $body = json_decode($response->body(), true);
+    //     Http::post('http://localhost:8888/department/delete', $data_request);
+    //     return redirect()->back()->with('success', 'Delete complete');
+      
+    // }
 
-        // if($body['message'] == "Delete complete") {
-        //     return redirect()->back()->with('success', 'Delete complete!');
-        // } 
-        // else {
-        //     return redirect()->back()->with('error', 'Delete fail');
-        // }
-    }
+    
+
 
     public function add() {
         return view('main.department.add');
@@ -173,16 +169,48 @@ class DepartmentController extends Controller
     }
 
 
+    // public function getDeleteDep(Request $request)
+    // {
+    //     $id = $request->id;
+    //     $response = Http::get(config('app.api_url') . '/department/delete', ['id' => $id]);
+    //     $body = json_decode($response->body(), false);
+    //   // dd($body);
+    //     if ($body->isSuccess) {
+    //         return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Delete department complete.']);
+    //     }
+    //     return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Delete department fail.']);
+    // }
+
     public function getDeleteDep(Request $request)
     {
         $id = $request->id;
-        $response = Http::get(config('app.api_url') . '/department/delete', ['id' => $id]);
-        $body = json_decode($response->body(), false);
-      // dd($body);
-        if ($body->isSuccess) {
-            return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Delete department complete.']);
+    
+        // Gọi API để lấy danh sách nhân viên
+        $staffResponse = Http::get(config('app.api_url') . '/staff/list');
+    
+        if ($staffResponse->successful()) {
+            $staffList = json_decode($staffResponse->body(), true)['data']; // Chuyển đổi kết quả trả về thành mảng JSON
+    
+            // Kiểm tra xem phòng ban có đang được sử dụng trong bảng Staff
+            $staffCount = collect($staffList)->where('department', $id)->count();
+    
+            if ($staffCount > 0) {
+                // Department is being used in the Staff table
+                return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Department is currently being used by staff and cannot be deleted.']);
+            }
+    
+            // Department is not being used, proceed with the delete
+            $deleteResponse = Http::get(config('app.api_url') . '/department/delete', ['id' => $id]);
+    
+            $body = json_decode($deleteResponse->body(), false);
+            if ($body->isSuccess) {
+                return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Delete department complete.']);
+            } else {
+                return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Delete department fail.']);
+            }
+        } else {
+            return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Failed to retrieve staff list.']);
         }
-        return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'Delete department fail.']);
     }
 
     public function getUndoDep(Request $request)

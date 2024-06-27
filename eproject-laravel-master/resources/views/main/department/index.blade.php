@@ -24,13 +24,14 @@
                 </div>
                 @endif
 
-            {{-- @if (session('message'))
-                <div class="">
-                    <div class="alert alert-primary">
-                        {!! session('message') !!}
+                @if (\Session::has('message'))
+                    @php
+                        $message = \Session::get('message');
+                    @endphp
+                    <div class="alert alert-{{ $message['type'] }}">
+                        {{ $message['message'] }}
                     </div>
-                </div>
-            @endif --}}
+                @endif
 
                 @if($errors->any())
                 <div class="alert alert-danger border-0 alert-dismissible">
