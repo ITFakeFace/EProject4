@@ -1425,15 +1425,44 @@ class TimeleaveController extends Controller
     $date = $year . '-' . $month . '-' . '01';
     $data_request = ['y_m' => $date];
 
+    $response = Http::get('http://localhost:8888/department/list', []);
+    $body = json_decode($response->body(), true);
+    $departments = [];
+    if ($body['isSuccess']) {
+      $departments = $body['data'];
+    }
+    $response = Http::get('http://localhost:8888/staff/list');
+    $body = json_decode($response->body(), true);
+    $staffs = $body['data'];
+
     $response = Http::get('http://localhost:8888/time-leave/get-all-staff-time', $data_request);
     $body = json_decode($response->body(), true);
 
     $response = Http::get('http://localhost:8888/time-leave/summary-staff-time', $data_request);
     $summary = json_decode($response->body(), true);
 
+    $stfList = [];
+    //process all staff not in list
+    foreach ($staffs as $staff) {
+      $exists = false; // Biến kiểm tra nếu staff_id tồn tại
+      foreach ($summary["data"] as $stf) {
+        if ($staff["id"] == $stf["staff_id"]) {
+          $exists = true;
+          break;
+        }
+      }
+
+      if (!$exists) {
+        // Thêm phần tử vào $stfList nếu staff_id không tồn tại
+        $stfList[] = $staff;
+      }
+    }
+
     return view('main.time_leave.all_staff_time')
       ->with('data', $body['data'])
       ->with('summary', $summary['data'])
+      ->with('department', $departments)
+      ->with('staffNotCheck',$stfList)
       ->with('year', $year)
       ->with('month', $month)
       ->with('y_m', $date)

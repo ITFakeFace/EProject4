@@ -98,74 +98,97 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         <td><button id="{{ $item['staff_id'] }}" class="btn btn-primary open-detail">Details</button></td>
                     </tr>
                 @endforeach
-            </tbody>
-        </table>
-    </div>
-    <!-- /basic datatable -->
+                @foreach ($staffNotCheck as $item)
+                    <tr>
+                        <td>{{ $item['firstname'] . ' ' . $item['lastname'] }}</td>
+                        @foreach ($department as $dp)
+                            @if ($dp['id'] == $item['department'])
+                                <td>{{ $dp['nameVn'] }}</td>
+                            @break;
+                        @endif
+                    @endforeach
+                    <td>{{ $item['isManager'] == 1 ? 'Manager' : 'Staff' }}</td>
+                    <td>00:00:00</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ $item['dayOfLeave'] }}</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #ffffe7">0</td>
+                    <td>
+                        {{-- <button id="{{ $item['staff_id'] }}" class="btn btn-primary open-detail">Details</button> --}}
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+<!-- /basic datatable -->
 
-    <!-- Full width modal -->
-    <div id="modalDetail" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-full">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Details</h5>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+<!-- Full width modal -->
+<div id="modalDetail" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Details</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
 
-                <div class="modal-body">
-                    <table class="table datatable-detail">
-                        <thead>
-                            <tr>
-                                <td>Employee ID</td>
-                                <td>Full Name</td>
-                                <td>Department</td>
-                                <td>Position</td>
-                                <th>Date</th>
-                                <th>Day</th>
-                                <th class="text-center">Check-in Time</th>
-                                <th class="text-center">Check-out Time</th>
-                                <th>Late</th>
-                                <th>Early Leave</th>
-                                <th>Work Hours</th>
-                                <th>Total Hours</th>
-                                <th>Overtime</th>
-                            </tr>
-                        </thead>
-                        <tbody id="detail">
+            <div class="modal-body">
+                <table class="table datatable-detail">
+                    <thead>
+                        <tr>
+                            <td>Employee ID</td>
+                            <td>Full Name</td>
+                            <td>Department</td>
+                            <td>Position</td>
+                            <th>Date</th>
+                            <th>Day</th>
+                            <th class="text-center">Check-in Time</th>
+                            <th class="text-center">Check-out Time</th>
+                            <th>Late</th>
+                            <th>Early Leave</th>
+                            <th>Work Hours</th>
+                            <th>Total Hours</th>
+                            <th>Overtime</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detail">
 
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <!-- /full width modal -->
+</div>
+<!-- /full width modal -->
 @endsection
 
 @section('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.open-detail').click(function() {
-                var staff_id = $(this).attr('id');
-                var month = <?php echo $month; ?>;
-                var year = <?php echo $year; ?>;
+<script>
+    $(document).ready(function() {
+        $('.open-detail').click(function() {
+            var staff_id = $(this).attr('id');
+            var month = <?php echo $month; ?>;
+            var year = <?php echo $year; ?>;
 
-                $.ajax({
-                    url: '{{ action('TimeleaveController@getDetailStaffTime') }}',
-                    Type: 'POST',
-                    datatype: 'text',
-                    data: {
-                        staff_id: staff_id,
-                        month: month,
-                        year: year
-                    },
-                    cache: false,
-                    success: function(data) {
-                        $('#detail').empty().append(data);
-                        $('#modalDetail').modal();
-                    }
-                });
+            $.ajax({
+                url: '{{ action('TimeleaveController@getDetailStaffTime') }}',
+                Type: 'POST',
+                datatype: 'text',
+                data: {
+                    staff_id: staff_id,
+                    month: month,
+                    year: year
+                },
+                cache: false,
+                success: function(data) {
+                    $('#detail').empty().append(data);
+                    $('#modalDetail').modal();
+                }
             });
         });
-    </script>
+    });
+</script>
 @endsection
