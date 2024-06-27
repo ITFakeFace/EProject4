@@ -5,8 +5,10 @@ import 'package:futurehrm_android_app/models/ApiService.dart';
 import 'package:futurehrm_android_app/models/department.dart';
 import 'package:futurehrm_android_app/models/education.dart';
 import 'package:futurehrm_android_app/models/staff.dart';
+import 'package:futurehrm_android_app/page/profile/widgets/circle_icon.dart';
 import 'package:futurehrm_android_app/page/profile/widgets/info_line_character.dart';
 import 'package:futurehrm_android_app/page/profile/widgets/info_line_icon.dart';
+import 'package:futurehrm_android_app/page/profile/widgets/school_info.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
@@ -71,7 +73,11 @@ class _ProfilePageState extends State<ProfilePage> {
         listEdu.clear();
       }
       for (var item in response.data) {
+        print("Edu: $item");
         listEdu.add(Education.fromMap(item));
+        print("List Edu Length: ${listEdu.length}");
+        print("Edu Object: ${listEdu[0]}");
+        print("Edu String: ${listEdu[0].modeOfStudy}");
       }
     });
   }
@@ -79,7 +85,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final double avatarWidth = 200;
   final double avatarHeight = 200;
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,6 +165,29 @@ class _ProfilePageState extends State<ProfilePage> {
                             title: "Phone Number",
                             content: "${currentAuth!.phoneNumber}",
                           ),
+                          ExpansionTile(
+                              leading: CircleIcon(
+                                icon: Icons.cast_for_education,
+                                circleColor: Colors.orange,
+                                size: 40.0,
+                              ),
+                              title: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Education",
+                                    style: InfoLineIcon.titleStyle,
+                                  ),
+                                ],
+                              ),
+                              children: listEdu
+                                  .map((edu) => SchoolInfo(
+                                        schoolName: edu.school,
+                                        fieldOfStudy: edu.fieldOfStudy,
+                                        levelName: edu.levelName,
+                                        mode: edu.modeOfStudy,
+                                      ))
+                                  .toList()),
                         ],
                       ),
                     ),

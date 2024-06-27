@@ -97,13 +97,13 @@ class _AttendancePageState extends State<AttendancePage> {
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.green, Colors.lightGreen],
+                colors: [Colors.orange, Colors.orangeAccent],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
               child: Column(
                 children: [
                   Row(
@@ -211,7 +211,7 @@ class _AttendancePageState extends State<AttendancePage> {
                         return Container(
                           margin: const EdgeInsets.all(4.0),
                           decoration: BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.red.shade200,
                             shape: BoxShape.circle,
                           ),
                           child: Center(
@@ -244,7 +244,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 ),
                 calendarStyle: CalendarStyle(
                   todayDecoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent,
+                    color: Colors.deepPurple.shade400,
                     shape: BoxShape.circle,
                   ),
                   selectedDecoration: BoxDecoration(
@@ -259,7 +259,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   formatButtonVisible: false,
                   titleCentered: true,
                   decoration: BoxDecoration(
-                    color: Colors.lightGreen,
+                    color: Colors.orangeAccent,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   titleTextStyle: TextStyle(color: Colors.white),

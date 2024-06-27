@@ -119,13 +119,13 @@
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 12px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Chào bạn,</p>
+              <p style="margin: 0;">Hi,</p>
             </td>
           </tr>
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 12px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                <p style="margin: 0;">Cám ơn bạn đã sử dụng hệ thống FHRM.</p>
-                <p style="margin: 0;">FHRM đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Nếu bạn muốn đặt lại mật khẩu, vui lòng click vào nút bên dưới:</p>
+                <p style="margin: 0;">Thank you for using FHRM system.</p>
+                <p style="margin: 0;">Click on below button to update password:</p>
               </td>
           </tr>
           <!-- end copy -->
@@ -151,7 +151,7 @@
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Hoặc bạn có thể copy đường link bên dưới và dán vào trình duyệt để đặt lại mật khẩu:</p>
+              <p style="margin: 0;">Or Copy Link:</p>
               <p style="margin: 0;"><a href="{{ url('auth/reset?token='.$token) }}" target="_blank">{{ url('auth/reset?token='.$token) }}</a></p>
             </td>
           </tr>
@@ -160,7 +160,7 @@
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
-              <p style="margin: 0;">FHRM cảm ơn và chúc bạn có trải nghiệm hữu ích ở FHRM,<br> Team Quản lý nhân sự.</p>
+              <p style="margin: 0;">Thank you,<br> Human Resource Team.</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -183,7 +183,7 @@
           <!-- start permission -->
           <tr>
             <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
-              <p style="margin: 0;">Bạn nhận được email này vì bạn đã yêu cầu đặt lại mật khẩu tại FHRM. Nếu đó không phải là bạn, vui lòng bỏ qua hoặc xóa email này.</p>
+              <p style="margin: 0;">If you were not received update password email, please click</p>
             </td>
           </tr>
           <!-- end permission -->

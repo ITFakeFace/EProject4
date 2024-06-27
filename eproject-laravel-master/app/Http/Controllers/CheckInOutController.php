@@ -162,7 +162,7 @@ class CheckInOutController extends Controller
         if ($value['type_day'] == 1) {
           $arr['color'] = '#EF5350';
         } else {
-          $arr['color'] = '#046A38';
+          $arr['color'] = '#4B49AC';
         }
 
         array_push($calendar, $arr);
