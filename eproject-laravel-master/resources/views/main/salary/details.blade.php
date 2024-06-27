@@ -27,7 +27,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <table class="table dt-responsive nowrap w-75">
+                <table class="table datatable-basic table-responsive nowrap w-100">
                     <thead>
                         <tr>
                             <th>Employee Id</th>
