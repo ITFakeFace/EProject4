@@ -44,19 +44,44 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
         <div class="card card-sidebar-mobile">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
 
-                <!-- Main -->
+                <!-- Dashboard -->
                 <li class="nav-item">
                     <a href="{{ action('DashboardController@index') }}" class="nav-link">
                         <i class="icon-home2"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
+                {{-- Account's info --}}
+                <li class="nav-item nav-item-submenu <?php echo ($url[0] == 'staff' && $url[1] !== 'view-profile') || ($url[0] == 'staff' && $url[1] == 'view-profile') || ($url[0] == 'staff' && strpos($url[1], 'gedit') === 0) || ($url[0] == 'auth' && $url[1] == 'change_password') ? 'nav-item-open' : ''; ?>">
+                    <a href="#" class="nav-link"><i class="icon-user-check"></i> <span>User Settings</span></a>
+                    <ul class="nav nav-group-sub" data-submenu-title="Employee" style="display: <?php echo ($url[0] == 'staff' && $url[1] !== 'view-profile') || ($url[0] == 'staff' && $url[1] == 'view-profile') || ($url[0] == 'staff' && strpos($url[1], 'gedit') === 0) || ($url[0] == 'auth' && $url[1] == 'change_password') ? 'block' : 'none'; ?>">
+                        <li class="nav-item">
+                            <a href="{{ action('StaffController@viewProfile') }}" class="nav-link">
+                                <i class="icon-profile"></i>
+                                <span>View Profile</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ action('StaffController@getEditStaff') }}?id={{ auth()->user()->id }}" class="nav-link">
+                                <i class="icon-pencil"></i>
+                                <span>Update Account</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ action('AuthenticateController@getForgot') }}" class="nav-link">
+                                <i class="icon-key"></i>
+                                <span>Change Password</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
 
                 @if (auth()->user()->department == 2 or auth()->user()->department == 5)
 
-                    <li class="nav-item nav-item-submenu <?php echo $url[0] == 'deparment' || $url[1] == 'department' ? 'nav-item-open' : ''; ?>">
+                    <li class="nav-item nav-item-submenu <?php echo $url[0] == 'department' || $url[1] == 'department' ? 'nav-item-open' : ''; ?>">
                         <a href="#" class="nav-link"><i class="icon-credit-card"></i> <span>Department</span></a>
-                        <ul class="nav nav-group-sub" data-submenu-title="Department" style="display: <?php echo $url[0] == 'deparment' || $url[1] == 'department' ? 'block' : 'none'; ?> ">
+                        <ul class="nav nav-group-sub" data-submenu-title="Department" style="display: <?php echo $url[0] == 'department' || $url[1] == 'department' ? 'block' : 'none'; ?> ">
                             <li class="nav-item">
                                 <a href="{{ action('DepartmentController@index') }}" class="nav-link">
                                     <i class="icon-list"></i>
@@ -73,7 +98,7 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                     </li>
 
                     <li class="nav-item nav-item-submenu <?php echo ($url[0] == 'staff' && $url[1] !== 'view-profile') || $url[1] == 'staff' ? 'nav-item-open' : ''; ?>">
-                        <a href="#" class="nav-link"><i class="icon-user"></i> <span>Employees</span></a>
+                        <a href="#" class="nav-link"><i class="icon-users"></i> <span>Employees</span></a>
                         <ul class="nav nav-group-sub" data-submenu-title="Employee" style="display: <?php echo ($url[0] == 'staff' && $url[1] !== 'view-profile') || $url[1] == 'staff' ? 'block' : 'none'; ?>">
                             <li class="nav-item">
                                 <a href="{{ action('StaffController@index') }}" class="nav-link">

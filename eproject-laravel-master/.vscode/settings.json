@@ -11,6 +11,10 @@
         {
             "filePath": "routes",
             "group": "Default"
+        },
+        {
+            "filePath": "public",
+            "group": "Default"
         }
     ]
 }
