@@ -92,7 +92,7 @@ public class TimeLeaveImpl implements TimeLeaveService {
     public void updateDayTimeLeaveOfStaff(int id) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Query query = em.createQuery("UPDATE Staff SET day_of_leave = day_of_leave - 1 WHERE id = ?1")
+        Query query = em.createQuery("UPDATE Staff SET dayOfLeave = dayOfLeave - 1 WHERE id = ?1")
                 .setParameter(1, id);
         query.executeUpdate();
         em.getTransaction().commit();
@@ -103,7 +103,7 @@ public class TimeLeaveImpl implements TimeLeaveService {
     public void revertDayTimeLeaveOfStaff(int id) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Query query = em.createQuery("UPDATE Staff SET day_of_leave = day_of_leave + 1 WHERE id = ?1")
+        Query query = em.createQuery("UPDATE Staff SET dayOfLeave = dayOfLeave + 1 WHERE id = ?1")
                 .setParameter(1, id);
         query.executeUpdate();
         em.getTransaction().commit();
@@ -150,7 +150,7 @@ public class TimeLeaveImpl implements TimeLeaveService {
     public void adminApproveTimeLeave(String is_approved, int id, Date day_approve) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Query query = em.createQuery("UPDATE TimeLeave SET is_approved = ?1, day_approved =?2 WHERE id = ?3")
+        Query query = em.createQuery("UPDATE TimeLeave SET isApproved = ?1, dayApproved =?2 WHERE id = ?3")
                 .setParameter(1, is_approved)
                 .setParameter(2, day_approve)
                 .setParameter(3, id);
