@@ -79,7 +79,7 @@
                                         <td>{{ $staff->code }}</td>
                                         <td>{{ $staff->firstname . ' ' . $staff->lastname }}</td>
                                         <td>
-                                            {{ \Carbon\Carbon::createFromTimestampMs($staff->joinedAt)->format('d/m/Y') }}
+                                            {{ \Carbon\Carbon::createFromTimestampMs($staff->joinedAt)->format('Y-m-d') }}
                                             {{-- {{ $staff->joinedAt }} --}}
                                         </td>
                                     </tr>

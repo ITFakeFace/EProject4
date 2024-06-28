@@ -150,13 +150,13 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Date of Birth:</label>
-                                        <b><label>{{ \Carbon\Carbon::createFromTimestampMs($data['dob'])->format('d/m/Y') }}</label></b>
+                                        <b><label>{{ \Carbon\Carbon::createFromTimestampMs($data['dob'])->format('Y-m-d') }}</label></b>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Joining Date:</label>
-                                        <b><label>{{ \Carbon\Carbon::createFromTimestampMs($data['joinedAt'])->format('d/m/Y') }}</label></b>
+                                        <b><label>{{ \Carbon\Carbon::createFromTimestampMs($data['joinedAt'])->format('Y-m-d') }}</label></b>
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +219,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Created At:</label>
-                                        <b><label>{{ \Carbon\Carbon::createFromTimestampMs($data['createdAt'])->format('d/m/Y') }}</label></b>
+                                        <b><label>{{ \Carbon\Carbon::createFromTimestampMs($data['createdAt'])->format('Y-m-d') }}</label></b>
                                     </div>
                                 </div>
                             </div>

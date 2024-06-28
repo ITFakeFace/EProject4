@@ -141,10 +141,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             $count++; ?></td>
                             <td>
                                 {{-- <?php echo $special_date['day_special_from']; ?> --}}
-                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('d/m/Y') }}
+                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('Y-m-d') }}
                             </td>
                             <td>
-                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_to'])->format('d/m/Y') }}
+                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_to'])->format('Y-m-d') }}
                                 {{-- <?php echo $special_date['day_special_to']; ?> --}}
                             </td>
                             <td>

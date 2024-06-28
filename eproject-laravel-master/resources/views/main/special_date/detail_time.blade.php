@@ -60,9 +60,9 @@
                     <td>{{ $time_special['full_name'] }}</td>
                     <td>{{ $time_special['department_name'] }}</td>
                     <td>{{ $time_special['is_manager'] == 1 ? "Manager" : "Employee" }}</td>
-                    <td>{{Carbon\Carbon::createFromTimestampMs($time_special['day_time_special'])->format('d-m-Y')}}</td>
+                    <td>{{Carbon\Carbon::createFromTimestampMs($time_special['day_time_special'])->format('Y-m-d')}}</td>
                     <td>{{ $time_special['number_time'] }}</td>
-                    <td>{{ Carbon\Carbon::createFromTimestampMs($time_special['date_create'])->format('d-m-Y') }}</td>
+                    <td>{{ Carbon\Carbon::createFromTimestampMs($time_special['date_create'])->format('Y-m-d') }}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -47,8 +47,8 @@
                                 Manager
                             @endif
                         </td>
-                        <td>{{ \Carbon\Carbon::createFromTimestamp($staff['joinedAt'] / 1000)->format('d/m/Y') }}</td>
-                        <td>{{ \Carbon\Carbon::createFromTimestamp($staff['dob'] / 1000)->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::createFromTimestamp($staff['joinedAt'] / 1000)->format('Y-m-d') }}</td>
+                        <td>{{ \Carbon\Carbon::createFromTimestamp($staff['dob'] / 1000)->format('Y-m-d') }}</td>
                         <td>
                             @if ($staff['gender'] == 1)
                                 Male
