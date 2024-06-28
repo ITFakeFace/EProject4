@@ -137,6 +137,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="form-group" hidden>
+                                    <label>Hr approved:(*)</label>
+                                    <input type="hidden" class="form-control" name="txthr" value="1">
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label">Proposed Salary:</label>
@@ -167,7 +171,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 </div>
             </div>
         </div>
-        
+
         <table class="table datatable-basic">
             <thead>
                 <tr>
@@ -180,7 +184,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     <th>Current Manager Approval</th>
                     <th>New Manager Approval</th>
                     <th>Director Approval</th>
-                    <th class="text-center">Edit / Delete</th>
+                    <th class="text-center">Status</th>
                     <th>Action</th>
                     <th>Director</th>
                 </tr>
@@ -394,11 +398,11 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         @endif
                     @endforeach
                 @elseif(auth()->user()->is_manager == 0 || $data['note_manager'] != null)
-                    <div class="form-group d-flex">
+                    {{-- <div class="form-group d-flex">
                         <div class="">
                             &emsp;&nbsp;&nbsp;<button class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">Create New</button>
                         </div>
-                    </div>
+                    </div> --}}
 
                     @foreach ($data as $transfer)
                         @if ($transfer['staff_id'] == auth()->user()->id)

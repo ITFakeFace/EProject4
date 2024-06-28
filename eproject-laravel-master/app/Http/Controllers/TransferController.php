@@ -145,6 +145,10 @@ class TransferController extends Controller
       return redirect()->back()->with('error', 'Transfer creation failed! This staff is currently in transfer status.');
     }
 
+    if ($new_salary == null || $new_salary <= 0 || $new_salary == "null") {
+      return redirect()->back()->with('error', 'New Salary must be larger than 500,000');
+    }
+
     $data_request = [
       'staff_id' => $id_staff_transfer,
       'old_department' => $old_department,
@@ -668,13 +672,13 @@ class TransferController extends Controller
             <div class="form-group row">
             <label class="col-lg-3 col-form-label">Employee Created Date:</label>
             <div class="col-lg-9" >
-                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . $body['data']['createdAt'] . '</textarea>
+                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . \Carbon\Carbon::createFromTimestampMs($body['data']['createdAt'])->format('d/m/Y') . '</textarea>
             </div>
              </div>
             <div class="form-group row">
             <label class="col-lg-3 col-form-label">Director Approval Date:</label>
             <div class="col-lg-9" >
-                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . $body['data']['updateAt'] . '</textarea>
+                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . \Carbon\Carbon::createFromTimestampMs($body['data']['updateAt'])->format('d/m/Y') . '</textarea>
             </div>
              </div>
 
