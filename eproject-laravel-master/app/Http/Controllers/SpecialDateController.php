@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
@@ -51,7 +52,7 @@ class SpecialDateController extends Controller
 
     if ($type_day == 2) {
       if (!$staff_ot) {
-        return redirect()->back()->with('error', 'Vui lòng chọn Nhân viên tăng ca');
+        return redirect()->back()->with('error', 'Please select staff for overtime');
       }
     }
 
@@ -62,17 +63,17 @@ class SpecialDateController extends Controller
     $body_check = json_decode($response_check->body(), true);
 
     if ($day_special_from < date('Y-m-d', strtotime(date("Y-m-d") . ' + 3 days'))) {
-      return redirect()->back()->with('error', 'Ngày bắt đầu phải lớn hơn ngày hiện tại ít nhất 3 ngày! Vui lòng thử lại');
+      return redirect()->back()->with('error', 'The start date must be at least 3 days from the current date! Please try again');
     }
 
     if ($type_day == 1) {
       $day_from_check = $day_special_from;
       if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
-        return redirect()->back()->with('error', 'Không được đặt ngày lễ có chứa Thứ 7 / Chủ nhật! Vui lòng chỉnh sửa');
+        return redirect()->back()->with('error', 'Cannot set a holiday that includes Saturday/Sunday! Please make adjustments');
       }
       while ($day_from_check <= $day_special_to) {
         if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
-          return redirect()->back()->with('error', 'Không được đặt ngày lễ có chứa Thứ 7 / Chủ nhật! Vui lòng chỉnh sửa');
+          return redirect()->back()->with('error', 'Cannot set a holiday that includes Saturday/Sunday! Please make adjustments');
         }
         $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
       }
@@ -88,7 +89,7 @@ class SpecialDateController extends Controller
       if ($value['type_day'] == 1) {
         if (($value['day_special_from'] >= $day_special_from && $value['day_special_from'] <= $day_special_to) || ($value['day_special_to'] >= $day_special_from && $value['day_special_to'] <= $day_special_to)) {
           if ($type_day == 1)
-            return redirect()->back()->with('error', 'Ngày lễ không được chồng chéo nhau!');
+            return redirect()->back()->with('error', 'Holidays cannot overlap!');
           // else 
           //     return redirect()->back()->with('error', 'Ngày tăng ca không được chồng chéo ngày lễ!');
         }
@@ -96,11 +97,11 @@ class SpecialDateController extends Controller
     }
 
     if ($day_special_from > $day_special_to) {
-      return redirect()->back()->with('error', 'Từ ngày không được lớn hơn đến ngày! Vui lòng thử lại');
+      return redirect()->back()->with('error', 'Start date cannot be greater than end date! Please try again');
     }
 
     if (strlen($note) > 300) {
-      return redirect()->back()->with('error', 'Mô tả không được vượt quá 300 kí tự');
+      return redirect()->back()->with('error', 'Description cannot exceed 300 characters');
     }
 
     $data_request = [
@@ -130,14 +131,14 @@ class SpecialDateController extends Controller
 
     if ($body['message'] == "Save SpecialDate success") {
       if ($type_day == 1)
-        return redirect()->back()->with('success', 'Thêm ngày lễ thành công!');
+        return redirect()->back()->with('success', 'Successfully added holiday!');
       else
-        return redirect()->back()->with('success', 'Đề xuất tăng ca thành công! Vui lòng chờ giám đốc duyệt');
+        return redirect()->back()->with('success', 'Request for Overtime has been added successfully! Please wait for approval\'s director!');
     } else {
       if ($type_day == 1)
-        return redirect()->back()->with('error', 'Thêm ngày lễ thất bại!');
+        return redirect()->back()->with('error', 'Failed to add holiday!');
       else
-        return redirect()->back()->with('error', 'Đề xuất tăng ca thất bại!');
+        return redirect()->back()->with('error', 'Request for Overtime Failed!');
     }
   }
 
@@ -151,7 +152,7 @@ class SpecialDateController extends Controller
 
     Http::post('http://localhost:8888/special-date/delete', $data_request);
 
-    return redirect()->back()->with('success', 'Xóa thành công!');
+    return redirect()->back()->with('success', 'Successfully deleted!');
   }
 
   public function detailSpecialDate(Request $request)
@@ -165,11 +166,11 @@ class SpecialDateController extends Controller
     $response = Http::get('http://localhost:8888/special-date/detail', $data_request);
     $body = json_decode($response->body(), true);
 
-    $title = "Lễ";
+    $title = "Holidays";
     $select2 = "";
 
     if ($body['data']['typeDay'] == 2) {
-      $title = "Tăng Ca";
+      $title = "Overtime";
       $select2 = '$(".select").select2({
                             minimumResultsForSearch: Infinity
                         });
@@ -200,7 +201,7 @@ class SpecialDateController extends Controller
     $change_staff = '';
     if ($body['data']['typeDay'] == 2) {
       $change_staff = '<div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Nhân viên tăng ca: </label>
+                                <label class="col-lg-3 col-form-label">Select staff for overtime: </label>
                                 <div class="col-lg-9">
                                     <select name="staff_ot[]" class="form-control multiselect-full-featured" multiple="multiple" data-fouc>
                                         ' . $options . '
@@ -208,38 +209,40 @@ class SpecialDateController extends Controller
                                 </div>
                             </div>';
     }
+    $fromDate= Carbon::createFromTimestampMs($body['data']['daySpecialFrom'])->format('Y-m-d');
+    $toDate= Carbon::createFromTimestampMs($body['data']['daySpecialTo'])->format('Y-m-d'); 
 
     $html = "<input type='hidden' name='id_update' value='" . $id . "'>";
     $html .= "<input type='hidden' name='type_day' value='" . $body['data']['typeDay'] . "'>";
-    $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Chỉnh Sửa Ngày ' . $title . '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+    $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Update ' . $title . '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
     $html .= '<span aria-hidden="true">&times;</span></button></div>';
     $html .= '
             <div class="modal-body">
                 ' . $change_staff . '
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Từ ngày:</label>
+                    <label class="col-lg-3 col-form-label">From:</label>
                     <div class="col-lg-9">
-                        <input type="text" class="form-control day_leave" name="day_special_from" value="' . $body['data']['daySpecialFrom'] . '" required>
+                        <input type="text" class="form-control day_leave" name="day_special_from" value="' . $fromDate . '" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Đến ngày:</label>
+                    <label class="col-lg-3 col-form-label">To:</label>
                     <div class="col-lg-9">
-                        <input type="text" class="form-control day_leave" name="day_special_to" value="' . $body['data']['daySpecialTo'] . '" required>
+                        <input type="text" class="form-control day_leave" name="day_special_to" value="' . $toDate . '" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Mô tả ngày ' . $title . ':</label>
+                    <label class="col-lg-3 col-form-label">Description ' . $title . ':</label>
                     <div class="col-lg-9">
                         <textarea class="form-control" name="note" id="note" cols="20" rows="10" placeholder="VD: Lễ quốc khánh, Lễ Tết, ..." required>' . $body['data']['note'] . '</textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-primary">Sửa</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Edit</button>
             </div>
 
             <script>
@@ -275,7 +278,7 @@ class SpecialDateController extends Controller
     $body_check = json_decode($response_check->body(), true);
 
     if ($day_special_from < date('Y-m-d', strtotime(date("Y-m-d") . ' + 3 days'))) {
-      return redirect()->back()->with('error', 'Ngày bắt đầu phải lớn hơn ngày hiện tại ít nhất 3 ngày! Vui lòng thử lại');
+      return redirect()->back()->with('error', 'The start date must be at least 3 days from the current date! Please try again');
     }
 
     foreach ($body_check['data'] as $value) {
@@ -290,17 +293,17 @@ class SpecialDateController extends Controller
       // }
       if ($value['type_day'] == 1 && $type_day == 1) {
         if (($value['day_special_from'] >= $day_special_from && $value['day_special_from'] <= $day_special_to) || ($value['day_special_to'] >= $day_special_from && $value['day_special_to'] <= $day_special_to)) {
-          return redirect()->back()->with('error', 'Ngày lễ không được chồng chéo nhau!');
+          return redirect()->back()->with('error', 'Special dates cannot overlap!');
         }
       }
     }
 
     if ($day_special_from > $day_special_to) {
-      return redirect()->back()->with('error', 'Từ ngày không được nhỏ hơn đến ngày! Vui lòng thử lại');
+      return redirect()->back()->with('error', 'The start date cannot be greater than the end date! Please try again');
     }
 
     if (strlen($note) > 300) {
-      return redirect()->back()->with('error', 'Mô tả không được vượt quá 300 kí tự');
+      return redirect()->back()->with('error', 'Description cannot exceed 300 characters');
     }
 
     $data_request = [
@@ -313,7 +316,7 @@ class SpecialDateController extends Controller
     $staff_ot = $request->input('staff_ot');
     if ($type_day == 2) {
       if (!$staff_ot) {
-        return redirect()->back()->with('error', 'Vui lòng chọn Nhân viên tăng ca');
+        return redirect()->back()->with('error', 'Please select staff for overtime');
       }
     }
 
@@ -332,14 +335,14 @@ class SpecialDateController extends Controller
 
     if ($body['message'] == "Update Special Date success") {
       if ($type_day == 2)
-        return redirect()->back()->with('success', 'Chỉnh sửa đề xuất tăng ca thành công!');
+        return redirect()->back()->with('success', 'Successfully updated overtime request!');
       else
-        return redirect()->back()->with('success', 'Chỉnh sửa ngày lễ thành công!');
+        return redirect()->back()->with('success', 'Successfully updated special date!');
     } else {
       if ($type_day == 2)
-        return redirect()->back()->with('error', 'Chỉnh sửa đề xuất tăng ca thất bại!');
+        return redirect()->back()->with('error', 'Failed to update overtime request!');
       else
-        return redirect()->back()->with('error', 'Chỉnh sửa ngày lễ thất bại!');
+        return redirect()->back()->with('error', 'Failed to update special date!');
     }
   }
 
@@ -412,9 +415,9 @@ class SpecialDateController extends Controller
 
     $staff_will_ot = '';
     if ($body['data']['type_day'] == 2) {
-      $title = "Tăng Ca";
+      $title = "Ovetime";
       if ($body['data']['staff_ot'] == 'all') {
-        $staff_will_ot = '<label class="col-form-label" style="color: #4B49AC">Tất cả nhân viên trong phòng ban ' . $body['data']['name_department_request'] . '</label>';
+        $staff_will_ot = '<label class="col-form-label" style="color: #4B49AC">All employees in the department ' . $body['data']['name_department_request'] . '</label>';
       } else {
         $param_request = ['department' => $body['data']['department_request']];
         $response = Http::get('http://localhost:8888/staff/find-staff-department', $param_request);
@@ -428,57 +431,59 @@ class SpecialDateController extends Controller
         }
       }
     }
+    $fromDate= Carbon::createFromTimestampMs($body['data']['day_special_from'])->format('Y-m-d');
+    $toDate= Carbon::createFromTimestampMs($body['data']['day_special_to'])->format('Y-m-d');
 
     $footer = '';
     if (auth()->user()->id == 7) {
       $footer = '<div class="modal-footer">
-                            <button type="submit" name="btn_approve" value="1" class="btn btn-success">Duyệt</button>
-                            <button type="submit" name="btn_reject" value="-1" class="btn btn-danger">Từ chối</button>
+                            <button type="submit" name="btn_approve" value="1" class="btn btn-success">Approve</button>
+                            <button type="submit" name="btn_reject" value="-1" class="btn btn-danger">Reject</button>
                         </div>';
     } else {
       $footer = '<div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>';
     }
 
     $html = "<input type='hidden' name='id_update' value='" . $id . "'>";
-    $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Chi Tiết Đề Xuất ' . $title . '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+    $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Request Details ' . $title . '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
     $html .= '<span aria-hidden="true">&times;</span></button></div>';
     $html .= '
             <div class="modal-body">
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Tên quản lý phòng ban:</label>
+                    <label class="col-lg-3 col-form-label">Department Manager Name:</label>
                     <div class="col-lg-9">
                         <label class="col-form-label">' . $body['data']['full_name_staff_request'] . '</label>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Phòng ban đề xuất:</label>
+                    <label class="col-lg-3 col-form-label">Department requesting:</label>
                     <div class="col-lg-9">
                         <label class="col-form-label">' . $body['data']['name_department_request'] . '</label>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Nhân viên tăng ca: </label>
+                    <label class="col-lg-3 col-form-label">Overtime staff: </label>
                     <div class="col-lg-9">
                         ' . $staff_will_ot . '
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Từ ngày:</label>
+                    <label class="col-lg-3 col-form-label">From:</label>
                     <div class="col-lg-9">
-                        <label class="col-form-label">' . $body['data']['day_special_from'] . '</label>
+                        <label class="col-form-label">' . $fromDate . '</label>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Đến ngày:</label>
+                    <label class="col-lg-3 col-form-label">To:</label>
                     <div class="col-lg-9">
-                        <label class="col-form-label">' . $body['data']['day_special_to'] . '</label>
+                        <label class="col-form-label">' . $toDate . '</label>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-lg-3 col-form-label">Mô tả ngày ' . $title . ':</label>
+                    <label class="col-lg-3 col-form-label">Description ' . $title . ':</label>
                     <div class="col-lg-9">
                         <textarea class="form-control" name="note" id="note" cols="15" rows="7" placeholder="VD: Lễ quốc khánh, Lễ Tết, ..." readonly>' . $body['data']['note'] . '</textarea>
                     </div>
@@ -516,9 +521,9 @@ class SpecialDateController extends Controller
     $body = json_decode($response->body(), true);
 
     if ($body['message'] == "Approve success") {
-      return redirect()->back()->with('success', 'Thành công!');
+      return redirect()->back()->with('success', 'Success!');
     } else {
-      return redirect()->back()->with('error', 'Thất bại!');
+      return redirect()->back()->with('error', 'Failed!');
     }
   }
 }

@@ -24,7 +24,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">>Detail of Special Time Supplement {{ date('d/m/Y', strtotime($data[0]['day_special_from'])) }} - {{ date('d/m/Y', strtotime($data[0]['day_special_to'])) }} ( {{ $data[0]['note'] }} )</h1>
+        <h1 class="pt-3 pl-3 pr-3">Detail of Special Date Supplement: {{ $data[0]['note'] }}</h1>
         <div class="card-body">
             @if (\Session::has('success'))
                 <div class="">
@@ -50,7 +50,7 @@
                 <th>Department</th>
                 <th>Position</th>
                 <th>Supplement Date</th>
-                <th>Time</th>
+                <th>Supplement leave days</th>
                 <th>Creation Date</th>
             </tr>
             </thead>
@@ -60,9 +60,9 @@
                     <td>{{ $time_special['full_name'] }}</td>
                     <td>{{ $time_special['department_name'] }}</td>
                     <td>{{ $time_special['is_manager'] == 1 ? "Manager" : "Employee" }}</td>
-                    <td>{{ $time_special['day_time_special'] }}</td>
+                    <td>{{Carbon\Carbon::createFromTimestampMs($time_special['day_time_special'])->format('d-m-Y')}}</td>
                     <td>{{ $time_special['number_time'] }}</td>
-                    <td>{{ $time_special['date_create'] }}</td>
+                    <td>{{ Carbon\Carbon::createFromTimestampMs($time_special['date_create'])->format('d-m-Y') }}</td>
                 </tr>
             @endforeach
             </tbody>
