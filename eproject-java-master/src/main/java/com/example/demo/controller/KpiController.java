@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 @RestController
 @RequestMapping("/kpi")
 public class KpiController {
@@ -43,7 +42,8 @@ public class KpiController {
     @GetMapping(path = "/find-kpi-staff")
     public ResponseEntity<Object> findKpiStaff(@RequestParam int staff_id, @RequestParam String kpi_name) {
         try {
-            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success", service.findKpiStaff(staff_id, kpi_name));
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success",
+                    service.findKpiStaff(staff_id, kpi_name));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.OK, true, "Fail", "Get data error");
         }
@@ -52,7 +52,8 @@ public class KpiController {
     @GetMapping(path = "/find-kpi-department")
     public ResponseEntity<Object> findKpiDepartment(@RequestParam int department_id, @RequestParam String kpi_name) {
         try {
-            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success", service.findKpiDepartment(department_id, kpi_name));
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success",
+                    service.findKpiDepartment(department_id, kpi_name));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.OK, true, "Fail", "Get data error");
         }
@@ -61,26 +62,26 @@ public class KpiController {
     @PostMapping(path = "/save-kpi")
     public ResponseEntity<Object> saveKpi(@RequestBody HashMap<String, Object> body) {
         try {
-            //Save KPI
+            // Save KPI
             String kpi_name = body.get("kpi_name").toString();
             Date created_at = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(body.get("created_at").toString());
 
             Kpi kpi = new Kpi();
-            //Kpi of staff
+            // Kpi of staff
             if (body.get("department_id") == null) {
                 kpi.setDepartmentId(null);
             } else {
                 kpi.setDepartmentId(Integer.parseInt(body.get("department_id").toString()));
             }
 
-            //Kpi of department
+            // Kpi of department
             if (body.get("staff_id") == null) {
                 kpi.setStaffId(null);
             } else {
                 kpi.setStaffId(Integer.parseInt(body.get("staff_id").toString()));
             }
 
-            //set approve if manager create
+            // set approve if manager create
             if (body.get("approved_by") == null) {
                 kpi.setApprovedBy(null);
             } else {
@@ -94,17 +95,17 @@ public class KpiController {
 
             Kpi new_kpi = service.saveKpi(kpi);
 
-            //Save Kpi Details
+            // Save Kpi Details
             ArrayList<HashMap> tasks = (ArrayList) body.get("tasks");
 
             for (int i = 0; i < tasks.size(); i++) {
                 KpiDetail kpiDetail = new KpiDetail();
-                //Create kpi detail with new kpi
+                // Create kpi detail with new kpi
                 kpiDetail.setKpiId(new_kpi.getId());
                 kpiDetail.setTaskTarget(tasks.get(i).get("target").toString());
-//                kpiDetail.setTaskDescription(tasks.get(i).get("task_description").toString());
-//                kpiDetail.setDutiesActivities(tasks.get(i).get("duties_activities").toString());
-//                kpiDetail.setSkill(tasks.get(i).get("skill").toString());
+                // kpiDetail.setTaskDescription(tasks.get(i).get("task_description").toString());
+                // kpiDetail.setDutiesActivities(tasks.get(i).get("duties_activities").toString());
+                // kpiDetail.setSkill(tasks.get(i).get("skill").toString());
                 kpiDetail.setRatio(Integer.parseInt(tasks.get(i).get("ratio").toString()));
                 kpiDetail.setDel(false);
 
@@ -125,20 +126,20 @@ public class KpiController {
     @PostMapping(path = "/update-kpi-details")
     public ResponseEntity<Object> updateKpiDetails(@RequestBody HashMap<String, Object> body) {
         try {
-            //Save Kpi Details
+            // Save Kpi Details
             ArrayList<HashMap> tasks = (ArrayList) body.get("tasks");
 
             for (int i = 0; i < tasks.size(); i++) {
                 KpiDetail kpiDetail = new KpiDetail();
-                //Create kpi detail with new kpi
+                // Create kpi detail with new kpi
                 if (tasks.get(i).get("id") != null) {
                     kpiDetail.setId(Integer.parseInt(tasks.get(i).get("id").toString()));
                 }
                 kpiDetail.setKpiId(Integer.parseInt(body.get("kpi_id").toString()));
                 kpiDetail.setTaskTarget(tasks.get(i).get("target").toString());
-//                kpiDetail.setTaskDescription(tasks.get(i).get("task_description").toString());
-//                kpiDetail.setDutiesActivities(tasks.get(i).get("duties_activities").toString());
-//                kpiDetail.setSkill(tasks.get(i).get("skill").toString());
+                // kpiDetail.setTaskDescription(tasks.get(i).get("task_description").toString());
+                // kpiDetail.setDutiesActivities(tasks.get(i).get("duties_activities").toString());
+                // kpiDetail.setSkill(tasks.get(i).get("skill").toString());
                 kpiDetail.setRatio(Integer.parseInt(tasks.get(i).get("ratio").toString()));
                 kpiDetail.setDel(Boolean.parseBoolean(tasks.get(i).get("del").toString()));
 
@@ -172,7 +173,8 @@ public class KpiController {
     @GetMapping(path = "/get-list-kpi-staff")
     public ResponseEntity<Object> getListKpiStaff(@RequestParam int department, @RequestParam int is_manager) {
         try {
-            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success", service.getKpiStaff(department, is_manager));
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success",
+                    service.getKpiStaff(department, is_manager));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.OK, true, "Fail", e);
         }
@@ -181,7 +183,8 @@ public class KpiController {
     @GetMapping(path = "/get-list-kpi-department")
     public ResponseEntity<Object> getListKpiDepartment(@RequestParam int department, @RequestParam int is_manager) {
         try {
-            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success", service.getKpiDepartment(department, is_manager));
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success",
+                    service.getKpiDepartment(department, is_manager));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.OK, true, "Fail", e);
         }
@@ -203,7 +206,8 @@ public class KpiController {
     @GetMapping(path = "/get-detail-of-kpi")
     public ResponseEntity<Object> getDetailOfKpi(@RequestParam int kpi_id) {
         try {
-            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success", service.getDetailOfKpi(kpi_id));
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success",
+                    service.getDetailOfKpi(kpi_id));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.OK, true, "Fail", e.toString());
         }
@@ -212,7 +216,8 @@ public class KpiController {
     @GetMapping(path = "/get-kpi-detail-child")
     public ResponseEntity<Object> getKpiDetailChild(@RequestParam int kpi_detail_id) {
         try {
-            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success", childService.getKpiDetailChild(kpi_detail_id));
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get data success",
+                    childService.getKpiDetailChild(kpi_detail_id));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.OK, true, "Get Fail", e.toString());
         }
@@ -221,14 +226,29 @@ public class KpiController {
     @PostMapping(path = "/save-detail-child")
     public ResponseEntity<Object> saveDetailChild(@RequestBody HashMap<String, Object> body) {
         try {
-            //Save Kpi Details
+            // Save Kpi Details
             ArrayList<HashMap> tasks = (ArrayList) body.get("tasks");
 
             childService.clearAllDetailChild(Integer.parseInt(body.get("id_kpi_detail").toString()));
+            if (tasks.size() == 0) {
+                KpiDetailChild kpiDetailChild = new KpiDetailChild();
 
+                kpiDetailChild.setKpiDetailId(Integer.parseInt(body.get("id_kpi_detail").toString()));
+                kpiDetailChild.setName(null);
+                kpiDetailChild.setNumberTarget(null);
+                kpiDetailChild.setNumberGet(null);
+                kpiDetailChild.setDutiesActivities(null);
+                kpiDetailChild.setName(null);
+                kpiDetailChild.setSkill(null);
+                try {
+                    childService.saveKpiDetailChild(kpiDetailChild);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
             for (int i = 0; i < tasks.size(); i++) {
                 KpiDetailChild kpiDetailChild = new KpiDetailChild();
-                //Create kpi detail with new kpi
+                // Create kpi detail with new kpi
                 if (tasks.get(i).get("id") != null) {
                     kpiDetailChild.setId(Integer.parseInt(tasks.get(i).get("id").toString()));
                 }

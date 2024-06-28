@@ -137,9 +137,6 @@ public class SalaryController {
             if (currentYearMonth.isBefore(shouldCompareYearMonth)) {
                 return ResponseHandler.generateResponse(HttpStatus.OK, false,
                         "Cannot calculate future salary", null);
-            } else if (currentYearMonth.isAfter(shouldCompareYearMonth)) {
-                return ResponseHandler.generateResponse(HttpStatus.OK, false,
-                        "Cannot calculate past salary", null);
             }
 
             String[] dateRange = this.getFirstAndLastDay(month, year);
@@ -174,18 +171,8 @@ public class SalaryController {
 
             Salary salaryData = this.checkSimilarCalculatedSalaryDate(from_date, to_date);
             if (salaryData == null) {
-                // nếu không bị trùng thì tạo mới
                 salaryData = salaryService
-                        .save(new Salary(dateSqlFormat.parse(from_date), dateSqlFormat.parse(to_date), standard_days)); // tạo
-                                                                                                                        // data
-                                                                                                                        // cho
-                                                                                                                        // salary
-                                                                                                                        // tính
-                                                                                                                        // lương
-                                                                                                                        // khoảng
-                                                                                                                        // thời
-                                                                                                                        // gian
-                // này
+                        .save(new Salary(dateSqlFormat.parse(from_date), dateSqlFormat.parse(to_date), standard_days));
             }
 
             ArrayList listStaffIdCalculated = (ArrayList) body.get("staffs"); // muốn tính các nhân viên nào trong danh
