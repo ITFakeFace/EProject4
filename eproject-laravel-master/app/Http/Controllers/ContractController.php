@@ -43,6 +43,9 @@ class ContractController extends Controller
     if ($editContractResponse->isSuccess) {
       $contract = $editContractResponse->data;
     }
+
+   
+
     return view('main.contract.detail', [
       'listStaff' => $listStaff->data,
       'contract' => $contract,
@@ -185,14 +188,16 @@ class ContractController extends Controller
           '[STAFF_ID_NUMBER]' => $contract->staff->idNumber,
           '[STAFF_ID_DATE]' => Carbon::createFromTimestampMs($contract->staff->identity_issue_date)->format('d/m/Y'),
           '[STAFF_ID_ADDRESS]' => $bodyDistrict->data->name . ', ' . $bodyCity->data->name,
-          '[CONTRACT_EXPIRE]' => Carbon::createFromTimestampMs($contract->startDate)->diffInMonths($contract->endDate),
-          '[CONTRACT_FROM]' => Carbon::createFromTimestampMs($contract->startDate)->format('d/m/Y'),
-          '[CONTRACT_TO]' => Carbon::createFromTimestampMs($contract->endDate)->format('d/m/Y'),
+          '[CONTRACT_EXPIRE]' => Carbon::createFromFormat('Y-m-d', $contract->startDate)->diffInMonths($contract->endDate),
+          '[CONTRACT_FROM]' => Carbon::createFromFormat('Y-m-d', $contract->startDate),
+          // '[CONTRACT_TO]' => Carbon::createFromTimestampMs($contract['endDate'])->format('d-m-Y'),
+          '[CONTRACT_TO]' => Carbon::createFromFormat('Y-m-d', $contract->endDate),
+          // '[CONTRACT_TO]' => Carbon::createFromTimestampMs($contract->endDate)->format('d/m/Y'),
           '[DEPARTMENT_NAME]' => $department->nameVn,
           '[POSITION]' => $contract->staff->isManager ? 'Trưởng nhóm' : 'Nhân viên',
           '[SALARY_BASE]' => number_format($contract->baseSalary),
 
-
+          // Carbon::createFromTimestampMs($time_special['day_time_special'])->format('d-m-Y')
 
         ];
 
