@@ -81,7 +81,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 </div>
             </form>
 
-            @if ((auth()->user()->department == 2) & (auth()->user()->is_manager != 0))
+            @if ((auth()->user()-> department !=5))
                 <div class="form-group d-flex">
                     <div class="">
                         <button class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">Create New</button>
@@ -96,6 +96,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     <form action="{{ action('TransferController@create') }}" method="post">
                         @csrf
                         <input type="hidden" name="id_staff_create" value="{{ auth()->user()->id }}">
+                        <input type="hidden" name="old_department" value="{{ auth()->user()->department }}">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLongTitle">Create New Transfer</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -104,27 +105,39 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         </div>
                         <div class="modal-body">
                             <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Employee Name</label>
+                                <label class="col-lg-3 col-form-label">Employee name</label>
                                 <div class="col-lg-9">
-                                    <select class="form-control select_staff_transfer" name="staff_id" id="selected_staff">
-                                        <option selected hidden value="">Select Employee</option>
-                                        @if (auth()->user()->is_manager == 0)
-                                            <option value="{{ auth()->user()->id }}" old_department="{{ auth()->user()->department }}">{{ auth()->user()->firstname . ' ' . auth()->user()->lastname }}</option>
-                                        @else
+                                    @if (auth()->user()->department != 5)
+                                        <div class="col-form-label">
+                                            {{ auth()->user()->firstname . ' ' . auth()->user()->lastname }}
+                                        </div>
+                                        <input type="hidden" name="staff_id" value="{{ auth()->user()->id }}" old_department="{{ auth()->user()->department }}">
+                                    @else
+                                        <select class="form-control select_staff_transfer" name="staff_id" id="selected_staff">
+                                            <option selected hidden value="">Select employee</option>
                                             @foreach ($listStaff as $staff)
                                                 <option value="{{ $staff->id }}" old_department="{{ $staff->department }}">{{ $staff->firstname . ' ' . $staff->lastname }}</option>
                                             @endforeach
-                                        @endif
-                                    </select>
+                                        </select>
+                                    @endif
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label">Current Department:</label>
                                 <div class="col-lg-9">
-                                    <select class="form-control old_department" name="old_department" readonly="true">
-
-                                    </select>
+                                    @if (auth()->user()->department != 5)
+                                         {{-- {{ auth()->user()->department }} --}}
+                                            @foreach ($listDepartment as $department)
+                                                @if ($department['id'] == auth()->user()->department)
+                                                    {{ $department['name'] }}
+                                                @endif
+                                            @endforeach
+                                    @else
+                                        <select class="form-control old_department" name="old_department" readonly="true">
+                                            <!-- Phòng ban cũ sẽ được điền tự động dựa trên nhân viên được chọn -->
+                                        </select>
+                                    @endif
                                 </div>
                             </div>
 
@@ -190,20 +203,113 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 </tr>
             </thead>
             <tbody>
+{{-- chu ý  --}}
+        <?php $count = 1; ?>
+        @if (auth()->user()->department != 0)
+            @foreach ($data as $transfer)
+                @php
+                    $canEdit = (auth()->user()->department == 2 || auth()->user()->department == 5 || $transfer['staff_id'] == auth()->user()->id ||
+                            (auth()->user()->is_manager == 1 && (auth()->user()->department == $transfer['old_department'] || auth()->user()->department == $transfer['new_department'])));
+                    $isNewTransfer = ($transfer['old_manager_approved'] == 0 && $transfer['new_manager_approved'] == 0 && $transfer['manager_approved'] == 0);
+                    $canApprove = (auth()->user()->is_manager == 1 && (auth()->user()->department == 2 || $transfer['old_department'] == 2 || $transfer['new_department'] == 2));
+                    $canDelete = ($isNewTransfer && $canEdit);
+                @endphp
 
-                <?php $count = 1; ?>
-                @if (auth()->user()->department == 2)
-                    @if (auth()->user()->is_manager == 0)
-                        <div class="form-group d-flex">
-                            <div class="">
-                                &emsp;&nbsp;&nbsp;<button class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">Create New</button>
+                @if ($canEdit || $canApprove || $canDelete)
+                    <tr>
+                        <td><?php echo $count; $count++; ?></td>
+                        <td><?php echo $transfer['staff_transfer']; ?></td>
+                        @foreach ($listDepartment as $depart)
+                            @if ($transfer['old_department'] == $depart['id'])
+                                <td><?php echo $depart['name']; ?></td>
+                            @endif
+                        @endforeach
+                        <td><?php echo $transfer['new_department_name']; ?></td>
+                        <td>
+                            @php $salary = 0; @endphp
+                            @foreach ($listContact as $contract)
+                                @if ($transfer['staff_id'] == $contract->staffId)
+                                    @php $salary = $contract->baseSalary; @endphp
+                                @endif
+                            @endforeach
+                            {{ number_format($salary) }}
+                        </td>
+                        <td><?php echo number_format($transfer['new_salary']); ?></td>
+                        <td>
+                            {!! $transfer['old_manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>' !!}
+                        </td>
+                        <td>
+                            {!! $transfer['new_manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>' !!}
+                        </td>
+                        <td>
+                            {!! $transfer['manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>' !!}
+                        </td>
+                        @if (auth()->user()->department == 2)
+                            @if ($isNewTransfer)
+                                <td>
+                                    @if ($transfer['hr_approved'] == 1)
+                                        <div class="from-group d-flex">
+                                            &nbsp;&nbsp; <a class="btn btn-info open-detail-approvedHR" id="{{ $transfer['id'] }}" style="padding: 5px;color: white;cursor: pointer;">Confirm</a>
+                                        </div>
+                                    @elseif (auth()->user()->is_manager == 1 && $transfer['hr_approved'] == 0 && ($transfer['old_department'] == 2 || $transfer['new_department'] == 2))
+                                        <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
+                                    @elseif ($transfer['hr_approved'] == 0)
+                                        <a>Confirmed</a>
+                                    @endif
+                                </td>
+                            @elseif ($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1 && $transfer['manager_approved'] == 1)
+                                <td style="max-width: 160px;">Approved, employee has been transferred</td>
+                            @else
+                                @if ($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1)
+                                    <td style="max-width: 160px;">Waiting for Director's approval</td>
+                                @elseif (auth()->user()->is_manager == 1)
+                                    <td>
+                                        <div class="from-group d-flex">
+                                            <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
+                                        </div>
+                                    </td>
+                                @else
+                                    <td style="max-width: 160px;">At least one manager has approved, cannot edit</td>
+                                @endif
+                            @endif
+                        @elseif (auth()->user()->department == 5)
+                            @if ($transfer['old_manager_approved'] == 0 && $transfer['new_manager_approved'] == 0)
+                                <td style="max-width: 160px;">Managers have not approved</td>
+                            @elseif ($transfer['old_manager_approved'] == 0)
+                                <td style="max-width: 160px;">Old manager has not approved</td>
+                            @elseif ($transfer['new_manager_approved'] == 0)
+                                <td style="max-width: 160px;">New manager has not approved</td>
+                            @elseif ($transfer['manager_approved'] == 1)
+                                <td style="max-width: 160px;">Approved, employee has been transferred</td>
+                            @elseif ($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1)
+                                <td>
+                                    <div class="from-group d-flex">
+                                        <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
+                                    </div>
+                                </td>
+                            @else
+                                <td>
+                                    <div class="from-group d-flex">
+                                        <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
+                                    </div>
+                                </td>
+                            @endif
+                        @endif
+                        <td>
+                            <div class="from-group d-flex">
+                                <a class="btn btn-info open-detail-transfer1" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Details</a>
                             </div>
-                        </div>
-                    @endif
-                    @foreach ($data as $transfer)
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+        @elseif (auth()->user()->department != 2 && auth()->user()->is_manager == 1)
+            @foreach ($data as $transfer)
+                @if ($transfer['hr_approved'] == 0)
+                    @if (auth()->user()->department == 2 || auth()->user()->department == 5 || $transfer['staff_id'] == auth()->user()->id ||
+                        (auth()->user()->is_manager == 1 && (auth()->user()->department == $transfer['old_department'] || auth()->user()->department == $transfer['new_department'])))
                         <tr>
-                            <td><?php echo $count;
-                            $count++; ?></td>
+                            <td><?php echo $count; $count++; ?></td>
                             <td><?php echo $transfer['staff_transfer']; ?></td>
                             @foreach ($listDepartment as $depart)
                                 @if ($transfer['old_department'] == $depart['id'])
@@ -212,14 +318,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             @endforeach
                             <td><?php echo $transfer['new_department_name']; ?></td>
                             <td>
-                                @php
-                                    $salary = 0;
-                                @endphp
+                                @php $salary = 0; @endphp
                                 @foreach ($listContact as $contract)
                                     @if ($transfer['staff_id'] == $contract->staffId)
-                                        @php
-                                            $salary = $contract->baseSalary;
-                                        @endphp
+                                        @php $salary = $contract->baseSalary; @endphp
                                     @endif
                                 @endforeach
                                 {{ number_format($salary) }}
@@ -235,24 +337,24 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 <?php echo $transfer['manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>'; ?>
                             </td>
                             @if (auth()->user()->department == 2)
-                                @if ($transfer['old_manager_approved'] == 0 && $transfer['new_manager_approved'] == 0)
+                                @if ($isNewTransfer)
                                     <td>
-                                        @if ($transfer['hr_approved'] == 1)
-                                            <div class="from-group d-flex">
-                                                &nbsp;&nbsp; <a class="btn btn-info open-detail-approvedHR" id="{{ $transfer['id'] }}" style="padding: 5px;color: white;cursor: pointer;">Confirm</a>
-                                            </div>
-                                        @elseif(auth()->user()->is_manager == 1 && $transfer['hr_approved'] == 0 && ($transfer['old_department'] == 2 || $transfer['new_department'] == 2))
-                                            <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                        @elseif($transfer['hr_approved'] == 0)
-                                            <a>Confirmed</a>
-                                        @endif
+                                        <div class="from-group d-flex">
+                                            <a class="btn btn-info open-detail-transfer" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Edit</a>
+                                            @if ($canDelete)
+                                                <a href="{{ action('TransferController@delete') }}?id={{ $transfer['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
+                                            @endif
+                                            @if(auth()->user()->is_manager == 1)
+                                                <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
+                                            @endif
+                                        </div>
                                     </td>
-                                @elseif($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1 && $transfer['manager_approved'] == 1)
+                                @elseif ($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1 && $transfer['manager_approved'] == 1)
                                     <td style="max-width: 160px;">Approved, employee has been transferred</td>
                                 @else
                                     @if ($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1)
                                         <td style="max-width: 160px;">Waiting for Director's approval</td>
-                                    @elseif(auth()->user()->is_manager == 1)
+                                    @elseif (auth()->user()->is_manager == 1)
                                         <td>
                                             <div class="from-group d-flex">
                                                 <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
@@ -262,247 +364,40 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                         <td style="max-width: 160px;">At least one manager has approved, cannot edit</td>
                                     @endif
                                 @endif
-                            @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 0 and $transfer['new_manager_approved'] == 0)
-                                <td style="max-width: 160px;">Managers have not approved</td>
-                            @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 0)
-                                <td style="max-width: 160px;">Old manager has not approved</td>
-                            @elseif(auth()->user()->department == 5 and $transfer['new_manager_approved'] == 0)
-                                <td style="max-width: 160px;">New manager has not approved</td>
-                            @elseif(auth()->user()->department == 5 and $transfer['manager_approved'] == 1)
-                                <td style="max-width: 160px;">Approved, employee has been transferred</td>
-                            @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 1 and $transfer['new_manager_approved'] == 1)
-                                <td>
-                                    <div class="from-group d-flex">
-                                        <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                    </div>
-                                </td>
-                            @else
-                                <td>
-                                    <div class="from-group d-flex">
-                                        <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                    </div>
-                                </td>
+                            @elseif (auth()->user()->department == 5)
+                                @if ($transfer['old_manager_approved'] == 0 && $transfer['new_manager_approved'] == 0)
+                                    <td style="max-width: 160px;">Managers have not approved</td>
+                                @elseif ($transfer['old_manager_approved'] == 0)
+                                    <td style="max-width: 160px;">Old manager has not approved</td>
+                                @elseif ($transfer['new_manager_approved'] == 0)
+                                    <td style="max-width: 160px;">New manager has not approved</td>
+                                @elseif ($transfer['manager_approved'] == 1)
+                                    <td style="max-width: 160px;">Approved, employee has been transferred</td>
+                                @elseif ($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1)
+                                    <td>
+                                        <div class="from-group d-flex">
+                                            <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
+                                        </div>
+                                    </td>
+                                @else
+                                    <td>
+                                        <div class="from-group d-flex">
+                                            <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
+                                        </div>
+                                    </td>
+                                @endif
                             @endif
                             <td>
                                 <div class="from-group d-flex">
                                     <a class="btn btn-info open-detail-transfer1" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Details</a>
                                 </div>
                             </td>
-
                         </tr>
-                    @endforeach
-                @elseif(auth()->user()->department != 2 and auth()->user()->is_manager == 1)
-                    @foreach ($data as $transfer)
-                        @if ($transfer['hr_approved'] == 0)
-                            <tr>
-                                <td><?php echo $count;
-                                $count++; ?></td>
-                                <td><?php echo $transfer['staff_transfer']; ?></td>
-                                @foreach ($listDepartment as $depart)
-                                    @if ($transfer['old_department'] == $depart['id'])
-                                        <td><?php echo $depart['name']; ?></td>
-                                    @endif
-                                @endforeach
-                                <td><?php echo $transfer['new_department_name']; ?></td>
-                                <td>
-                                    @php
-                                        $salary = 0;
-                                    @endphp
-                                    @foreach ($listContact as $contract)
-                                        @if ($transfer['staff_id'] == $contract->staffId)
-                                            @php
-                                                $salary = $contract->baseSalary;
-                                            @endphp
-                                        @endif
-                                    @endforeach
-                                    {{ number_format($salary) }}
-                                </td>
-                                <td><?php echo number_format($transfer['new_salary']); ?></td>
-                                <td>
-                                    <?php echo $transfer['old_manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>'; ?>
-                                </td>
-                                <td>
-                                    <?php echo $transfer['new_manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>'; ?>
-                                </td>
-                                <td>
-                                    <?php echo $transfer['manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>'; ?>
-                                </td>
-                                @if (auth()->user()->department == 2)
-                                    @if ($transfer['old_manager_approved'] == 0 && $transfer['new_manager_approved'] == 0)
-                                        <td>
-                                            <div class="from-group d-flex">
-                                                <a class="btn btn-info open-detail-transfer" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Edit</a>
-                                                <a href="{{ action('TransferController@delete') }}?id={{ $transfer['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
-                                            </div>
-                                            @if (auth()->user()->is_manager == 1)
-                                                <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                            @endif
-                                        </td>
-                                    @elseif($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1 && $transfer['manager_approved'] == 1)
-                                        <td style="max-width: 160px;">Approved, employee has been transferred</td>
-                                    @else
-                                        @if (auth()->user()->is_manager == 1)
-                                            <td>
-                                                <div class="from-group d-flex">
-                                                    <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                                </div>
-                                            </td>
-                                        @else
-                                            <td style="max-width: 160px;">At least one manager has approved, cannot edit</td>
-                                        @endif
-                                    @endif
-                                @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 0 and $transfer['new_manager_approved'] == 0)
-                                    <td style="max-width: 160px;">Managers have not approved</td>
-                                @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 0)
-                                    <td style="max-width: 160px;">Old manager has not approved</td>
-                                @elseif(auth()->user()->department == 5 and $transfer['new_manager_approved'] == 0)
-                                    <td style="max-width: 160px;">New manager has not approved</td>
-                                @elseif(auth()->user()->department == 5 and $transfer['manager_approved'] == 1)
-                                    <td style="max-width: 160px;">Approved, employee has been transferred</td>
-                                @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 1 and $transfer['new_manager_approved'] == 1)
-                                    <td>
-                                        <div class="from-group d-flex">
-                                            <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                        </div>
-                                        <div class="from-group d-flex">
-                                            <a class="btn btn-info open-detail-transferC ml-2" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Request</a>
-                                        </div>
-                                    </td>
-                                @elseif($transfer['old_manager_approved'] == 1 and $transfer['new_manager_approved'] == 1 and $transfer['manager_approved'] == 1)
-                                    <td style="max-width: 160px;">Approved, employee has been transferred</td>
-                                @elseif($transfer['old_manager_approved'] == 1 and $transfer['new_manager_approved'] == 1)
-                                    <td style="max-width: 160px;">Waiting for Director's approval</td>
-                                @else
-                                    <td>
-                                        <div class="from-group d-flex">
-                                            <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                        </div>
-                                    </td>
-                                @endif
-                                <td>
-                                    <div class="from-group d-flex">
-                                        <a class="btn btn-info open-detail-transfer1" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Details</a>
-                                    </div>
-                                </td>
-                                <td style="max-width: 160px; color: red;">
-                                    <?php
-                                    if (strlen($transfer['note_manager']) > 100) {
-                                        echo substr($transfer['note_manager'], 0, 100) . '...';
-                                    } else {
-                                        echo $transfer['note_manager'];
-                                    }
-                                    ?>
-                                </td>
-
-                            </tr>
-                        @endif
-                    @endforeach
-                @elseif(auth()->user()->is_manager == 0 || $data['note_manager'] != null)
-                    {{-- <div class="form-group d-flex">
-                        <div class="">
-                            &emsp;&nbsp;&nbsp;<button class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">Create New</button>
-                        </div>
-                    </div> --}}
-
-                    @foreach ($data as $transfer)
-                        @if ($transfer['staff_id'] == auth()->user()->id)
-                            <tr>
-                                <td><?php echo $count;
-                                $count++; ?></td>
-                                <td><?php echo $transfer['staff_transfer']; ?></td>
-                                @foreach ($listDepartment as $depart)
-                                    @if ($transfer['old_department'] == $depart['id'])
-                                        <td><?php echo $depart['name']; ?></td>
-                                    @endif
-                                @endforeach
-
-                                <td><?php echo $transfer['new_department_name']; ?></td>
-                                <td>
-                                    @php
-                                        $salary = 0;
-                                    @endphp
-                                    @foreach ($listContact as $contract)
-                                        @if ($transfer['staff_id'] == $contract->staffId)
-                                            @php
-                                                $salary = $contract->baseSalary;
-                                            @endphp
-                                        @endif
-                                    @endforeach
-                                    {{ number_format($salary) }}
-                                </td>
-                                <td><?php echo number_format($transfer['new_salary']); ?></td>
-                                <td>
-                                    <?php echo $transfer['old_manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>'; ?>
-                                </td>
-                                <td>
-                                    <?php echo $transfer['new_manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>'; ?>
-                                </td>
-                                <td>
-                                    <?php echo $transfer['manager_approved'] == 0 ? '<span class="badge badge-warning">Not Approved</span>' : '<span class="badge badge-success">Approved</span>'; ?>
-                                </td>
-                                @if (auth()->user()->department != 5)
-                                    @if ($transfer['old_manager_approved'] == 0 && $transfer['new_manager_approved'] == 0)
-                                        <td>
-                                            <div class="from-group d-flex">
-                                                <a class="btn btn-info open-detail-transfer" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Edit</a>
-                                                <a href="{{ action('TransferController@delete') }}?id={{ $transfer['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
-                                            </div>
-                                        </td>
-                                    @elseif($transfer['old_manager_approved'] == 1 && $transfer['new_manager_approved'] == 1 && $transfer['manager_approved'] == 1)
-                                        <td style="max-width: 160px;">Approved, employee has been transferred</td>
-                                    @else
-                                        @if ($transfer['note_manager'] != null)
-                                            <td>
-                                                <div class="from-group d-flex">
-                                                    <a class="btn btn-info open-detail-transfer" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Edit</a>
-                                                    <a href="{{ action('TransferController@delete') }}?id={{ $transfer['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
-                                                </div>
-                                            </td>
-                                        @else
-                                            <td style="max-width: 160px;">At least one manager has approved, cannot edit</td>
-                                        @endif
-                                    @endif
-                                @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 0 and $transfer['new_manager_approved'] == 0)
-                                    <td style="max-width: 160px;">Managers have not approved</td>
-                                @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 0)
-                                    <td style="max-width: 160px;">Old manager has not approved</td>
-                                @elseif(auth()->user()->department == 5 and $transfer['new_manager_approved'] == 0)
-                                    <td style="max-width: 160px;">New manager has not approved</td>
-                                @elseif(auth()->user()->department == 5 and $transfer['manager_approved'] == 1)
-                                    <td style="max-width: 160px;">Approved, employee has been transferred</td>
-                                @elseif(auth()->user()->department == 5 and $transfer['old_manager_approved'] == 1 and $transfer['new_manager_approved'] == 1)
-                                    <td>
-                                        <div class="from-group d-flex">
-                                            <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                        </div>
-                                    </td>
-                                @else
-                                    <td>
-                                        <div class="from-group d-flex">
-                                            <a href="{{ action('TransferController@approve') }}?id={{ $transfer['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Approve</a>
-                                        </div>
-                                    </td>
-                                @endif
-                                <td>
-                                    <div class="from-group d-flex">
-                                        <a class="btn btn-info open-detail-transfer1" id="{{ $transfer['id'] }}" style="color: white; cursor: pointer;">Details</a>
-                                    </div>
-                                </td>
-                                <td style="max-width: 160px; color: red;">
-                                    <?php
-                                    if (strlen($transfer['note_manager']) > 100) {
-                                        echo substr($transfer['note_manager'], 0, 100) . '...';
-                                    } else {
-                                        echo $transfer['note_manager'];
-                                    }
-                                    ?>
-                                </td>
-
-                            </tr>
-                        @endif
-                    @endforeach
+                    @endif
                 @endif
-            </tbody>
+            @endforeach
+        @endif
+            {{-- chu y --}}
         </table>
 
         <div id="bsc-modal" class="modal fade" role="dialog"> <!-- modal bsc -->
