@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 public interface ISalaryDetailRepository extends JpaRepository<SalaryDetail, Integer> {
 
     SalaryDetail save(SalaryDetail detail);
@@ -24,21 +23,20 @@ public interface ISalaryDetailRepository extends JpaRepository<SalaryDetail, Int
     @Query(value = "delete SalaryDetail s where s.id = :id")
     void delete(@Param("id") Integer id);
 
-
     @Transactional
     @Modifying
-    @Query(value = "delete SalaryDetail s where s.salaryId = :salary_id")
+    @Query(value = "DELETE FROM salary_detail WHERE salary_id = :salary_id", nativeQuery = true)
     void deleteBySalaryId(@Param("salary_id") Integer salary_id);
 
     @Transactional
     @Modifying
-    @Query(value = "from SalaryDetail s where s.salaryId = :salary_id")
+    @Query(value = "SELECT * FROM salary_detail WHERE salary_id = :salary_id", nativeQuery = true)
     List<SalaryDetail> findBySalaryId(@Param("salary_id") Integer salary_id);
 
     SalaryDetail findById(int id);
 
     @Transactional
     @Modifying
-    @Query(value = "from SalaryDetail s where s.staffId = :staff_id")
+    @Query(value = "SELECT * FROM salary_detail WHERE staff_id = :staff_id", nativeQuery = true)
     List<SalaryDetail> findByStaffId(@Param("staff_id") Integer staff_id);
 }

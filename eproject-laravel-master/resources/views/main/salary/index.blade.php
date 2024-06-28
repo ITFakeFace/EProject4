@@ -69,14 +69,14 @@
 @section('scripts')
     <script>
         function deleteSalary(id) {
-            let conf = confirm('Bạn có chắc muốn xóa bảng tính ID: ' + id);
+            let conf = confirm('Are you sure to delete salary ID: ' + id);
             if (conf) {
                 window.location.href = '{{ route('getDeleteSalary') }}/' + id;
             }
         }
 
         function setSuccessSalary(id) {
-            let conf = confirm('Bạn có chắc muốn chuyển sang hoàn tất bảng lương ID: ' + id);
+            let conf = confirm('Are you sure to complete salary ID: ' + id);
             if (conf) {
                 window.location.href = '{{ route('getChangeStatusSuccessSalary') }}/' + id;
             }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 
 class TimeleaveController extends Controller
 {
@@ -343,248 +344,249 @@ class TimeleaveController extends Controller
     $type_of_leave = $request->input('type_of_leave');
 
     if ($type_of_leave == 0) {
-        if ($user->day_of_leave == 0) {
-            return redirect()->back()->with('error', 'You have run out of annual leave days');
-        }
+      if ($user->day_of_leave == 0) {
+        return redirect()->back()->with('error', 'You have run out of annual leave days');
+      }
 
-        $day_leave = $request->input('day_leave');
-        $number_day_leave = $request->input('number_day_leave');
-        $note_dkp = $request->input('note_dkp');
+      $day_leave = $request->input('day_leave');
+      $number_day_leave = $request->input('number_day_leave');
+      $note_dkp = $request->input('note_dkp');
 
-        if (strlen($note_dkp) > 300) {
-            return redirect()->back()->with('error', 'Reason cannot exceed 300 characters');
-        }
+      if (strlen($note_dkp) > 300) {
+        return redirect()->back()->with('error', 'Reason cannot exceed 300 characters');
+      }
 
-        if ($number_day_leave == 1)
-            $time = "08:00:00";
-        else
-            $time = "04:00:00";
+      if ($number_day_leave == 1)
+        $time = "08:00:00";
+      else
+        $time = "04:00:00";
 
-        $is_approved = 0;
+      $is_approved = 0;
+      if ($user->is_manager == 1) {
+        $is_approved = 2;
+      }
+
+      if (date('w', strtotime($day_leave)) == 6 or date('w', strtotime($day_leave)) == 0) {
+        return redirect()->back()->with('error', 'Leave registration failed! ' . $day_leave . ' is a Saturday / Sunday! Please make changes');
+      }
+
+      $check_special_day = [
+        'day_check' => $day_leave
+      ];
+
+      $response = Http::get('http://localhost:8888/special-date/check-day', $check_special_day);
+      $body = json_decode($response->body(), true);
+
+      if ($body['data'] == "Yes") {
+        return redirect()->back()->with('error', 'Leave registration failed! ' . $day_leave . ' is a holiday! Please make changes');
+      }
+
+      $data_request = [
+        "staff_id" => $user->id,
+        'staff_code' => $user->code,
+        'day_time_leave' => $day_leave,
+        'time' => $time,
+        'type' => true,
+        'note' => $note_dkp,
+        'is_approved' => $is_approved
+      ];
+
+      $response = Http::post('http://localhost:8888/time-leave/addLeave', $data_request);
+      $body = json_decode($response->body(), true);
+
+      if ($body['message'] == "Save success") {
         if ($user->is_manager == 1) {
-            $is_approved = 2;
-        }
-
-        if (date('w', strtotime($day_leave)) == 6 or date('w', strtotime($day_leave)) == 0) {
-            return redirect()->back()->with('error', 'Leave registration failed! ' . $day_leave . ' is a Saturday / Sunday! Please make changes');
-        }
-
-        $check_special_day = [
-            'day_check' => $day_leave
-        ];
-
-        $response = Http::get('http://localhost:8888/special-date/check-day', $check_special_day);
-        $body = json_decode($response->body(), true);
-
-        if ($body['data'] == "Yes") {
-            return redirect()->back()->with('error', 'Leave registration failed! ' . $day_leave . ' is a holiday! Please make changes');
-        }
-
-        $data_request = [
-            "staff_id" => $user->id,
-            'staff_code' => $user->code,
-            'day_time_leave' => $day_leave,
-            'time' => $time,
-            'type' => true,
-            'note' => $note_dkp,
-            'is_approved' => $is_approved
-        ];
-
-        $response = Http::post('http://localhost:8888/time-leave/addLeave', $data_request);
-        $body = json_decode($response->body(), true);
-
-        if ($body['message'] == "Save success") {
-            if ($user->is_manager == 1) {
-                return redirect()->back()->with('success', 'Leave registration successful! As a manager, the leave request is automatically approved');
-            } else {
-                return redirect()->back()->with('success', 'Leave registration successful! Please wait for approval');
-            }
-        } else if ($body['data'] == "Added time") {
-            return redirect()->back()->with('error', 'Leave registration failed! You have already worked and clocked in on ' . $day_leave . '! Please make changes');
+          return redirect()->back()->with('success', 'Leave registration successful! As a manager, the leave request is automatically approved');
         } else {
-            return redirect()->back()->with('error', 'Leave registration failed! You have already registered leave / added attendance on ' . $day_leave . '! Please make changes');
+          return redirect()->back()->with('success', 'Leave registration successful! Please wait for approval');
         }
+      } else if ($body['data'] == "Added time") {
+        return redirect()->back()->with('error', 'Leave registration failed! You have already worked and clocked in on ' . $day_leave . '! Please make changes');
+      } else {
+        return redirect()->back()->with('error', 'Leave registration failed! You have already registered leave / added attendance on ' . $day_leave . '! Please make changes');
+      }
     } else {
-        $day_leave_from = $request->input('day_leave_from');
-        $day_leave_to = $request->input('day_leave_to');
-        $image_leave = $request->input('image_leave');
-        $note_dkp = $request->input('note_dkp');
+      $day_leave_from = $request->input('day_leave_from');
+      $day_leave_to = $request->input('day_leave_to');
+      $image_leave = $request->input('image_leave');
+      $note_dkp = $request->input('note_dkp');
 
-        if ($day_leave_from > $day_leave_to) {
-            return redirect()->back()->with('error', 'Start date cannot be later than end date');
+      if ($day_leave_from > $day_leave_to) {
+        return redirect()->back()->with('error', 'Start date cannot be later than end date');
+      }
+
+      $data_check = [
+        "staff_id" => $user->id,
+        'day_leave_from' => $day_leave_from,
+        'day_leave_to' => $day_leave_to
+      ];
+
+      $response = Http::post('http://localhost:8888/leave-other/check-list-time-leave', $data_check);
+      $time_leave_exists = json_decode($response->body(), true);
+
+      if (count($time_leave_exists['data']) > 0) {
+        return redirect()->back()->with('error', 'There are already additional attendance or other leave days affecting the requested leave period! Please try again');
+      }
+
+      if ($type_of_leave == 6 or $type_of_leave == 7) {
+        $day_from_check = $day_leave_from;
+        if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
+          return redirect()->back()->with('error', 'Cannot set wedding leave or bereavement leave on Saturday / Sunday! Please make changes');
         }
-
-        $data_check = [
-            "staff_id" => $user->id,
-            'day_leave_from' => $day_leave_from,
-            'day_leave_to' => $day_leave_to
-        ];
-
-        $response = Http::post('http://localhost:8888/leave-other/check-list-time-leave', $data_check);
-        $time_leave_exists = json_decode($response->body(), true);
-
-        if (count($time_leave_exists['data']) > 0) {
-            return redirect()->back()->with('error', 'There are already additional attendance or other leave days affecting the requested leave period! Please try again');
+        while ($day_from_check <= $day_leave_to) {
+          if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
+            return redirect()->back()->with('error', 'Cannot set leave days containing Saturday / Sunday! Please make changes');
+          }
+          $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
         }
+      }
 
-        if ($type_of_leave == 6 or $type_of_leave == 7) {
-            $day_from_check = $day_leave_from;
-            if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
-                return redirect()->back()->with('error', 'Cannot set wedding leave or bereavement leave on Saturday / Sunday! Please make changes');
-            }
-            while ($day_from_check <= $day_leave_to) {
-                if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
-                    return redirect()->back()->with('error', 'Cannot set leave days containing Saturday / Sunday! Please make changes');
-                }
-                $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
-            }
+      // Validate day of other leave
+      switch ($type_of_leave) {
+        case '2':
+          $origin = new DateTime($day_leave_from);
+          $target = new DateTime($day_leave_to);
+          $interval = $origin->diff($target);
+          if ($interval->format('%a') > 32) {
+            return redirect()->back()->with('error', 'Unpaid leave type can only be registered for up to 31 days');
+          }
+          break;
+        case '3':
+          $origin = new DateTime($day_leave_from);
+          $target = new DateTime($day_leave_to);
+          $interval = $origin->diff($target);
+          if ($interval->format('%a') > 2) {
+            return redirect()->back()->with('error', 'Short sick leave type can only be registered for up to 3 days');
+          }
+          break;
+        case '4':
+          $origin = new DateTime($day_leave_from);
+          $target = new DateTime($day_leave_to);
+          $interval = $origin->diff($target);
+          if ($interval->format('%a') > 32) {
+            return redirect()->back()->with('error', 'Long sick leave type can only be registered for up to 31 days');
+          }
+          break;
+        case '5':
+          $origin = new DateTime($day_leave_from);
+          $target = new DateTime($day_leave_to);
+          $interval = $origin->diff($target);
+          if ($interval->format('%a') > 184) {
+            return redirect()->back()->with('error', 'Long-term sick leave type can only be registered for up to 6 months');
+          }
+          break;
+        case '6':
+          $origin = new DateTime($day_leave_from);
+          $target = new DateTime($day_leave_to);
+          $interval = $origin->diff($target);
+          if ($interval->format('%a') > 2) {
+            return redirect()->back()->with('error', 'Wedding leave type can only be registered for up to 3 days');
+          }
+          break;
+        case '7':
+          $origin = new DateTime($day_leave_from);
+          $target = new DateTime($day_leave_to);
+          $interval = $origin->diff($target);
+          if ($interval->format('%a') > 2) {
+            return redirect()->back()->with('error', 'Bereavement leave type can only be registered for up to 3 days');
+          }
+          break;
+        default:
+          # code...
+          break;
+      }
+
+      if (strlen($note_dkp) > 300) {
+        return redirect()->back()->with('error', 'Reason cannot exceed 300 characters');
+      }
+
+      $is_approved = 0;
+      if ($user->is_manager == 1) {
+        $is_approved = 2;
+      }
+
+      // Photo
+      $now = Carbon::now();
+
+      if (request()->hasFile('image_leave')) {
+        // Generate random name for the image
+        $file_name_random = function ($key) {
+          $ext = request()->file($key)->getClientOriginalExtension();
+          $str_random = (string)Str::uuid();
+
+          return $str_random . '.' . $ext;
+        };
+
+        $image = $file_name_random('image_leave');
+        if (request()->file('image_leave')->move('./images/other_leave/' . $now->format('dmY') . '/', $image)) {
+          // Assign image path to model for saving
+          $image_time = '/images/other_leave/' . $now->format('dmY') . '/' . $image;
         }
+      } else {
+        return redirect()->back()->with('error', 'Please upload an image');
+      }
 
-        // Validate day of other leave
-        switch ($type_of_leave) {
-            case '2':
-                $origin = new DateTime($day_leave_from);
-                $target = new DateTime($day_leave_to);
-                $interval = $origin->diff($target);
-                if ($interval->format('%a') > 32) {
-                    return redirect()->back()->with('error', 'Unpaid leave type can only be registered for up to 31 days');
-                }
-                break;
-            case '3':
-                $origin = new DateTime($day_leave_from);
-                $target = new DateTime($day_leave_to);
-                $interval = $origin->diff($target);
-                if ($interval->format('%a') > 2) {
-                    return redirect()->back()->with('error', 'Short sick leave type can only be registered for up to 3 days');
-                }
-                break;
-            case '4':
-                $origin = new DateTime($day_leave_from);
-                $target = new DateTime($day_leave_to);
-                $interval = $origin->diff($target);
-                if ($interval->format('%a') > 32) {
-                    return redirect()->back()->with('error', 'Long sick leave type can only be registered for up to 31 days');
-                }
-                break;
-            case '5':
-                $origin = new DateTime($day_leave_from);
-                $target = new DateTime($day_leave_to);
-                $interval = $origin->diff($target);
-                if ($interval->format('%a') > 184) {
-                    return redirect()->back()->with('error', 'Long-term sick leave type can only be registered for up to 6 months');
-                }
-                break;
-            case '6':
-                $origin = new DateTime($day_leave_from);
-                $target = new DateTime($day_leave_to);
-                $interval = $origin->diff($target);
-                if ($interval->format('%a') > 2) {
-                    return redirect()->back()->with('error', 'Wedding leave type can only be registered for up to 3 days');
-                }
-                break;
-            case '7':
-                $origin = new DateTime($day_leave_from);
-                $target = new DateTime($day_leave_to);
-                $interval = $origin->diff($target);
-                if ($interval->format('%a') > 2) {
-                    return redirect()->back()->with('error', 'Bereavement leave type can only be registered for up to 3 days');
-                }
-                break;
-            default:
-                # code...
-                break;
-        }
+      $data_request = [
+        'id_update' => null,
+        "staff_id" => $user->id,
+        'type_leave' => $type_of_leave,
+        'day_leave_from' => $day_leave_from,
+        'day_leave_to' => $day_leave_to,
+        'image' => $image_time,
+        'note' => $note_dkp,
+        'is_approved' => $is_approved,
+        'created_at' => date("Y-m-d")
+      ];
 
-        if (strlen($note_dkp) > 300) {
-            return redirect()->back()->with('error', 'Reason cannot exceed 300 characters');
-        }
+      Log::info(json_encode($data_request));
+      $response = Http::post('http://localhost:8888/leave-other/add', $data_request);
+      $body = json_decode($response->body(), true);
 
-        $is_approved = 0;
+      if ($body['message'] == "Save success") {
         if ($user->is_manager == 1) {
-            $is_approved = 2;
-        }
-
-        // Photo
-        $now = Carbon::now();
-
-        if (request()->hasFile('image_leave')) {
-            // Generate random name for the image
-            $file_name_random = function ($key) {
-                $ext = request()->file($key)->getClientOriginalExtension();
-                $str_random = (string)Str::uuid();
-
-                return $str_random . '.' . $ext;
-            };
-
-            $image = $file_name_random('image_leave');
-            if (request()->file('image_leave')->move('./images/other_leave/' . $now->format('dmY') . '/', $image)) {
-                // Assign image path to model for saving
-                $image_time = '/images/other_leave/' . $now->format('dmY') . '/' . $image;
-            }
+          return redirect()->back()->with('success', 'Leave registration successful! As a manager, the leave request is automatically approved');
         } else {
-            return redirect()->back()->with('error', 'Please upload an image');
+          return redirect()->back()->with('success', 'Leave registration successful! Please wait for approval');
         }
-
-        $data_request = [
-            'id_update' => null,
-            "staff_id" => $user->id,
-            'type_leave' => $type_of_leave,
-            'day_leave_from' => $day_leave_from,
-            'day_leave_to' => $day_leave_to,
-            'image' => $image_time,
-            'note' => $note_dkp,
-            'is_approved' => $is_approved,
-            'created_at' => date("Y-m-d")
-        ];
-
-        $response = Http::post('http://localhost:8888/leave-other/add', $data_request);
-        $body = json_decode($response->body(), true);
-
-        if ($body['message'] == "Save success") {
-            if ($user->is_manager == 1) {
-                return redirect()->back()->with('success', 'Leave registration successful! As a manager, the leave request is automatically approved');
-            } else {
-                return redirect()->back()->with('success', 'Leave registration successful! Please wait for approval');
-            }
-        } else if ($body['data'] == "Added time") {
-            return redirect()->back()->with('error', 'Leave registration failed! You have already worked and clocked in on the days you requested leave for! Please make changes');
-        } else if ($body['data'] == "Duplicate leave") {
-            return redirect()->back()->with('error', 'Leave registration failed! You cannot overlap leave requests! Please make changes');
-        } else {
-            return redirect()->back()->with('error', 'Leave registration failed!');
-        }
+      } else if ($body['data'] == "Added time") {
+        return redirect()->back()->with('error', 'Leave registration failed! You have already worked and clocked in on the days you requested leave for! Please make changes');
+      } else if ($body['data'] == "Duplicate leave") {
+        return redirect()->back()->with('error', 'Leave registration failed! You cannot overlap leave requests! Please make changes');
+      } else {
+        return redirect()->back()->with('error', 'Leave registration failed!' . json_encode($body));
+      }
     }
   }
 
 
   public function detailLeave(Request $request)
   {
-      $id = $request->input('id');
-  
-      $data_request = [
-          "id" => $id
-      ];
-  
-      $response = Http::get('http://localhost:8888/time-leave/detail', $data_request);
-      $body = json_decode($response->body(), true);
-  
-      if ($body['data']['time'] == '08:00:00') {
-          $option = '
+    $id = $request->input('id');
+
+    $data_request = [
+      "id" => $id
+    ];
+
+    $response = Http::get('http://localhost:8888/time-leave/detail', $data_request);
+    $body = json_decode($response->body(), true);
+
+    if ($body['data']['time'] == '08:00:00') {
+      $option = '
               <option value="1" selected>One day</option>
               <option value="0.5">Half day</option>
           ';
-      } else {
-          $option = '
+    } else {
+      $option = '
               <option value="1">One day</option>
               <option value="0.5" selected>Half day</option>
           ';
-      }
-  
-      $html = "<input type='hidden' name='id_update' value='" . $id . "'>";
-      $html .= "<input type='hidden' name='type_update' value='" . $body['data']['type'] . "'>";
-      $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Leave Registration</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
-      $html .= '<span aria-hidden="true">&times;</span></button></div>';
-      $html .= '
+    }
+
+    $html = "<input type='hidden' name='id_update' value='" . $id . "'>";
+    $html .= "<input type='hidden' name='type_update' value='" . $body['data']['type'] . "'>";
+    $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Leave Registration</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+    $html .= '<span aria-hidden="true">&times;</span></button></div>';
+    $html .= '
           <div class="modal-body">
               <div class="form-group row">
                   <label class="col-lg-3 col-form-label">Leave type:</label>
@@ -651,69 +653,69 @@ class TimeleaveController extends Controller
               });
           </script>
       ';
-  
-      echo $html;
-      die;
+
+    echo $html;
+    die;
   }
-  
+
 
   public function detailLeaveOther(Request $request)
-{
+  {
     $id = $request->input('id');
 
     $data_request = [
-        "id" => $id
+      "id" => $id
     ];
 
     $response = Http::get('http://localhost:8888/leave-other/get-detail', $data_request);
     $body = json_decode($response->body(), true);
 
     if ($body['data']['typeLeave'] == 2) {
-        $option1 = '<option value="2" selected>Unpaid Leave</option>';
-        $display1 = '';
+      $option1 = '<option value="2" selected>Unpaid Leave</option>';
+      $display1 = '';
     } else {
-        $option1 = '<option value="2">Unpaid Leave</option>';
-        $display1 = 'style="display: none"';
+      $option1 = '<option value="2">Unpaid Leave</option>';
+      $display1 = 'style="display: none"';
     }
 
     if ($body['data']['typeLeave'] == 3) {
-        $option2 = '<option value="3" selected>Short-term Sick Leave</option>';
-        $display2 = '';
+      $option2 = '<option value="3" selected>Short-term Sick Leave</option>';
+      $display2 = '';
     } else {
-        $option2 = '<option value="3">Short-term Sick Leave</option>';
-        $display2 = 'style="display: none"';
+      $option2 = '<option value="3">Short-term Sick Leave</option>';
+      $display2 = 'style="display: none"';
     }
 
     if ($body['data']['typeLeave'] == 4) {
-        $option3 = '<option value="4" selected>Long-term Sick Leave</option>';
-        $display3 = '';
+      $option3 = '<option value="4" selected>Long-term Sick Leave</option>';
+      $display3 = '';
     } else {
-        $option3 = '<option value="4">Long-term Sick Leave</option>';
-        $display3 = 'style="display: none"';
+      $option3 = '<option value="4">Long-term Sick Leave</option>';
+      $display3 = 'style="display: none"';
     }
 
     if ($body['data']['typeLeave'] == 5) {
-        $option4 = '<option value="5" selected>Maternity Leave</option>';
-        $display4 = '';
+      $option4 = '<option value="5" selected>Maternity Leave</option>';
+      $display4 = '';
     } else {
-        $option4 = '<option value="5">Maternity Leave</option>';
-        $display4 = 'style="display: none"';
+      $option4 = '<option value="5">Maternity Leave</option>';
+      $display4 = 'style="display: none"';
     }
 
     if ($body['data']['typeLeave'] == 6) {
-        $option6 = '<option value="6" selected>Marriage Leave</option>';
-        $display6 = '';
+      $option6 = '<option value="6" selected>Marriage Leave</option>';
+      $display6 = '';
     } else {
-        $option6 = '<option value="6">Marriage Leave</option>';
-        $display6 = 'style="display: none"';
+      $option6 = '<option value="6">Marriage Leave</option>';
+      $display6 = 'style="display: none"';
     }
 
     if ($body['data']['typeLeave'] == 7) {
-        $option7 = '<option value="7" selected>Bereavement Leave</option>';
-        $display7 = '';
+      $option7 = '<option value="7" selected>Bereavement Leave</option>';
+      $display7 = '';
     } else {
-        $option7 = '<option value="7">Bereavement Leave</option>';
-        $display7 = 'style="display: none"';
+      $option7 = '<option value="7">Bereavement Leave</option>';
+      $display7 = 'style="display: none"';
     }
 
     $html = "<input type='hidden' name='id_update' value='" . $id . "'>";
@@ -912,155 +914,155 @@ class TimeleaveController extends Controller
             </div>';
 
     return response()->json($html);
-}
+  }
 
   public function updateLeaveOther(Request $request)
   {
-      $user = auth()->user();
+    $user = auth()->user();
 
-      $type_of_leave = $request->input('type_of_leave');
-      $id_update = $request->input('id_update');
-      $note_bsc = $request->input('note_bsc_update');
-      $image_time = $request->input('txtImageOld') ? $request->input('txtImageOld') : '';
-      $day_leave_from = $request->input('day_leave_from');
-      $day_leave_to = $request->input('day_leave_to');
+    $type_of_leave = $request->input('type_of_leave');
+    $id_update = $request->input('id_update');
+    $note_bsc = $request->input('note_bsc_update');
+    $image_time = $request->input('txtImageOld') ? $request->input('txtImageOld') : '';
+    $day_leave_from = $request->input('day_leave_from');
+    $day_leave_to = $request->input('day_leave_to');
 
-      if ($day_leave_from > $day_leave_to) {
-          return redirect()->back()->with('error', 'From date cannot be greater than to date');
+    if ($day_leave_from > $day_leave_to) {
+      return redirect()->back()->with('error', 'From date cannot be greater than to date');
+    }
+
+    $data_check = [
+      "staff_id" => $user->id,
+      'day_leave_from' => $day_leave_from,
+      'day_leave_to' => $day_leave_to
+    ];
+
+    $response = Http::post('http://localhost:8888/leave-other/check-list-time-leave', $data_check);
+    $time_leave_exists = json_decode($response->body(), true);
+
+    if (count($time_leave_exists['data']) > 0) {
+      return redirect()->back()->with('error', 'There is already a supplementary work or annual leave registration for the days you have registered! Please try again');
+    }
+
+    if ($type_of_leave == 6 or $type_of_leave == 7) {
+      $day_from_check = $day_leave_from;
+      if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
+        return redirect()->back()->with('error', 'Cannot register leave containing Saturday/Sunday! Please adjust');
       }
-
-      $data_check = [
-          "staff_id" => $user->id,
-          'day_leave_from' => $day_leave_from,
-          'day_leave_to' => $day_leave_to
-      ];
-
-      $response = Http::post('http://localhost:8888/leave-other/check-list-time-leave', $data_check);
-      $time_leave_exists = json_decode($response->body(), true);
-
-      if (count($time_leave_exists['data']) > 0) {
-          return redirect()->back()->with('error', 'There is already a supplementary work or annual leave registration for the days you have registered! Please try again');
+      while ($day_from_check <= $day_leave_to) {
+        if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
+          return redirect()->back()->with('error', 'Cannot register leave containing Saturday/Sunday! Please adjust');
+        }
+        $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
       }
+    }
 
-      if ($type_of_leave == 6 or $type_of_leave == 7) {
-          $day_from_check = $day_leave_from;
-          if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
-              return redirect()->back()->with('error', 'Cannot register leave containing Saturday/Sunday! Please adjust');
-          }
-          while ($day_from_check <= $day_leave_to) {
-              if (date('w', strtotime($day_from_check)) == 6 or date('w', strtotime($day_from_check)) == 0) {
-                  return redirect()->back()->with('error', 'Cannot register leave containing Saturday/Sunday! Please adjust');
-              }
-              $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
-          }
+    // Validate day of other leave
+    switch ($type_of_leave) {
+      case '2':
+        $origin = new DateTime($day_leave_from);
+        $target = new DateTime($day_leave_to);
+        $interval = $origin->diff($target);
+        if ($interval->format('%a') > 32) {
+          return redirect()->back()->with('error', 'Unpaid leave can only be registered for a maximum of 31 days');
+        }
+        break;
+      case '3':
+        $origin = new DateTime($day_leave_from);
+        $target = new DateTime($day_leave_to);
+        $interval = $origin->diff($target);
+        if ($interval->format('%a') > 2) {
+          return redirect()->back()->with('error', 'Short-term sick leave can only be registered for a maximum of 3 days');
+        }
+        break;
+      case '4':
+        $origin = new DateTime($day_leave_from);
+        $target = new DateTime($day_leave_to);
+        $interval = $origin->diff($target);
+        if ($interval->format('%a') > 32) {
+          return redirect()->back()->with('error', 'Long-term sick leave can only be registered for a maximum of 31 days');
+        }
+        break;
+      case '5':
+        $origin = new DateTime($day_leave_from);
+        $target = new DateTime($day_leave_to);
+        $interval = $origin->diff($target);
+        if ($interval->format('%a') > 184) {
+          return redirect()->back()->with('error', 'Maternity leave can only be registered for a maximum of 6 months');
+        }
+        break;
+      case '6':
+        $origin = new DateTime($day_leave_from);
+        $target = new DateTime($day_leave_to);
+        $interval = $origin->diff($target);
+        if ($interval->format('%a') > 2) {
+          return redirect()->back()->with('error', 'Marriage leave can only be registered for a maximum of 3 days');
+        }
+        break;
+      case '7':
+        $origin = new DateTime($day_leave_from);
+        $target = new DateTime($day_leave_to);
+        $interval = $origin->diff($target);
+        if ($interval->format('%a') > 2) {
+          return redirect()->back()->with('error', 'Bereavement leave can only be registered for a maximum of 3 days');
+        }
+        break;
+      default:
+        break;
+    }
+
+    if (strlen($note_bsc) > 300) {
+      return redirect()->back()->with('error', 'The reason cannot exceed 300 characters');
+    }
+
+    $is_approved = 0;
+    if ($user->is_manager == 1) {
+      $is_approved = 2;
+    }
+
+    // Photo
+    $now = Carbon::now();
+
+    if (request()->hasFile('image_leave')) {
+      // Generate a random name for the image
+      $file_name_random = function ($key) {
+        $ext = request()->file($key)->getClientOriginalExtension();
+        $str_random = (string)Str::uuid();
+
+        return $str_random . '.' . $ext;
+      };
+
+      $image = $file_name_random('image_leave');
+      if (request()->file('image_leave')->move('./images/other_leave/' . $now->format('dmY') . '/', $image)) {
+        // Assign the image path to the model to save
+        $image_time = '/images/other_leave/' . $now->format('dmY') . '/' . $image;
       }
+    }
 
-      // Validate day of other leave
-      switch ($type_of_leave) {
-          case '2':
-              $origin = new DateTime($day_leave_from);
-              $target = new DateTime($day_leave_to);
-              $interval = $origin->diff($target);
-              if ($interval->format('%a') > 32) {
-                  return redirect()->back()->with('error', 'Unpaid leave can only be registered for a maximum of 31 days');
-              }
-              break;
-          case '3':
-              $origin = new DateTime($day_leave_from);
-              $target = new DateTime($day_leave_to);
-              $interval = $origin->diff($target);
-              if ($interval->format('%a') > 2) {
-                  return redirect()->back()->with('error', 'Short-term sick leave can only be registered for a maximum of 3 days');
-              }
-              break;
-          case '4':
-              $origin = new DateTime($day_leave_from);
-              $target = new DateTime($day_leave_to);
-              $interval = $origin->diff($target);
-              if ($interval->format('%a') > 32) {
-                  return redirect()->back()->with('error', 'Long-term sick leave can only be registered for a maximum of 31 days');
-              }
-              break;
-          case '5':
-              $origin = new DateTime($day_leave_from);
-              $target = new DateTime($day_leave_to);
-              $interval = $origin->diff($target);
-              if ($interval->format('%a') > 184) {
-                  return redirect()->back()->with('error', 'Maternity leave can only be registered for a maximum of 6 months');
-              }
-              break;
-          case '6':
-              $origin = new DateTime($day_leave_from);
-              $target = new DateTime($day_leave_to);
-              $interval = $origin->diff($target);
-              if ($interval->format('%a') > 2) {
-                  return redirect()->back()->with('error', 'Marriage leave can only be registered for a maximum of 3 days');
-              }
-              break;
-          case '7':
-              $origin = new DateTime($day_leave_from);
-              $target = new DateTime($day_leave_to);
-              $interval = $origin->diff($target);
-              if ($interval->format('%a') > 2) {
-                  return redirect()->back()->with('error', 'Bereavement leave can only be registered for a maximum of 3 days');
-              }
-              break;
-          default:
-              break;
-      }
+    $data_request = [
+      'id_update' => $id_update,
+      "staff_id" => $user->id,
+      'type_leave' => $type_of_leave,
+      'day_leave_from' => $day_leave_from,
+      'day_leave_to' => $day_leave_to,
+      'image' => $image_time,
+      'note' => $note_bsc,
+      'is_approved' => $is_approved,
+      'created_at' => date("Y-m-d")
+    ];
 
-      if (strlen($note_bsc) > 300) {
-          return redirect()->back()->with('error', 'The reason cannot exceed 300 characters');
-      }
+    $response = Http::post('http://localhost:8888/leave-other/add', $data_request);
+    $body = json_decode($response->body(), true);
 
-      $is_approved = 0;
-      if ($user->is_manager == 1) {
-          $is_approved = 2;
-      }
-
-      // Photo
-      $now = Carbon::now();
-
-      if (request()->hasFile('image_leave')) {
-          // Generate a random name for the image
-          $file_name_random = function ($key) {
-              $ext = request()->file($key)->getClientOriginalExtension();
-              $str_random = (string)Str::uuid();
-
-              return $str_random . '.' . $ext;
-          };
-
-          $image = $file_name_random('image_leave');
-          if (request()->file('image_leave')->move('./images/other_leave/' . $now->format('dmY') . '/', $image)) {
-              // Assign the image path to the model to save
-              $image_time = '/images/other_leave/' . $now->format('dmY') . '/' . $image;
-          }
-      }
-
-      $data_request = [
-          'id_update' => $id_update,
-          "staff_id" => $user->id,
-          'type_leave' => $type_of_leave,
-          'day_leave_from' => $day_leave_from,
-          'day_leave_to' => $day_leave_to,
-          'image' => $image_time,
-          'note' => $note_bsc,
-          'is_approved' => $is_approved,
-          'created_at' => date("Y-m-d")
-      ];
-
-      $response = Http::post('http://localhost:8888/leave-other/add', $data_request);
-      $body = json_decode($response->body(), true);
-
-      if ($body['message'] == "Save success") {
-          return redirect()->back()->with('success', 'Edit successful! Please wait for approval');
-      } else if ($body['data'] == "Added time") {
-          return redirect()->back()->with('error', 'Failed to edit leave registration! You have already worked and logged in on the days you registered for leave! Please adjust');
-      } else if ($body['data'] == "Duplicate leave") {
-          return redirect()->back()->with('error', 'Failed to edit leave registration! You cannot register overlapping leaves! Please adjust');
-      } else {
-          return redirect()->back()->with('error', 'Failed to edit leave registration!');
-      }
+    if ($body['message'] == "Save success") {
+      return redirect()->back()->with('success', 'Edit successful! Please wait for approval');
+    } else if ($body['data'] == "Added time") {
+      return redirect()->back()->with('error', 'Failed to edit leave registration! You have already worked and logged in on the days you registered for leave! Please adjust');
+    } else if ($body['data'] == "Duplicate leave") {
+      return redirect()->back()->with('error', 'Failed to edit leave registration! You cannot register overlapping leaves! Please adjust');
+    } else {
+      return redirect()->back()->with('error', 'Failed to edit leave registration!');
+    }
   }
 
 
@@ -1237,47 +1239,47 @@ class TimeleaveController extends Controller
 
   public function detailOtherLeaveApprove(Request $request)
   {
-      $id = $request->input('id');
-  
-      $data_request = [
-          "id" => $id
-      ];
-  
-      $response = Http::get('http://localhost:8888/leave-other/detail-time-staff-approve', $data_request);
-      $body = json_decode($response->body(), true);
-  
-      if ($body['data'][0][3] == 2) {
-          $type_leave = 'Unpaid Leave';
-      } else if ($body['data'][0][3] == 3) {
-          $type_leave = 'Short-term Sick Leave';
-      } else if ($body['data'][0][3] == 4) {
-          $type_leave = 'Long-term Sick Leave';
-      } else if ($body['data'][0][3] == 5) {
-          $type_leave = 'Maternity Leave';
-      } else if ($body['data'][0][3] == 6) {
-          $type_leave = 'Marriage Leave';
-      } else if ($body['data'][0][3] == 7) {
-          $type_leave = 'Funeral Leave';
-      }
-  
-      if ($body['data'][0][5] == 1) {
-          $approved = '
+    $id = $request->input('id');
+
+    $data_request = [
+      "id" => $id
+    ];
+
+    $response = Http::get('http://localhost:8888/leave-other/detail-time-staff-approve', $data_request);
+    $body = json_decode($response->body(), true);
+
+    if ($body['data'][0][3] == 2) {
+      $type_leave = 'Unpaid Leave';
+    } else if ($body['data'][0][3] == 3) {
+      $type_leave = 'Short-term Sick Leave';
+    } else if ($body['data'][0][3] == 4) {
+      $type_leave = 'Long-term Sick Leave';
+    } else if ($body['data'][0][3] == 5) {
+      $type_leave = 'Maternity Leave';
+    } else if ($body['data'][0][3] == 6) {
+      $type_leave = 'Marriage Leave';
+    } else if ($body['data'][0][3] == 7) {
+      $type_leave = 'Funeral Leave';
+    }
+
+    if ($body['data'][0][5] == 1) {
+      $approved = '
                   Approved by Director
               ';
-      } else if ($body['data'][0][5] == 2) {
-          $approved = '
+    } else if ($body['data'][0][5] == 2) {
+      $approved = '
                   Approved by Manager
               ';
-      } else {
-          $approved = '
+    } else {
+      $approved = '
                   Not Approved
               ';
-      }
-  
-      $html = "<input type='hidden' name='id' value='" . $id . "'>";
-      $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Employee Leave Request</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
-      $html .= '<span aria-hidden="true">&times;</span></button></div>';
-      $html .= '
+    }
+
+    $html = "<input type='hidden' name='id' value='" . $id . "'>";
+    $html .= '<div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">Employee Leave Request</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+    $html .= '<span aria-hidden="true">&times;</span></button></div>';
+    $html .= '
               <div class="modal-body">
                   <div class="form-group row">
                       <label class="col-lg-3 col-form-label">Employee Name:</label>
@@ -1349,11 +1351,11 @@ class TimeleaveController extends Controller
                   });
               </script>
           ';
-  
-      echo $html;
-      die;
+
+    echo $html;
+    die;
   }
-  
+
 
   public function approvedTimeLeave(Request $request)
   {
@@ -1423,15 +1425,44 @@ class TimeleaveController extends Controller
     $date = $year . '-' . $month . '-' . '01';
     $data_request = ['y_m' => $date];
 
+    $response = Http::get('http://localhost:8888/department/list', []);
+    $body = json_decode($response->body(), true);
+    $departments = [];
+    if ($body['isSuccess']) {
+      $departments = $body['data'];
+    }
+    $response = Http::get('http://localhost:8888/staff/list');
+    $body = json_decode($response->body(), true);
+    $staffs = $body['data'];
+
     $response = Http::get('http://localhost:8888/time-leave/get-all-staff-time', $data_request);
     $body = json_decode($response->body(), true);
 
     $response = Http::get('http://localhost:8888/time-leave/summary-staff-time', $data_request);
     $summary = json_decode($response->body(), true);
 
+    $stfList = [];
+    //process all staff not in list
+    foreach ($staffs as $staff) {
+      $exists = false; // Biến kiểm tra nếu staff_id tồn tại
+      foreach ($summary["data"] as $stf) {
+        if ($staff["id"] == $stf["staff_id"]) {
+          $exists = true;
+          break;
+        }
+      }
+
+      if (!$exists) {
+        // Thêm phần tử vào $stfList nếu staff_id không tồn tại
+        $stfList[] = $staff;
+      }
+    }
+
     return view('main.time_leave.all_staff_time')
       ->with('data', $body['data'])
       ->with('summary', $summary['data'])
+      ->with('department', $departments)
+      ->with('staffNotCheck',$stfList)
       ->with('year', $year)
       ->with('month', $month)
       ->with('y_m', $date)
@@ -1518,96 +1549,96 @@ class TimeleaveController extends Controller
 
   public function getDetailTimeLeave(Request $request)
   {
-      $staff_id = $request->input('staff_id');
-      $month = $request->input('month');
-      $year = $request->input('year');
-      if (!$month) {
-          $month = date("m");
-      }
-      if (!$year) {
-          $year = date("Y");
-      }
-      $date = $year . '-' . $month . '-' . '01';
-      $data_request = ['y_m' => $date];
-  
-      $data_request = ['month_get' => $date, 'staff_id' => $staff_id];
-  
-      $response = Http::get('http://localhost:8888/time-leave/detail-time-leave-all', $data_request);
-      $body = json_decode($response->body(), true);
-  
-      $html = "";
-      foreach ($body['data'] as $time_leave) {
-          if ($time_leave['staff_id'] == $staff_id) {
-              if ($time_leave['special_date_id'] !== null) $color = "#ffe7e7";
-              else if ($time_leave['day_of_week'] == 1 or $time_leave['day_of_week'] == 7) $color = "#d3ffd4";
-              else $color = "";
-  
-              $time_leave['is_manager'] == 1 ? $manager = "Manager" : $manager = "Employee";
-              $time_leave['day_of_week'] !== 1 ? $day_of_week = "Day " . $time_leave['day_of_week'] : $day_of_week = "Sunday";
-              $time_leave['day_of_week'] == null ? $day_of_week = "" : $day_of_week = $day_of_week;
-              $time_leave['special_date_id'] !== null ? $day_of_week .= "(Holiday)" : '';
-              $time_leave['time'] == "08:00:00" ? $time = '1' : $time = '0.5';
-              $time_leave['time'] == null ? $time = '0' : $time = $time;
-              $time_leave['time'] == "08:00:00" ? $time_multi = 1 * $time_leave['multiply'] . '' : $time_multi = 0.5 * $time_leave['multiply'];
-              $time_leave['time'] == null ? $time_multi = '0' : $time_multi = $time_multi;
-  
-              switch ($time_leave['type']) {
-                  case '1':
-                      $type = "Leave Registration (Paid Leave)";
-                      break;
-                  case '2':
-                      $type = "Leave Registration (Unpaid Leave)";
-                      break;
-                  case '3':
-                      $type = "Leave Registration (Short-term Sick Leave)";
-                      break;
-                  case '4':
-                      $type = "Leave Registration (Long-term Sick Leave)";
-                      break;
-                  case '5':
-                      $type = "Leave Registration (Maternity Leave)";
-                      break;
-                  case '6':
-                      $type = "Leave Registration (Marriage Leave)";
-  
-                      $arr_from_to = explode(' to ', $time_leave['day_time_leave']);
-  
-                      $day_from_check = $arr_from_to[0];
-                      $time = 0;
-                      $time_multi = 0;
-                      while ($day_from_check <= $arr_from_to[1]) {
-                          $time += 1;
-                          $time_multi += 1;
-                          $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
-                      }
-                      break;
-                  case '7':
-                      $type = "Leave Registration (Funeral Leave)";
-  
-                      $arr_from_to = explode(' to ', $time_leave['day_time_leave']);
-  
-                      $day_from_check = $arr_from_to[0];
-                      $time = 0;
-                      $time_multi = 0;
-                      while ($day_from_check <= $arr_from_to[1]) {
-                          $time += 1;
-                          $time_multi += 1;
-                          $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
-                      }
-                      break;
-                  default:
-                      $type = "Additional Attendance";
-                      break;
-              }
-  
-              if ($time_leave['is_approved'] == 0)
-                  $approve = '<span class="badge badge-warning">Not approved</span>';
-              elseif ($time_leave['is_approved'] == 2)
-                  $approve = '<span class="badge badge-success">Manager approved</span>';
-              else
-                  $approve = '<span class="badge badge-primary">Director approved</span>';
-  
-              $html .= "
+    $staff_id = $request->input('staff_id');
+    $month = $request->input('month');
+    $year = $request->input('year');
+    if (!$month) {
+      $month = date("m");
+    }
+    if (!$year) {
+      $year = date("Y");
+    }
+    $date = $year . '-' . $month . '-' . '01';
+    $data_request = ['y_m' => $date];
+
+    $data_request = ['month_get' => $date, 'staff_id' => $staff_id];
+
+    $response = Http::get('http://localhost:8888/time-leave/detail-time-leave-all', $data_request);
+    $body = json_decode($response->body(), true);
+
+    $html = "";
+    foreach ($body['data'] as $time_leave) {
+      if ($time_leave['staff_id'] == $staff_id) {
+        if ($time_leave['special_date_id'] !== null) $color = "#ffe7e7";
+        else if ($time_leave['day_of_week'] == 1 or $time_leave['day_of_week'] == 7) $color = "#d3ffd4";
+        else $color = "";
+
+        $time_leave['is_manager'] == 1 ? $manager = "Manager" : $manager = "Employee";
+        $time_leave['day_of_week'] !== 1 ? $day_of_week = "Day " . $time_leave['day_of_week'] : $day_of_week = "Sunday";
+        $time_leave['day_of_week'] == null ? $day_of_week = "" : $day_of_week = $day_of_week;
+        $time_leave['special_date_id'] !== null ? $day_of_week .= "(Holiday)" : '';
+        $time_leave['time'] == "08:00:00" ? $time = '1' : $time = '0.5';
+        $time_leave['time'] == null ? $time = '0' : $time = $time;
+        $time_leave['time'] == "08:00:00" ? $time_multi = 1 * $time_leave['multiply'] . '' : $time_multi = 0.5 * $time_leave['multiply'];
+        $time_leave['time'] == null ? $time_multi = '0' : $time_multi = $time_multi;
+
+        switch ($time_leave['type']) {
+          case '1':
+            $type = "Leave Registration (Paid Leave)";
+            break;
+          case '2':
+            $type = "Leave Registration (Unpaid Leave)";
+            break;
+          case '3':
+            $type = "Leave Registration (Short-term Sick Leave)";
+            break;
+          case '4':
+            $type = "Leave Registration (Long-term Sick Leave)";
+            break;
+          case '5':
+            $type = "Leave Registration (Maternity Leave)";
+            break;
+          case '6':
+            $type = "Leave Registration (Marriage Leave)";
+
+            $arr_from_to = explode(' đến ', $time_leave['day_time_leave']);
+
+            $day_from_check = $arr_from_to[0];
+            $time = 0;
+            $time_multi = 0;
+            while ($day_from_check <= $arr_from_to[1]) {
+              $time += 1;
+              $time_multi += 1;
+              $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
+            }
+            break;
+          case '7':
+            $type = "Leave Registration (Funeral Leave)";
+
+            $arr_from_to = explode(' đến ', $time_leave['day_time_leave']);
+
+            $day_from_check = $arr_from_to[0];
+            $time = 0;
+            $time_multi = 0;
+            while ($day_from_check <= $arr_from_to[1]) {
+              $time += 1;
+              $time_multi += 1;
+              $day_from_check = date('Y-m-d', strtotime($day_from_check . ' + 1 days'));
+            }
+            break;
+          default:
+            $type = "Additional Attendance";
+            break;
+        }
+
+        if ($time_leave['is_approved'] == 0)
+          $approve = '<span class="badge badge-warning">Not approved</span>';
+        elseif ($time_leave['is_approved'] == 2)
+          $approve = '<span class="badge badge-success">Manager approved</span>';
+        else
+          $approve = '<span class="badge badge-primary">Director approved</span>';
+
+        $html .= "
                   <tr style='background-color: " . $color . "'>
                       <td>" . $time_leave['firstname'] . ' ' . $time_leave['lastname'] . "</td>
                       <td>" . $time_leave['name_vn'] . "</td>
@@ -1619,30 +1650,30 @@ class TimeleaveController extends Controller
                       <td>" . $time_multi . "</td>
                       <td>" . $approve . "</td>
                   </tr>";
-          }
       }
-  
-      echo $html;
-      die;
+    }
+
+    echo $html;
+    die;
   }
-  
+
 
   public function doneLeave(Request $request)
   {
-      $from_date = $request->input('from_date');
-      $to_date = $request->input('to_date');
-  
-      if ($from_date > $to_date) {
-          return redirect()->back()->with('error', 'From date cannot be greater than to date! Please try again');
-      }
-  
-      $data_request = ['from_date' => $from_date, 'to_date' => $to_date];
-  
-      Http::get('http://localhost:8888/time-leave/done-leave', $data_request);
-  
-      return redirect()->back()->with('success', 'Leave closed successfully');
+    $from_date = $request->input('from_date');
+    $to_date = $request->input('to_date');
+
+    if ($from_date > $to_date) {
+      return redirect()->back()->with('error', 'From date cannot be greater than to date! Please try again');
+    }
+
+    $data_request = ['from_date' => $from_date, 'to_date' => $to_date];
+
+    Http::get('http://localhost:8888/time-leave/done-leave', $data_request);
+
+    return redirect()->back()->with('success', 'Leave closed successfully');
   }
-  
+
 
   public function getAllTimeInMonth(Request $request)
   {

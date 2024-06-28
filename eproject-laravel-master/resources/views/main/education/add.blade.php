@@ -87,7 +87,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Employee ID:(*)</label>
-                                        <select class="form-control" name="txtStaffID" required>
+                                        <select class="form-control select-search" name="txtStaffID" required>
                                             @foreach($data_staff as $staff)
                                                 <option value="{{ $staff['id'] }}">{{ $staff['lastname'] }} {{ $staff['firstname'] }} || {{ $staff['id'] }}</option>
                                             @endforeach
@@ -200,4 +200,11 @@
             });
         });
     </script>
+
+<script>
+    $(document).ready(function() {
+        $('.select-search').select2();
+    });
+</script>
+
 @endsection

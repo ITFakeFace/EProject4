@@ -16,13 +16,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
-
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/salary")
 public class SalaryController {
-
+    Logger logger = Logger.getLogger(SalaryController.class.getName());
     @Autowired
     private TimeLeaveService service;
 
@@ -63,31 +65,31 @@ public class SalaryController {
     @GetMapping(path = "/list")
     public ResponseEntity<Object> listSalary() {
         List<Salary> data = salaryService.findAll();
-        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Gửi yêu cầu thành công", data);
+        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Requested", data);
     }
 
     @GetMapping(path = "/details")
     public ResponseEntity<Object> salaryDetails(@RequestParam int id) {
         List<SalaryDetail> data = salaryDetailService.findBySalaryId(id);
-        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Gửi yêu cầu thành công", data);
+        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Requested", data);
     }
 
     @GetMapping(path = "/detail")
     public ResponseEntity<Object> salaryDetail(@RequestParam int id) {
         SalaryDetail data = salaryDetailService.findById(id);
-        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Gửi yêu cầu thành công", data);
+        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Requested", data);
     }
 
     @GetMapping(path = "/find-salary")
     public ResponseEntity<Object> findSalary(@RequestParam int id) {
         Salary data = salaryService.findById(id);
-        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Gửi yêu cầu thành công", data);
+        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Requested", data);
     }
 
     @GetMapping(path = "/find-salary-by-staff")
     public ResponseEntity<Object> findSalaryBySaff(@RequestParam int staff_id) {
         List<SalaryDetail> data = salaryDetailService.findByStaffId(staff_id);
-        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Gửi yêu cầu thành công", data);
+        return ResponseHandler.generateResponse(HttpStatus.OK, true, "Requested", data);
     }
 
     @GetMapping(path = "/delete")
@@ -95,12 +97,14 @@ public class SalaryController {
         boolean result = salaryService.deleteSalaryById(id);
         if (result) {
             boolean resultDeleteChild = salaryDetailService.deleteBySalaryId(id);
+            System.out.println(resultDeleteChild);
             if (resultDeleteChild) {
-                return ResponseHandler.generateResponse(HttpStatus.OK, true, "Xóa thành công", result);
+                return ResponseHandler.generateResponse(HttpStatus.OK, true, "Delete Succeeded", result);
             }
-            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Xóa chi tiết tính lương thất bại", resultDeleteChild);
+            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Salary Details cannot delete",
+                    resultDeleteChild);
         } else {
-            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Xóa thất bại", result);
+            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Delete Failed", result);
         }
     }
 
@@ -110,65 +114,108 @@ public class SalaryController {
         String status = body.get("status");
         boolean result = salaryService.updateStatus(id, status);
         if (result) {
-            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Thay đổi trạng thái thành công", true);
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Status change successfully", true);
         }
-        return ResponseHandler.generateResponse(HttpStatus.OK, false, "Thay đổi trạng thái thất bại", false);
+        return ResponseHandler.generateResponse(HttpStatus.OK, false, "Status change fail", false);
     }
 
     @PostMapping(path = "/calculated")
     public ResponseEntity<Object> calculatedSalary(@RequestBody Map<String, Object> body) {
         try {
-            String from_date = body.get("from_date").toString();
-            String to_date = body.get("to_date").toString();
+            String[] monthAndYear = body.get("month").toString().split("-");
+            LocalDate currentDate = LocalDate.now();
+
+            int currentMonth = currentDate.getMonthValue();
+            int currentYear = currentDate.getYear();
+
+            int month = Integer.parseInt(monthAndYear[1]);
+            int year = Integer.parseInt(monthAndYear[0]);
+
+            YearMonth currentYearMonth = YearMonth.of(currentYear, currentMonth);
+            YearMonth shouldCompareYearMonth = YearMonth.of(year, month);
+
+            if (currentYearMonth.isBefore(shouldCompareYearMonth)) {
+                return ResponseHandler.generateResponse(HttpStatus.OK, false,
+                        "Cannot calculate future salary", null);
+            } else if (currentYearMonth.isAfter(shouldCompareYearMonth)) {
+                return ResponseHandler.generateResponse(HttpStatus.OK, false,
+                        "Cannot calculate past salary", null);
+            }
+
+            String[] dateRange = this.getFirstAndLastDay(month, year);
+
+            String from_date = dateRange[0];
+            String to_date = dateRange[1];
 
             Date from = new SimpleDateFormat("yyyy-MM-dd").parse(from_date);
             Date to = new SimpleDateFormat("yyyy-MM-dd").parse(to_date);
 
             Date from_date_calculated = dateSqlFormat.parse(from_date);
             Calendar calendar = new GregorianCalendar();
+
             calendar.setTime(from);
-            int standard_days = this.calculateNormalDays(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+            int standard_days = this.calculateNormalDays(month, year);
 
             Salary salarySuccess = this.checkHaveFromDateAndToDateSuccess(from_date, to_date);
+
             if (salarySuccess != null) {
-                return ResponseHandler.generateResponse(HttpStatus.OK, false, "Đã khóa bảng lương thời gian này không thể tính lại", null);
+                return ResponseHandler.generateResponse(HttpStatus.OK, false,
+                        "Payroll Lists that are locked cannot be re - calculate", null);
             }
 
             // Kiểm tra xem thời gian from và to có bị trùng vào lịch đã khóa trước đó không
-            boolean checkHaveFromDate = this.checkCalculatedSalaryDate(from_date);
-            boolean checkHaveToDate = this.checkCalculatedSalaryDate(to_date);
+            boolean checkFromDateExist = this.checkCalculatedSalaryDate(from_date);
+            boolean checkToDateSalaries = this.checkCalculatedSalaryDate(to_date);
 
-            if (checkHaveFromDate || checkHaveToDate) {
-                return ResponseHandler.generateResponse(HttpStatus.OK, false, "Thời gian bị trùng với dữ liệu đã khóa lương trước đó", null);
+            if (checkFromDateExist || checkToDateSalaries) {
+                return ResponseHandler.generateResponse(HttpStatus.OK, false,
+                        "Duplicated time range", null);
             }
 
             Salary salaryData = this.checkSimilarCalculatedSalaryDate(from_date, to_date);
             if (salaryData == null) {
                 // nếu không bị trùng thì tạo mới
-                salaryData = salaryService.save(new Salary(dateSqlFormat.parse(from_date), dateSqlFormat.parse(to_date), standard_days)); // tạo data cho salary tính lương khoảng thời gian này
+                salaryData = salaryService
+                        .save(new Salary(dateSqlFormat.parse(from_date), dateSqlFormat.parse(to_date), standard_days)); // tạo
+                                                                                                                        // data
+                                                                                                                        // cho
+                                                                                                                        // salary
+                                                                                                                        // tính
+                                                                                                                        // lương
+                                                                                                                        // khoảng
+                                                                                                                        // thời
+                                                                                                                        // gian
+                // này
             }
 
-            ArrayList listStaffIdCalculated = (ArrayList) body.get("staffs"); // muốn tính các nhân viên nào trong danh sách
+            ArrayList listStaffIdCalculated = (ArrayList) body.get("staffs"); // muốn tính các nhân viên nào trong danh
+                                                                              // sách
 
             // chấm công làm bình thường (done)
             // http://localhost:8888/time-leave/get-all-staff-time-from-to?from_date=2021-03-01&to_date=2021-03-30
             ArrayList<Map<String, Object>> timekeepings = service.getAllStaffTimeFromTo(from_date, to_date);
             HashMap<String, HashMap<String, Object>> staff_timekeeping = new HashMap(); // staff_id, timekeeping
-            staff_timekeeping = this.calculateStaffSalary(from_date_calculated, staff_timekeeping, timekeepings, "check_in_day_y_m_d", listStaffIdCalculated, false);
+            staff_timekeeping = this.calculateStaffSalary(from_date_calculated, staff_timekeeping, timekeepings,
+                    "check_in_day_y_m_d", listStaffIdCalculated, false);
 
             // lấy data phần chấm công bổ xung
-            // vì có trường hợp duyệt chậm thì lấy day_approved của ngày duyệt để bổ xung công
+            // vì có trường hợp duyệt chậm thì lấy day_approved của ngày duyệt để bổ xung
+            // công
             // http://localhost:8888/time-leave/get-time-leave-from-to?from_date=2021-03-01&to_date=2021-03-30
-            List<Map<String, Object>> timekeepings_forgot = salaryService.getAdditionalTimekeepingFromTo(from_date, to_date);
-            staff_timekeeping = this.calculateStaffSalary(from_date_calculated, staff_timekeeping, timekeepings_forgot, "day_time_leave", listStaffIdCalculated, true);
+            List<Map<String, Object>> timekeepings_forgot = salaryService.getAdditionalTimekeepingFromTo(from_date,
+                    to_date);
+            staff_timekeeping = this.calculateStaffSalary(from_date_calculated, staff_timekeeping, timekeepings_forgot,
+                    "day_time_leave", listStaffIdCalculated, true);
 
             // nghỉ lễ được tính công
             ArrayList<Map<String, Object>> timekeeping_special_date = timeSpecialService.GetTimeSepcialFromTo(from, to);
-            staff_timekeeping = this.calculateStaffSalary(from_date_calculated, staff_timekeeping, timekeeping_special_date, "day_time_special", listStaffIdCalculated, true);
+            staff_timekeeping = this.calculateStaffSalary(from_date_calculated, staff_timekeeping,
+                    timekeeping_special_date, "day_time_special", listStaffIdCalculated, true);
 
             // các loại phép được cộng công
             ArrayList<Map<String, Object>> leaveOtherDate = leaveOtherService.GetLeaveOtherFromTo(from_date, to_date);
-            staff_timekeeping = this.calculateStaffSalary(from_date_calculated, staff_timekeeping, leaveOtherDate, "day_time_special", listStaffIdCalculated, true);
+            staff_timekeeping = this.calculateStaffSalary(from_date_calculated, staff_timekeeping, leaveOtherDate,
+                    "day_time_special", listStaffIdCalculated, true);
 
             for (Map.Entry<String, HashMap<String, Object>> entry : staff_timekeeping.entrySet()) {
                 TimeWorking timeWorking = (TimeWorking) entry.getValue().get("timekeeping");
@@ -207,7 +254,8 @@ public class SalaryController {
                 if (contract != null) {
                     salaryDetail.setBaseSalaryContract(contract.getBaseSalary());
                 }
-                HashMap<String, HashMap<String, Object>> dataOptions = (HashMap<String, HashMap<String, Object>>) body.get("options");
+                HashMap<String, HashMap<String, Object>> dataOptions = (HashMap<String, HashMap<String, Object>>) body
+                        .get("options");
                 List<HashMap<String, Object>> allowances = new ArrayList();
                 List<HashMap<String, Object>> insurances = new ArrayList();
                 List<HashMap<String, Object>> taxs = new ArrayList();
@@ -235,11 +283,15 @@ public class SalaryController {
                 salaryDetail.setAllowanceDetails(gson.toJson(allowances));
                 salaryDetail.setInsuranceDetails(gson.toJson(insurances));
                 salaryDetail.setTaxDetails(gson.toJson(taxs));
-                salaryDetail.setDetails(gson.toJson(timeWorking.getDetails())); // ép về json để lưu 
-                double incomeTax = this.incomeTax(salaryDetail.getSalary(), salaryDetail.getSalaryOt(), allowances); // thu nhập chịu thuế
+                salaryDetail.setDetails(gson.toJson(timeWorking.getDetails())); // ép về json để lưu
+                double incomeTax = this.incomeTax(salaryDetail.getSalary(), salaryDetail.getSalaryOt(), allowances); // thu
+                                                                                                                     // nhập
+                                                                                                                     // chịu
+                                                                                                                     // thuế
                 salaryDetail.setIncomeTax(incomeTax); // thu nhập chịu thuế
 
-                double taxableIncome = this.taxableIncome(incomeTax, salaryDetail.getTotalInsurance(), salaryDetail.getTotalTax()); // thu nhập tính thuế
+                double taxableIncome = this.taxableIncome(incomeTax, salaryDetail.getTotalInsurance(),
+                        salaryDetail.getTotalTax()); // thu nhập tính thuế
                 salaryDetail.setTaxableIncome(taxableIncome); // thu nhập tính thuế
 
                 // thuế thu nhập cá nhân
@@ -247,13 +299,15 @@ public class SalaryController {
                 salaryDetail.setPersonalTax(personalTax);
 
                 // thực nhận
-                double salaryActually = this.salaryActuallyReceived(salaryDetail.getSalary(), salaryDetail.getSalaryOt(), salaryDetail.getTotalAllowance(), salaryDetail.getTotalInsurance(), personalTax);
+                double salaryActually = this.salaryActuallyReceived(salaryDetail.getSalary(),
+                        salaryDetail.getSalaryOt(), salaryDetail.getTotalAllowance(), salaryDetail.getTotalInsurance(),
+                        personalTax);
                 salaryDetail.setSalaryActuallyReceived(salaryActually);
 
                 salaryDetailService.save(salaryDetail);
             }
 
-            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Tính toán hoàn tất", staff_timekeeping);
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Calculating Succeeded", staff_timekeeping);
         } catch (Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.OK, false, e.getMessage(), null);
         }
@@ -344,13 +398,17 @@ public class SalaryController {
         }
     }
 
-    private double salaryActuallyReceived(double salary, double salary_ot, double total_allowance, double total_insurance, double personal_tax) {
+    private double salaryActuallyReceived(double salary, double salary_ot, double total_allowance,
+            double total_insurance, double personal_tax) {
         return salary + salary_ot + total_allowance - total_insurance - personal_tax;
     }
 
-    private HashMap<String, HashMap<String, Object>> calculateStaffSalary(Date date, HashMap<String, HashMap<String, Object>> staff_timekeeping, List<Map<String, Object>> timekeepings, String day_colume, ArrayList listStaffIdCalculated, boolean isSpecialDate) {
+    private HashMap<String, HashMap<String, Object>> calculateStaffSalary(Date date,
+            HashMap<String, HashMap<String, Object>> staff_timekeeping, List<Map<String, Object>> timekeepings,
+            String day_colume, ArrayList listStaffIdCalculated, boolean isSpecialDate) {
         // isSpecialDate true: mặc định là ngày này toàn bộ là nghỉ lễ có công
-        // trường hợp isSpecialDate false: thì phải check coi các loại phép nếu nằm trong đó coi như nghỉ có công
+        // trường hợp isSpecialDate false: thì phải check coi các loại phép nếu nằm
+        // trong đó coi như nghỉ có công
         try {
             Calendar calendar = new GregorianCalendar();
             // lấy data phần chấm công
@@ -372,7 +430,8 @@ public class SalaryController {
                     timeWorking.setTotal_time(0); // mặc định tổng công ban đầu là 0
                     timeWorking.setTotal_salary(0); // set mặc định lương khởi đầu là 0
                     timeWorking.setTotal_salary_ot(0); // set mặc định lương khởi đầu là 0
-                    float total_working_of_day = Float.parseFloat(item.get("number_time").toString()); // công làm việc 1.0 hoặc 0.5
+                    float total_working_of_day = Float.parseFloat(item.get("number_time").toString()); // công làm việc
+                                                                                                       // 1.0 hoặc 0.5
 
                     if (total_working_of_day > 0) {
                         // chưa tồn tại thì add thêm
@@ -384,16 +443,19 @@ public class SalaryController {
                         // tính lương
                         double salary_per_day = this.calculateSalaryPerDay(staff_id_int, date);
                         if (salary_per_day > 0) { // salary > 0 nghĩa là tìm thấy hợp đồng thì mới tính toán
-                            // nếu có tạo hợp đồng rồi thì mới tính lương không thì không add dữ liệu chấm công vào
+                            // nếu có tạo hợp đồng rồi thì mới tính lương không thì không add dữ liệu chấm
+                            // công vào
                             timeWorking.setTotal_time(total_working_of_day);
 
                             double salary_by_one_hour = salary_per_day / 8; // quy ra mỗi giờ bao nhiêu tiền
-                            int multiply_day = Integer.parseInt(item.get("multiply").toString()); // lấy ngày chấm công này x bao nhiêu
+                            int multiply_day = Integer.parseInt(item.get("multiply").toString()); // lấy ngày chấm công
+                                                                                                  // này x bao nhiêu
                             float ot_hours = getHourTime(item.get("ot"));
                             double salary_of_ot_150 = multiply_day == 1 ? salary_by_one_hour * ot_hours * 1.5 : 0;
                             double salary_of_ot_200 = multiply_day == 2 ? salary_by_one_hour * ot_hours * 2 : 0;
                             double salary_of_ot_300 = multiply_day == 3 ? salary_by_one_hour * ot_hours * 3 : 0;
-                            double salary_of_day = multiply_day > 0 ? (salary_by_one_hour * (8 * total_working_of_day)) : 0; // (lương ngày hôm nay = lương 1h * tổng giờ làm)
+                            double salary_of_day = multiply_day > 0 ? (salary_by_one_hour * (8 * total_working_of_day))
+                                    : 0; // (lương ngày hôm nay = lương 1h * tổng giờ làm)
 
                             if (multiply_day <= 0) {
                                 // trường hợp nếu <= 0 nghĩa là không tính lương
@@ -412,9 +474,11 @@ public class SalaryController {
                                 salary_of_ot_300 += (total_ot_time * salary_by_one_hour) * 3;
                             }
                             timeWorking.setTotal_salary(salary_of_day + timeWorking.getTotal_salary());
-                            timeWorking.setTotal_salary_ot(salary_of_ot_150 + salary_of_ot_200 + salary_of_ot_300 + timeWorking.getTotal_salary_ot());
+                            timeWorking.setTotal_salary_ot(salary_of_ot_150 + salary_of_ot_200 + salary_of_ot_300
+                                    + timeWorking.getTotal_salary_ot());
 
-                            // add chi tiết tính lương như thế nào dựa vào hợp đồng nào và số lương của ngày đó dựa vào hợp đồng
+                            // add chi tiết tính lương như thế nào dựa vào hợp đồng nào và số lương của ngày
+                            // đó dựa vào hợp đồng
                             HashMap<String, Object> detail = new HashMap();
                             if (isSpecialDate) {
                                 detail.put("paid_leave", true);
@@ -434,7 +498,8 @@ public class SalaryController {
                             detail.put("type_note", item.get("type_note").toString());
                             detail.put("total_salary_ot", salary_of_ot_150 + salary_of_ot_200 + salary_of_ot_300);
                             detail.put("day_detail", time_str);
-                            detail.put("standard_days", this.calculateNormalDays(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR)));
+                            detail.put("standard_days", this.calculateNormalDays(calendar.get(Calendar.MONTH) + 1,
+                                    calendar.get(Calendar.YEAR)));
                             detail.put("contract", this.detailContract(staff_id_int, time));
                             details.add(detail);
                             timeWorking.setDetails(details);
@@ -445,9 +510,11 @@ public class SalaryController {
                 } else {
                     // nếu đã tồn tại rồi thì bắt đầu cộng thêm số phút
                     HashMap<String, Object> detailTimekeeping = staff_timekeeping.get(staff_id); // lấy timekeeping
-                    TimeWorking timeWorking = (TimeWorking) detailTimekeeping.get("timekeeping"); // lấy object chấm công trong hashmap
+                    TimeWorking timeWorking = (TimeWorking) detailTimekeeping.get("timekeeping"); // lấy object chấm
+                                                                                                  // công trong hashmap
                     List<HashMap<String, Object>> details = timeWorking.getDetails();
-                    float total_working_of_day = Float.parseFloat(item.get("number_time").toString()); // công làm việc 1.0 hoặc 0.5
+                    float total_working_of_day = Float.parseFloat(item.get("number_time").toString()); // công làm việc
+                                                                                                       // 1.0 hoặc 0.5
 
                     if (total_working_of_day > 0) {
                         String time_str = item.get(day_colume).toString() + " " + item.get("time").toString();
@@ -461,13 +528,15 @@ public class SalaryController {
                             timeWorking.setTotal_time(new_time);
 
                             double salary_by_one_hour = salary_per_day / 8; // quy ra mỗi giờ bao nhiêu tiền
-                            int multiply_day = Integer.parseInt(item.get("multiply").toString()); // lấy ngày chấm công này x bao nhiêu
+                            int multiply_day = Integer.parseInt(item.get("multiply").toString()); // lấy ngày chấm công
+                                                                                                  // này x bao nhiêu
 
                             float ot_hours = getHourTime(item.get("ot"));
                             double salary_of_ot_150 = multiply_day == 1 ? salary_by_one_hour * ot_hours * 1.5 : 0;
                             double salary_of_ot_200 = multiply_day == 2 ? salary_by_one_hour * ot_hours * 2 : 0;
                             double salary_of_ot_300 = multiply_day == 3 ? salary_by_one_hour * ot_hours * 3 : 0;
-                            double salary_of_day = multiply_day > 0 ? (salary_by_one_hour * (8 * total_working_of_day)) : 0;
+                            double salary_of_day = multiply_day > 0 ? (salary_by_one_hour * (8 * total_working_of_day))
+                                    : 0;
                             if (multiply_day <= 0) {
                                 // trường hợp nếu <= 0 nghĩa là không tính lương
                                 continue;
@@ -486,9 +555,11 @@ public class SalaryController {
                             }
 
                             timeWorking.setTotal_salary(salary_of_day + timeWorking.getTotal_salary());
-                            timeWorking.setTotal_salary_ot(salary_of_ot_150 + salary_of_ot_200 + salary_of_ot_300 + timeWorking.getTotal_salary_ot());
+                            timeWorking.setTotal_salary_ot(salary_of_ot_150 + salary_of_ot_200 + salary_of_ot_300
+                                    + timeWorking.getTotal_salary_ot());
 
-                            // add chi tiết tính lương như thế nào dựa vào hợp đồng nào và số lương của ngày đó dựa vào hợp đồng
+                            // add chi tiết tính lương như thế nào dựa vào hợp đồng nào và số lương của ngày
+                            // đó dựa vào hợp đồng
                             HashMap<String, Object> detail = new HashMap();
                             if (isSpecialDate) {
                                 detail.put("paid_leave", true);
@@ -508,7 +579,8 @@ public class SalaryController {
                             detail.put("type_note", item.get("type_note").toString());
                             detail.put("total_salary_ot", salary_of_ot_150 + salary_of_ot_200 + salary_of_ot_300);
                             detail.put("day_detail", time_str);
-                            detail.put("standard_days", this.calculateNormalDays(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR)));
+                            detail.put("standard_days", this.calculateNormalDays(calendar.get(Calendar.MONTH) + 1,
+                                    calendar.get(Calendar.YEAR)));
                             detail.put("contract", this.detailContract(staff_id_int, time));
                             details.add(detail);
                             timeWorking.setDetails(details);
@@ -538,7 +610,13 @@ public class SalaryController {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(date);
 
-            int totalDays = calculateNormalDays(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR)); // tính ra số công chuẩn của tháng này
+            int totalDays = calculateNormalDays(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR)); // tính
+                                                                                                                // ra số
+                                                                                                                // công
+                                                                                                                // chuẩn
+                                                                                                                // của
+                                                                                                                // tháng
+                                                                                                                // này
             return contract.getBaseSalary() / totalDays; // lương / tổng công ngày
         } catch (Exception e) {
             return 0;
@@ -586,7 +664,8 @@ public class SalaryController {
         }
     }
 
-    // kiểm tra xem from_date và to_date tạo tính lương có bị dính vào đã tính trước đó hay không
+    // kiểm tra xem from_date và to_date tạo tính lương có bị dính vào đã tính trước
+    // đó hay không
     private boolean checkCalculatedSalaryDate(String date) {
         try {
             return salaryService.checkDateInRange(dateSqlFormat.parse(date));
@@ -605,9 +684,25 @@ public class SalaryController {
 
     private Salary checkHaveFromDateAndToDateSuccess(String fromDate, String toDate) {
         try {
-            return salaryService.checkFromDateAndToDateSuccess(dateSqlFormat.parse(fromDate), dateSqlFormat.parse(toDate));
+            return salaryService.checkFromDateAndToDateSuccess(dateSqlFormat.parse(fromDate),
+                    dateSqlFormat.parse(toDate));
         } catch (ParseException ex) {
             return null;
         }
+    }
+
+    private String[] getFirstAndLastDay(int month, int year) {
+        if (month < 1 || month > 12) {
+            throw new IllegalArgumentException("Month must be between 1 and 12");
+        }
+        YearMonth yearMonth = YearMonth.of(year, month);
+        // Get the first date of the month
+        LocalDate firstDate = yearMonth.atDay(1);
+
+        // Get the last date of the month
+        LocalDate lastDate = yearMonth.atEndOfMonth();
+
+        // Return the dates as strings
+        return new String[] { firstDate.toString(), lastDate.toString() };
     }
 }

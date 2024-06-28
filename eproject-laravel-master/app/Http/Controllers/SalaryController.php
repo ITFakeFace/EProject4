@@ -70,28 +70,9 @@ class SalaryController extends Controller
 
   public function postCalculatedSalary(Request $request)
   {
-    // Documentation: https://laravel.com/docs/8.x/validation#available-validation-rules
-    $rule = [
-      'from_date' => 'required|date_format:Y-m-d',
-      'to_date' => 'required|date_format:Y-m-d|after_or_equal:from_date',
-    ];
-    $message = [
-      'from_date.required' => 'Start date is required',
-      'from_date.date_format' => 'Invalid start date format: YYYY-MM-DD',
-      'to_date.required' => 'End date is required',
-      'to_date.date_format' => 'Invalid end date format: YYYY-MM-DD',
-      'to_date.after_or_equal' => 'End date must be after or equal to start date',
-    ];
+
     $data = $request->all();
-
     $data['staffs'] = array_values($data['staffs']);
-
-    $validate = Validator::make($data, $rule, $message);
-
-    if ($validate->fails()) {
-      return redirect()->back()->withErrors($validate->errors());
-    }
-
     $response = Http::post(config('app.api_url') . '/salary/calculated', $data);
     $body = json_decode($response->body(), false);
     if ($body->isSuccess) {
