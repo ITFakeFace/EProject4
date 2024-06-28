@@ -190,6 +190,7 @@ Route::group(['prefix' => 'auth'], function () {
   Route::get('logout', 'AuthenticateController@getLogout');
 });
 
+//Contract
 Route::group(['prefix' => 'contract'], function () {
   Route::get('list', 'ContractController@getList')->name('getListContract');
   Route::get('create', 'ContractController@getCreate')->name('getCreateContract');
@@ -200,6 +201,7 @@ Route::group(['prefix' => 'contract'], function () {
   Route::get('export-word/{id}', 'ContractController@exportWord')->name('exportWord');
 });
 
+//salary
 Route::group(['prefix' => 'salary'], function () {
   Route::get('list', 'SalaryController@getIndex')->name('getIndexSalary');
   Route::get('my-salary', 'SalaryController@mySalary')->name('mySalary');
@@ -227,7 +229,7 @@ Route::group(['prefix' => 'department'], function () {
 
 //Staff
 Route::group(['prefix' => 'staff'], function () {
-  Route::get('/index', 'StaffController@index');
+  Route::get('/index', 'StaffController@index')->name('staffList');
   Route::get('/add', 'StaffController@vaddStaff');
   Route::get('/detail', 'StaffController@getDetail');
   Route::get('/gedit', 'StaffController@getEditStaff');

@@ -52,21 +52,21 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                     </a>
                 </li>
                 {{-- Account's info --}}
-                <li class="nav-item nav-item-submenu <?php echo ($url[0] == 'staff' && $url[1] !== 'view-profile') || ($url[0] == 'staff' && $url[1] == 'view-profile') || ($url[0] == 'staff' && strpos($url[1], 'gedit') === 0) || ($url[0] == 'auth' && $url[1] == 'change_password') ? 'nav-item-open' : ''; ?>">
+                <li class="nav-item nav-item-submenu <?php echo ($url[0] == 'staff' && ($url[1] == 'view-profile' || strpos($url[1], 'gedit') === 0)) || ($url[0] == 'auth' && $url[1] == 'change_password') ? 'nav-item-open' : ''; ?>">
                     <a href="#" class="nav-link"><i class="icon-user-check"></i> <span>User Settings</span></a>
-                    <ul class="nav nav-group-sub" data-submenu-title="Employee" style="display: <?php echo ($url[0] == 'staff' && $url[1] !== 'view-profile') || ($url[0] == 'staff' && $url[1] == 'view-profile') || ($url[0] == 'staff' && strpos($url[1], 'gedit') === 0) || ($url[0] == 'auth' && $url[1] == 'change_password') ? 'block' : 'none'; ?>">
+                    <ul class="nav nav-group-sub" data-submenu-title="Employee" style="display: <?php echo ($url[0] == 'staff' && ($url[1] == 'view-profile' || strpos($url[1], 'gedit') === 0)) || ($url[0] == 'auth' && $url[1] == 'change_password') ? 'block' : 'none'; ?>">
                         <li class="nav-item">
                             <a href="{{ action('StaffController@viewProfile') }}" class="nav-link">
                                 <i class="icon-profile"></i>
                                 <span>View Profile</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ action('StaffController@getEditStaff') }}?id={{ auth()->user()->id }}" class="nav-link">
                                 <i class="icon-pencil"></i>
                                 <span>Update Account</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a href="{{ action('AuthenticateController@getForgot') }}" class="nav-link">
                                 <i class="icon-key"></i>
@@ -75,7 +75,6 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                         </li>
                     </ul>
                 </li>
-                
 
                 @if (auth()->user()->department == 2 or auth()->user()->department == 5)
 
@@ -97,9 +96,9 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                         </ul>
                     </li>
 
-                    <li class="nav-item nav-item-submenu <?php echo ($url[0] == 'staff' && $url[1] !== 'view-profile') || $url[1] == 'staff' ? 'nav-item-open' : ''; ?>">
+                    <li class="nav-item nav-item-submenu <?php echo ($url[0] == 'staff' && ($url[1] !== 'view-profile' && strpos($url[1], 'gedit') === false)) || $url[1] == 'staff' ? 'nav-item-open' : ''; ?>">
                         <a href="#" class="nav-link"><i class="icon-users"></i> <span>Employees</span></a>
-                        <ul class="nav nav-group-sub" data-submenu-title="Employee" style="display: <?php echo ($url[0] == 'staff' && $url[1] !== 'view-profile') || $url[1] == 'staff' ? 'block' : 'none'; ?>">
+                        <ul class="nav nav-group-sub" data-submenu-title="Employee" style="display: <?php echo ($url[0] == 'staff' && ($url[1] !== 'view-profile' && strpos($url[1], 'gedit') === false)) || $url[1] == 'staff' ? 'block' : 'none'; ?>">
                             <li class="nav-item">
                                 <a href="{{ action('StaffController@index') }}" class="nav-link">
                                     <i class="icon-list"></i>
@@ -118,7 +117,6 @@ $url = request()->segments() ? request()->segments() : ($url = ['abc', 'zxc']);
                                     <span>Ex-Employee</span>
                                 </a>
                             </li>
-
                         </ul>
                     </li>
 
