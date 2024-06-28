@@ -81,7 +81,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 </div>
             </form>
 
-            @if ((auth()->user()->department == 2) & (auth()->user()->is_manager != 0))
+            @if ((auth()->user()->department == 2) && (auth()->user()->is_manager!=0))
                 <div class="form-group d-flex">
                     <div class="">
                         <button class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">Create New</button>

@@ -74,14 +74,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#staff" role="tab" aria-controls="staff" aria-selected="true">Employee</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="allowance-tab" data-toggle="tab" href="#allowance" role="tab" aria-controls="allowance" aria-selected="false">Education</a>
-                            </li>
-                        </ul> --}}
+                       
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="staff" role="tabpanel" aria-labelledby="staff-tab">
                                 <div class="row">
@@ -162,7 +155,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Region<span class="text-danger">*</span></label>
+                                                        <label>Province/City<span class="text-danger">*</span></label>
                                                         <select id="province" class="form-control form-control-select2" color="red" data-fouc>
                                                             @foreach ($data_reg as $reg)
                                                                 <option value="{{ $reg['id'] }}">{{ $reg['name'] }}</option>
@@ -173,7 +166,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>City/District/Commune<span class="text-danger">*</span></label>
+                                                        <label>District/Commune<span class="text-danger">*</span></label>
                                                         <select id="district" class="form-control form-control-select2" name="txtRegional" color="red" data-fouc>
                                                             @foreach ($data_district as $district)
                                                                 <option value="{{ $district['id'] }}">{{ $district['name'] }}</option>
@@ -209,7 +202,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Issue Date<span class="text-danger">*</span></label>
+                                                <label>Identity Issue Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control daterange-single" name="txtIssue" value="{{ old('txtIssue') }}">
                                             </div>
 
