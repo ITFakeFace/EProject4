@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,9 +17,18 @@ class CheckInOutController extends Controller
     ];
     $response = Http::get('http://localhost:8888/staff/findOneStaffDepartment', $params);
     $body = json_decode($response->body(), true);
-
+    $paramsCheck = [
+      'staff_id' => auth()->user()->id,
+      'check_in_day' => \Carbon\Carbon::now()->format('Y-m-d'),
+    ];
+    $response = Http::post('http://localhost:8888/check-in-out/check-check-in', $paramsCheck);
+    $bodyIn = json_decode($response->body(), true);
+    $response = Http::post('http://localhost:8888/check-in-out/check-check-out', $paramsCheck);
+    $bodyOut = json_decode($response->body(), true);
     return view('main.check_in_out.index')
       ->with('staff', $body['data'])
+      ->with('checkIn',$bodyIn['data'])
+      ->with('checkOut',$bodyOut['data'])
       ->with('breadcrumbs', [['text' => 'Check In', 'url' => '../view-menu/time-leave'], ['text' => 'Check In GPS', 'url' => '#']]);
   }
 
