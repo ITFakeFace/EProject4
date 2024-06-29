@@ -19,24 +19,28 @@
 @section('content')
 <!-- Basic datatable -->
 <div class="card">
-    <h1 class="pt-3 pl-3 pr-3"><a href="{{action('DepartmentController@index')}}">Department List</a> </h1>
+    <h1 class="pt-3 pl-3 pr-3"><a href="{{action('DepartmentController@index')}}">Latest Departments</a> </h1>
     
 
     <table class="table datatable-basic">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>No.</th>
                 <th>Department Name</th>
                 <th>Department Name (Vietnamese)</th>
+                <th>Number of employees</th>
+                @if (Auth::user()->is_manager == 1 && (Auth::user()->department == 2 || Auth::user()->department == 5))
                 <th>Action</th>
+                @endif
             </tr>
         </thead>
         <tbody>
-                @foreach($data_department as $department)
+                @foreach($departmentListTakeTen as $index => $department)
                 <tr>
-                    <td>{{ $department['id'] }}</td>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $department['name'] }}</td>
                     <td>{{ $department['nameVn'] }}</td>
+                    <td>{{ $department['employee_count'] }}</td>
                     <!-- <td>
                         @if($department['del'] == 0)
                             Show
@@ -44,21 +48,22 @@
                             Hide
                         @endif    
                     </td> -->
-            
-                    <td class="text-center">
-                    <div class="list-icons">
-                        <div class="dropdown">
-                            <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                <i class="icon-menu9"></i>
-                            </a>
+                    @if (Auth::user()->is_manager == 1 && (Auth::user()->department == 2 || Auth::user()->department == 5))
+                        <td class="text-center">
+                            <div class="list-icons">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                        <i class="icon-menu9"></i>
+                                    </a>
 
-                            <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="{{ action('DepartmentController@getEditDep') }}?id={{ $department['id'] }}" class="dropdown-item">Update</a>
-                                    <a href="{{ action('DepartmentController@getDeleteDep') }}?id={{ $department['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                            <a href="{{ action('DepartmentController@getEditDep') }}?id={{ $department['id'] }}" class="dropdown-item">Update</a>
+                                            <a href="{{ action('DepartmentController@getDeleteDep') }}?id={{ $department['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </td>
+                        </td>
+                    @endif    
                 </tr>
                 @endforeach
         </tbody>

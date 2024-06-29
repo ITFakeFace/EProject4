@@ -20,6 +20,13 @@ class DashboardController extends Controller
     $response = Http::get('http://localhost:8888/department/list');
     $body = json_decode($response->body(), true);
     $data_department = $body['data'];
+    // Sort the array by the 'created_at' field in descending order
+    usort($data_department, function ($a, $b) {
+      return $b['id'] - $a['id'];
+    });
+
+    // Get the latest 5 departments
+    $departmentListTakeTen = array_slice($data_department, 0, 5);
 
     $response_count = Http::get('http://localhost:8888/staff/getStaffMonth');
     $body_staffs_count = json_decode($response_count->body(), true);
@@ -132,6 +139,24 @@ class DashboardController extends Controller
     }
     $staffs_off = json_encode($arr_chart_staffs_off);
 
+    //count department
+     // Tạo mảng để đếm số lượng nhân viên cho mỗi phòng ban
+     $staffCountByDepartment = [];
+    
+     foreach ($data_staffs as $staff) {
+         $departmentId = $staff['department'];
+         if (!isset($staffCountByDepartment[$departmentId])) {
+             $staffCountByDepartment[$departmentId] = 0;
+         }
+         $staffCountByDepartment[$departmentId]++;
+     }
+ 
+     // Thêm số lượng nhân viên vào dữ liệu phòng ban
+     foreach ($departmentListTakeTen as &$department) {
+         $departmentId = $department['id'];
+         $department['employee_count'] = $staffCountByDepartment[$departmentId] ?? 0;
+     }
+ 
     return view('main.dashboard.index')
       ->with('staffs_gender', $staffs_gender)
       ->with('staffs_age', $staffs_age)
@@ -142,6 +167,7 @@ class DashboardController extends Controller
       ->with('staffs_off', $staffs_off)
       ->with('data_staffs', $data_staffs)
       ->with('data_department', $data_department)
+      ->with('departmentListTakeTen', $departmentListTakeTen)
       ->with('breadcrumbs', [
         ['text' => 'Charts', 'url' => '#']
       ]);
