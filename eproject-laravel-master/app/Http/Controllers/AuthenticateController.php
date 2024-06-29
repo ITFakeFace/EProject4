@@ -124,6 +124,10 @@ class AuthenticateController extends Controller
     }
 
     $id_staff = DB::table('staff')->where('email', $email)->value('id');
+    $old_password = DB::table('staff')->where('email', $email)->value('password');
+    if ($old_password == $password) {
+      return redirect()->back()->with('error', 'New password must be different from the old password');
+    }
 
     $params = [
       'id' => $id_staff,
