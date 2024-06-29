@@ -17,6 +17,75 @@
 @endsection
 
 @section('content')
+<div class="card">
+    <h1 class="pt-3 pl-3 pr-3"><a href="{{action('StaffController@index')}}">Newest Employees</a> </h1>
+    <table class="table datatable-basic">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Department</th>
+                <th>Position</th>
+                <th>Joining Date</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                @if (Auth::user()->is_manager == 1 && (Auth::user()->department == 2 || Auth::user()->department == 5))
+                <th>Action</th>
+                @endif
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($staffListTakeTen as $index =>  $staff)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $staff['firstname'] }}</td>
+                    <td>{{ $staff['lastname'] }}</td>
+                    @foreach ($data_department as $department)
+                        @if ($staff['department'] == $department['id'])
+                            <td>{{ $department['nameVn'] }}</td>
+                        @endif
+                    @endforeach
+                    <td>
+                        @if ($staff['isManager'] == 0)
+                            Employee
+                        @else
+                            Manager
+                        @endif
+                    </td>
+                    <td>{{ \Carbon\Carbon::createFromTimestamp($staff['joinedAt'] / 1000)->format('Y-m-d') }}</td>
+                    <td>{{ \Carbon\Carbon::createFromTimestamp($staff['dob'] / 1000)->format('Y-m-d') }}</td>
+                    <td>
+                        @if ($staff['gender'] == 1)
+                            Male
+                        @else
+                            Female
+                        @endif
+                    </td>
+                    @if (Auth::user()->is_manager == 1 && (Auth::user()->department == 2 || Auth::user()->department == 5))
+                    <td>
+                        <div class="list-icons">
+                            <div class="dropdown">
+                                <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                    <i class="icon-menu9"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="{{ action('StaffController@getEditStaff') }}?id={{ $staff['id'] }}" class="dropdown-item">Update</a>
+                                    <a href="{{ action('StaffController@getDetail') }}?id={{ $staff['id'] }}" class="dropdown-item">Detail</a>
+                                    <a href="{{ route('exportWord1', ['id' => $staff['id']]) }}" class="dropdown-item">Export Employee File</a>
+                                    <a href="{{ action('StaffController@getDeleteStaff') }}?id={{ $staff['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    @endif
+                    
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 <!-- Basic datatable -->
 <div class="card">
     <h1 class="pt-3 pl-3 pr-3"><a href="{{action('DepartmentController@index')}}">Latest Departments</a> </h1>

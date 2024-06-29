@@ -16,6 +16,10 @@ class DashboardController extends Controller
     $response = Http::get('http://localhost:8888/staff/list');
     $body = json_decode($response->body(), true);
     $data_staffs = $body['data'];
+    usort($data_staffs, function ($a, $b) {
+      return $b['id'] - $a['id'];
+    });
+    $staffListTakeTen = array_slice($data_staffs, 0, 10);
 
     $response = Http::get('http://localhost:8888/department/list');
     $body = json_decode($response->body(), true);
@@ -166,6 +170,7 @@ class DashboardController extends Controller
       ->with('last_year', $last_year)
       ->with('staffs_off', $staffs_off)
       ->with('data_staffs', $data_staffs)
+      ->with('staffListTakeTen', $staffListTakeTen)
       ->with('data_department', $data_department)
       ->with('departmentListTakeTen', $departmentListTakeTen)
       ->with('breadcrumbs', [
