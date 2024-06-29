@@ -18,7 +18,7 @@
 
 @section('content')
 <div class="card">
-    <h1 class="pt-3 pl-3 pr-3 text-primary">Welcome to {{Auth::user()->firstname}} {{Auth::user()->lastname}},</h1>
+    <h1 class="pt-3 pl-3 pr-3 text-primary">Welcome {{Auth::user()->firstname}} {{Auth::user()->lastname}},</h1>
     @if(Auth::user()->is_manager == 1 && Auth::user()->department == 5)
         <h4 class="pl-4 pr-3">You are the CEO of the company.</h4>
     @else
