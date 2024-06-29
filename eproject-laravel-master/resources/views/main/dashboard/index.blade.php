@@ -34,6 +34,7 @@
 </div>
 <div class="card">
     <h1 class="pt-3 pl-3 pr-3"><a href="{{action('StaffController@index')}}">Newest Employees</a> </h1>
+    <h4 class="pl-4 pr-3 text-secondary">Our Company currently has total: {{ $totalEmployees }} Employees</h4>
     <table class="table datatable-basic">
         <thead>
             <tr>
@@ -156,7 +157,7 @@
 <!-- /basic datatable -->
 
     <!-- Pies -->
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header header-elements-inline">
@@ -243,7 +244,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
         <div class="col-12">
@@ -485,7 +486,7 @@
 
                         // Add legend
                         legend: {
-                            data: ['Number of Employees', 'Number of Leavers'],
+                            data: ['Employees', 'Ex-Employees'],
                             itemHeight: 8,
                             itemGap: 20,
                             textStyle: {
@@ -551,7 +552,7 @@
 
                         // Add series
                         series: [{
-                                name: 'Number of Employees',
+                                name: 'Employees',
                                 type: 'bar',
                                 //import data
                                 data: staffs_month,
@@ -574,7 +575,7 @@
                                 }
                             },
                             {
-                                name: 'Number of Leavers',
+                                name: 'Ex-Employees',
                                 type: 'bar',
                                 //import data
                                 data: staffs_off,
