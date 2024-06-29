@@ -36,7 +36,7 @@
                     </div>
                 @endif
 
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-12">
 
                     <div class="form-group">
                         <label class="font-weight-semibold" style="font-size: 0.9rem">Check-in Date:</label>
@@ -62,7 +62,7 @@
                             <?php echo $staff[0][2]; ?>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div hidden class="form-group">
                         <label class="font-weight-semibold" style="font-size: 0.9rem">Employee GPS Location: </label>
                         <input id="latitude" name="latitude" value="" readonly />
                         <input id="longitude" name="longitude" value="" readonly />
@@ -76,21 +76,21 @@
 
                 </div>
 
-                <div class="col-12 col-md-6">
+                {{-- <div class="col-12 col-md-6">
                     <div class=video-screenshot><video autoplay id=video></video>
                         <div>
                             <div id=screenshotsContainer><canvas id=canvas class=is-hidden></canvas></div>
                         </div>
                     </div>
                     <input id="image_64" type="hidden" name="image_64" value="">
-                </div>
+                </div> --}}
 
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-12">
                     <button type="submit" class="btn btn-primary mt-2 w-auto h-auto">Check-in</button>
                 </div>
-                <div class="col-12 col-md-6 mt-2">
+                {{-- <div class="col-12 col-md-6 mt-2">
                     <button type="button" class="btn btn-success" id=btnScreenshot>Take Photo</button>
-                </div>
+                </div> --}}
             </div>
         </form>
     </div>
@@ -186,27 +186,27 @@
             }
             init();
         }
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111717926-1"></script>
-    <script>
-        function gtag() {
-            dataLayer.push(arguments)
-        }
-        window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "UA-111717926-1")
-    </script>
-    <div>
-        <script async src=//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js></script><ins class=adsbygoogle style="display:block; text-align:center;" data-ad-layout=in-article data-ad-format=fluid data-ad-client=ca-pub-1121308659421064 data-ad-slot=8232164616></ins>
+    </script> --}}
+    {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111717926-1"></script>
         <script>
-            (adsbygoogle = window.adsbygoogle || []).push({})
+            function gtag() {
+                dataLayer.push(arguments)
+            }
+            window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "UA-111717926-1")
         </script>
-        <div></div>
-    </div>
-    </body>
+        <div>
+            <script async src=//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js></script><ins class=adsbygoogle style="display:block; text-align:center;" data-ad-layout=in-article data-ad-format=fluid data-ad-client=ca-pub-1121308659421064 data-ad-slot=8232164616></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({})
+            </script>
+            <div></div>
+        </div>
+        </body>
 
-    </html>
-@endsection
+        </html>
+    @endsection
 
-@section('scripts')
+    @section('scripts')
     <script>
         $(document).ready(function() {
             getLocation();
@@ -265,4 +265,4 @@
             }
         }
     </script>
-@endsection
+    @endsection
