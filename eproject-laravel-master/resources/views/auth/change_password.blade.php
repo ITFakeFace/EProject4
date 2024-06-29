@@ -25,7 +25,8 @@
                         </div>
                     @endif
                     <div class="text-center mb-3">
-                        <i class="icon-spinner11 icon-2x border-3 rounded-round p-3 mb-3 mt-1" style="color: #046A38; border-color: #046A38"></i>
+                        {{-- <i class="icon-spinner11 icon-2x border-3 rounded-round p-3 mb-3 mt-1" style="color: #046A38; border-color: #046A38"></i> --}}
+                        <img src="{{ asset('images/Logo-FutureHRM-index.svg') }}" alt="Logo" style="width: 200px; height: 100px;">
                         <h5 class="mb-0">Change Password</h5>
                         <span class="d-block text-muted">An Instruction would be sent to your email</span>
                     </div>
