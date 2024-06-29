@@ -45,6 +45,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     <div class="card">
         <div class="card-header header-elements-inline">
             <h1 class="pt-3 pl-3 pr-3">Employee Detailed Information</h1>
+            <a href="{{ action('StaffController@getEditStaff') }}?id={{ $data['id'] }}" role="button" class="btn btn-primary">Update Information</a>
             {{-- <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
@@ -100,7 +101,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>ID Number:</label>
+                                        <label>Identity Number:</label>
                                         <b><label>{{ $data['idNumber'] }}</label></b>
                                     </div>
                                 </div>

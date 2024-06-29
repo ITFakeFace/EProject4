@@ -15,6 +15,10 @@
         {
             "filePath": "public",
             "group": "Default"
+        },
+        {
+            "filePath": "public\\global_assets\\scss\\shared\\icons\\icomoon\\_icons.scss",
+            "group": "Default"
         }
     ]
 }
