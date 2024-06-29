@@ -154,12 +154,22 @@ class DashboardController extends Controller
          }
          $staffCountByDepartment[$departmentId]++;
      }
+
  
      // Thêm số lượng nhân viên vào dữ liệu phòng ban
      foreach ($departmentListTakeTen as &$department) {
          $departmentId = $department['id'];
          $department['employee_count'] = $staffCountByDepartment[$departmentId] ?? 0;
      }
+
+     foreach ($data_department as &$department) {
+        $departmentId = $department['id'];
+        $department['employee_count'] = $staffCountByDepartment[$departmentId] ?? 0;
+      }
+
+     // Tính tổng số nhân viên trong công ty
+     $totalEmployees = array_sum($staffCountByDepartment);
+    
  
     return view('main.dashboard.index')
       ->with('staffs_gender', $staffs_gender)
@@ -171,6 +181,7 @@ class DashboardController extends Controller
       ->with('staffs_off', $staffs_off)
       ->with('data_staffs', $data_staffs)
       ->with('staffListTakeTen', $staffListTakeTen)
+      ->with('totalEmployees', $totalEmployees)
       ->with('data_department', $data_department)
       ->with('departmentListTakeTen', $departmentListTakeTen)
       ->with('breadcrumbs', [
