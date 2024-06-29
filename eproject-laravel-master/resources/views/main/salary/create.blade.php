@@ -17,7 +17,6 @@
 @endsection
 
 @section('content')
-
 <div class="card">
     <h1 class="pt-3 pl-3 pr-3">Create Payroll</h1>
     <div class="card-header header-elements-inline">
@@ -26,7 +25,7 @@
     <div class="card-body">
         <form action="{{ route('postCalculatedSalary') }}" method="post">
             <div class="form-group d-flex w-25 p-3">
-                <input class="form-control" type="month" name="month" min="2018-03" value="2024-06" />
+                <input class="form-control" type="month" name="month" min="2018-03" value="{{$currentYearMonth}}" />
             </div>
             @if (session('message'))
             <div class="alert alert-{{ session('message')['type'] }} border-0 alert-dismissible">
@@ -79,7 +78,7 @@
                                         <td>{{ $staff->code }}</td>
                                         <td>{{ $staff->firstname . ' ' . $staff->lastname }}</td>
                                         <td>
-                                            {{ \Carbon\Carbon::createFromTimestampMs($staff->joinedAt)->format('d/m/Y') }}
+                                            {{ \Carbon\Carbon::createFromTimestampMs($staff->joinedAt)->format('Y-m-d') }}
                                             {{-- {{ $staff->joinedAt }} --}}
                                         </td>
                                     </tr>

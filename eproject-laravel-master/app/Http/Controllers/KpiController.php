@@ -442,6 +442,7 @@ class KpiController extends Controller
 
   public function createDetailChild(Request $request)
   {
+
     $id_kpi_detail = $request->input('id_kpi_detail');
     $id_child = $request->input('id_child');
     $name = $request->input('name');
@@ -449,6 +450,21 @@ class KpiController extends Controller
     $number_get = $request->input('number_get');
     $duties_activities = $request->input('duties_activities');
     $skill = $request->input('skill');
+
+    if ($request->input('id_child') == null) {
+      $data_request_create = [
+        'id_kpi_detail' => $id_kpi_detail,
+        'tasks' => [],
+      ];
+      $response = Http::post('http://localhost:8888/kpi/save-detail-child', $data_request_create);
+      $body = json_decode($response->body(), true);
+
+      if ($body['data'] == "Success") {
+        return redirect()->back()->with('success', 'Saved successfully!');
+      } else {
+        return redirect()->back()->with('error', 'Failed to save!');
+      }
+    }
 
     $tasks = array();
     for ($i = 0; $i < count($name); $i++) {

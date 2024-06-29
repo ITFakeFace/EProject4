@@ -1457,12 +1457,13 @@ class TimeleaveController extends Controller
         $stfList[] = $staff;
       }
     }
+    // dd($body['data']);
 
     return view('main.time_leave.all_staff_time')
       ->with('data', $body['data'])
       ->with('summary', $summary['data'])
       ->with('department', $departments)
-      ->with('staffNotCheck',$stfList)
+      ->with('staffNotCheck', $stfList)
       ->with('year', $year)
       ->with('month', $month)
       ->with('y_m', $date)
@@ -1494,10 +1495,12 @@ class TimeleaveController extends Controller
         else $color = "";
 
         $check_in_out['is_manager'] == 1 ? $manager = "Manager" : $manager = "Staff";
-        $check_in_out['day_of_week'] !== 1 ? $day_of_week = "Day" . $check_in_out['day_of_week'] : $day_of_week = "Chủ Nhật";
-        $check_in_out['special_date_id'] !== null ? $day_of_week .= "(Holiday)" : '';
-        $check_in_img = $check_in_out['image_check_in'] != null && $check_in_out['image_check_in'] != "null" ? "<img width='80px' src='../images/check_in/" . $check_in_out['image_check_in'] . "'/>" : "";
-        $check_out_img = $check_in_out['image_check_out'] != null && $check_in_out['image_check_out'] != "null" ? "<img width='80px' src='../images/check_in/" . $check_in_out['image_check_out'] . "'/>" : "";
+        $check_in_out['day_of_week'] !== 1 ? $day_of_week = "Day" . $check_in_out['day_of_week'] : $day_of_week = "Sunday";
+        $check_in_out['special_date_id'] != null ? $day_of_week .= "(Holiday)" : '';
+        // $check_in_img = $check_in_out['image_check_in'] != null && $check_in_out['image_check_in'] != "null" ? "<img width='80px' src='../images/check_in/" . $check_in_out['image_check_in'] . "'/>" : "";
+        // $check_out_img = $check_in_out['image_check_out'] != null && $check_in_out['image_check_out'] != "null" ? "<img width='80px' src='../images/check_in/" . $check_in_out['image_check_out'] . "'/>" : "";
+        $check_in_img = "";
+        $check_out_img = "";
 
         $html .= "
                 <tr style='background-color: " . $color . "'>
@@ -1509,8 +1512,8 @@ class TimeleaveController extends Controller
                     <td>" . $day_of_week . "</td>
                     <td class='text-center' style='max-width: 100px;'>" . $check_in_out['check_in'] . $check_in_img . " </td>
                     <td class='text-center' style='max-width: 100px;'>" . $check_in_out['check_out'] . $check_out_img . " </td>
-                    <td>" . $check_in_out['in_late'] . "</td>
-                    <td>" . $check_in_out['out_soon'] . "</td>
+                    <td>" . ($check_in_out['in_late'] == null ? "" : $check_in_out['in_late']) . "</td>
+                    <td>" . ($check_in_out['out_soon'] == null ? "" : $check_in_out['out_soon']) . "</td>
                     <td>" . $check_in_out['number_time'] * $check_in_out['multiply'] . "</td>
                     <td>" . $check_in_out['time'] . "</td>
                     <td>" . $check_in_out['ot'] . "</td>
@@ -1652,8 +1655,10 @@ class TimeleaveController extends Controller
                   </tr>";
       }
     }
-
     echo $html;
+    echo "<pre>";
+    print_r($html);
+    echo "</pre>";
     die;
   }
 

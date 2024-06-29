@@ -90,7 +90,7 @@
                         ?>
                     ">
                         <td class="td" style="width: 100px">
-                            {{ $check_in_out['check_in_day'] }}
+                            {{ \Carbon\Carbon::createFromTimestampMs($check_in_out['check_in_day'])->format('Y-m-d') }}
                             <?php 
                                 if($check_in_out['special_date_id'] !== null) {
                                     echo '(Ngày lễ)';
