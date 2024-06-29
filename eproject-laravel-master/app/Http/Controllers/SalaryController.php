@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Exports\StaffPayrollExport;
 use App\Imports\PayrollImport;
+use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 use Excel;
 
 class SalaryController extends Controller
@@ -44,7 +46,7 @@ class SalaryController extends Controller
       ]);
     }
 
-    return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'ID not found']);
+    return redirect()->back()->with('message', ['type' => 'danger', 'message' => 'No details for this salary calculation']);
   }
 
   public function getCreate()
@@ -61,10 +63,15 @@ class SalaryController extends Controller
     if ($listSalaryOptionResponse->isSuccess) {
       $listSalaryOption = $listSalaryOptionResponse->data;
     }
+    $currentDate = Carbon::now();
+    $currentMonth = $currentDate->month;
+    $currentYear = $currentDate->year;
 
+    $currentYearMonth = "{$currentYear}-0{$currentMonth}";
     return view('main.salary.create', [
       'listStaff' => $listStaff,
       'listSalaryOption' => $listSalaryOption,
+      'currentYearMonth' => $currentYearMonth
     ]);
   }
 

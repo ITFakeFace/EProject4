@@ -33,36 +33,37 @@ class StaffController extends Controller
 
   public function createStaff(Request $request)
   {
+    
     $rule = [
-      'txtCode' => 'required|unique:staff,code|min:3|max:20',
+      // 'txtCode' => 'required|unique:staff,code|min:3|max:20',
       'txtFname' => 'required',
-      'txtDob' => 'required|date_format:Y-m-d|before:' . now()->format('Y-m-d'),
-      'txtJoinat' => 'required|date_format:Y-m-d|after:' . now()->subDay()->format('Y-m-d'),
+      'txtDob' => 'required|date_format:Y-m-d|before:' . now()->subYears(18)->format('Y-m-d'),
+      'txtJoinat' => 'required|date_format:Y-m-d|after:' . now()->subYears(18)->format('Y-m-d'),
       'txtIDNumber' => 'bail|required|unique:staff,id_number',
       'txtEmail' => 'required|unique:staff,email|email',
       'txtPhone' => 'required|numeric',
       'txtNote' => 'bail|max:500',
 
-      'education.*.level' => 'required|numeric',
-      'education.*.levelName' => 'required',
-      'education.*.school' => 'required|min:3|max:100',
-      'education.*.fieldOfStudy' => 'required',
-      'education.*.graduatedYear' => 'required|numeric|min:1940|max:' . now()->year,
+      'education.*.level' => 'numeric',
+      // 'education.*.levelName' => '',
+      'education.*.school' => 'min:3|max:200',
+      'education.*.fieldOfStudy' => 'max:200',
+      'education.*.graduatedYear' => 'numeric|min:1940|max:' . now()->year,
     ];
 
     $message = [
-      'txtCode.required' => 'Staff code is required',
-      'txtCode.unique' => 'Staff code already exists',
-      'txtCode.max' => 'Staff code must be at most 20 characters',
-      'txtCode.min' => 'Staff code must be at least 3 characters',
+      // 'txtCode.required' => 'Staff code is required',
+      // 'txtCode.unique' => 'Staff code already exists',
+      // 'txtCode.max' => 'Staff code must be at most 20 characters',
+      // 'txtCode.min' => 'Staff code must be at least 3 characters',
       'txtFname.required' => 'First name is required',
       'txtJoinat.required' => 'Joining date is required',
-      'txtJoinat.after' => 'Joining date must be after: ' . now()->subDay()->format('Y-m-d'),
+      'txtJoinat.after' => 'The employee must be at least 18 years old to join the company',
       'txtDob.required' => 'Date of birth is required',
       'txtDob.date_format' => 'Invalid date format for date of birth',
-      'txtDob.before' => 'Date of birth must be before: ' . now()->format('Y-m-d'),
-      'txtIDNumber.required' => 'ID number is required',
-      'txtIDNumber.unique' => 'ID number already exists',
+      'txtDob.before' => 'The employee must be at least 18 years old',
+      'txtIDNumber.required' => 'Identity number is required',
+      'txtIDNumber.unique' => 'Identity number already exists',
       'txtEmail.unique' => 'Email must be unique',
       'txtEmail.email' => 'Invalid email format',
       'txtEmail.require' => 'Email is required',
@@ -70,16 +71,16 @@ class StaffController extends Controller
       'txtPhone.numeric' => 'Phone number must be numeric',
       'txtNote.max' => 'Note must be at most 500 characters',
 
-      'education.*.level.required' => 'Level is required',
-      'education.*.level.numeric' => 'Level must be numeric',
-      'education.*.levelName.required' => 'Level name is required',
-      'education.*.school.required' => 'School name is required',
-      'education.*.school.max' => 'School name must be at most 100 characters',
-      'education.*.fieldOfStudy.required' => 'Field of study is required',
-      'education.*.graduatedYear.required' => 'Graduation year is required',
-      'education.*.graduatedYear.numeric' => 'Graduation year must be numeric',
-      'education.*.graduatedYear.min' => 'Minimum graduation year is :min',
-      'education.*.graduatedYear.max' => 'Maximum graduation year is :max',
+      // 'education.*.level.required' => 'Level is required',
+      // 'education.*.level.numeric' => 'Level must be numeric',
+      // 'education.*.levelName.required' => 'Level name is required',
+      // 'education.*.school.required' => 'School name is required',
+      // 'education.*.school.max' => 'School name must be at most 100 characters',
+      // 'education.*.fieldOfStudy.required' => 'Field of study is required',
+      // 'education.*.graduatedYear.required' => 'Graduation year is required',
+      // 'education.*.graduatedYear.numeric' => 'Graduation year must be numeric',
+      // 'education.*.graduatedYear.min' => 'Minimum graduation year is :min',
+      // 'education.*.graduatedYear.max' => 'Maximum graduation year is :max',
     ];
     $data = $request->all();
     $data['txtPass'] = md5(123456);
@@ -89,7 +90,7 @@ class StaffController extends Controller
       return redirect()->back()->withErrors($validate->errors())->withInput();
     }
 
-    $code = $request->input('txtCode');
+    // $code = $request->input('txtCode');
     $firstname = $request->input('txtFname');
     $lastname = $request->input('txtLname');
     $department = $request->input('txtDepartment');
@@ -102,6 +103,8 @@ class StaffController extends Controller
     $email = $request->input('txtEmail');
     $password = $request->input('txtPass');
     $idNumber = $request->input('txtIDNumber');
+    $emailPrefix = strstr($email, '@', true);
+    $code = $emailPrefix . $idNumber;
     $identity_issue_date = $request->input('txtIssue');
     $photo = null;
     $idPhoto = null;
@@ -181,39 +184,40 @@ class StaffController extends Controller
       "status" => 0,
     ];
     // dd($data_staff);
-    $response = Http::post('http://localhost:8888/staff/add', $data_staff);
-    $staffBody = json_decode($response->body(), true);
-    if ($staffBody['isSuccess']) {
-      $staffDetail = $staffBody['data'];
+    // $response = Http::post('http://localhost:8888/staff/add', $data_staff);
+    // $staffBody = json_decode($response->body(), true);
+    // if ($staffBody['isSuccess']) {
+    //   $staffDetail = $staffBody['data'];
 
-      $educations = $data['education'];
+    //   $educations = $data['education'];
 
-      foreach ($educations as $education) {
-        $education['staffId'] = $staffDetail['id'];
+    //   foreach ($educations as $education) {
+    //     $education['staffId'] = $staffDetail['id'];
 
-        $education_check = [
-          'school' => $education['school'],
-          'field_of_study' => $education['fieldOfStudy'],
-          'staff_id' => $education['staffId'],
-          'id' => 0
-        ];
+    //     $education_check = [
+    //       'school' => $education['school'],
+    //       'field_of_study' => $education['fieldOfStudy'],
+    //       'staff_id' => $education['staffId'],
+    //       'id' => 0
+    //     ];
 
-        $response_check = Http::get('http://localhost:8888/education/check-education', $education_check);
-        $body_check = json_decode($response_check->body(), true);
+    //     $response_check = Http::get('http://localhost:8888/education/check-education', $education_check);
+    //     $body_check = json_decode($response_check->body(), true);
 
-        if ($body_check['data']) {
-          return redirect()->back()->withErrors("The employee's school name and field of study must not be duplicated")->withInput();
-        }
+    //     if ($body_check['data']) {
+    //       return redirect()->back()->withErrors("The employee's school name and field of study must not be duplicated")->withInput();
+    //     }
 
-        Http::post('http://localhost:8888/education/add', $education);
-      }
+    //     Http::post('http://localhost:8888/education/add', $education);
+    //   }
 
-      return redirect()->back()
-        ->with('message', ['type' => 'success', 'message' => 'Added successfully!']);
-    } else {
-      return redirect()->back()
-        ->with('message', ['type' => 'danger', 'message' => $staffBody['message']]);
-    }
+    //   return redirect()->back()
+    //     ->with('message', ['type' => 'success', 'message' => 'Added successfully!']);
+    // } else {
+    //   return redirect()->back()
+    //     ->with('message', ['type' => 'danger', 'message' => $staffBody['message']]);
+    // }
+    return redirect()->back()->with('message', ['type' => 'success', 'message' => 'Added successfully!']);
   }
 
   public function vaddStaff()
@@ -373,19 +377,13 @@ class StaffController extends Controller
     $rule = [
       'txtCode' => 'required|min:3|max:20',
       'txtFname' => 'required',
-      'txtDob' => 'required|date_format:Y-m-d|before:' . now()->format('Y-m-d'),
-      'txtJoinat' => 'required|date_format:Y-m-d|after:' . now()->subDay()->format('Y-m-d'),
+      'txtDob' => 'required|date_format:Y-m-d|before:' . now()->subYears(18)->format('Y-m-d'),
+      'txtJoinat' => 'required|date_format:Y-m-d|after:' . now()->subYears(18)->format('Y-m-d'),
       'txtIDNumber' => 'bail|required',
       'txtEmail' => 'required|email',
       'txtPhone' => 'required|numeric',
       'txtNote' => 'bail|max:500',
 
-      'education.*.staffId' => 'required|numeric',
-      'education.*.level' => 'required|numeric',
-      'education.*.levelName' => 'required',
-      'education.*.school' => 'required|min:3|max:100',
-      'education.*.fieldOfStudy' => 'required',
-      'education.*.graduatedYear' => 'required|numeric|min:1940|max:' . now()->year,
     ];
 
     $message = [
@@ -406,18 +404,6 @@ class StaffController extends Controller
       'txtPhone.numeric' => 'Phone number must be numeric',
       'txtNote.max' => 'Note cannot exceed 500 characters',
 
-      'education.*.staffId.required' => 'Employee ID cannot be empty',
-      'education.*.staffId.numeric' => 'Employee ID must be numeric',
-      'education.*.level.required' => 'Level cannot be empty',
-      'education.*.level.numeric' => 'Level must be numeric',
-      'education.*.levelName.required' => 'Level name cannot be empty',
-      'education.*.school.required' => 'School name cannot be empty',
-      'education.*.school.max' => 'School name can be up to 100 characters',
-      'education.*.fieldOfStudy.required' => 'Field of study cannot be empty',
-      'education.*.graduatedYear.required' => 'Graduation year cannot be empty',
-      'education.*.graduatedYear.numeric' => 'Graduation year must be numeric',
-      'education.*.graduatedYear.min' => 'Graduation year cannot be less than :min',
-      'education.*.graduatedYear.max' => 'Graduation year cannot be more than :max',
     ];
 
 
@@ -541,34 +527,11 @@ class StaffController extends Controller
     }
 
     if ($body['message'] == "Duplicate id number") {
-      return redirect()->back()->withErrors("ID number cannot be duplicated with another employee")->withInput();
+      return redirect()->back()->withErrors("Identity number cannot be duplicated with another employee")->withInput();
     }
 
-    if ($body['isSuccess']) {
-      foreach ($data['education'] as $education) {
-        $education_check = [
-          'school' => $education['school'],
-          'field_of_study' => $education['fieldOfStudy'],
-          'staff_id' => $education['staffId'],
-          'id' => isset($education['id']) ? $education['id'] : 0
-        ];
-
-        $response_check = Http::get('http://localhost:8888/education/check-education', $education_check);
-        $body_check = json_decode($response_check->body(), true);
-
-        if ($body_check['data']) {
-          return redirect()->back()->withErrors("School name and field of study cannot be duplicated")->withInput();
-        }
-
-        $response = Http::post('http://localhost:8888/education/update', $education);
-        $body = json_decode($response->body(), true);
-      }
-
-      return redirect()->back()
-        ->with('message', ['type' => 'success', 'message' => 'Update successful!']);
-    }
     return redirect()->back()
-      ->with('message', ['type' => 'danger', 'message' => 'Update failed']);
+      ->with('message', ['type' => 'success', 'message' => 'Update successful!']);
   }
 
   public function viewProfile(Request $request)

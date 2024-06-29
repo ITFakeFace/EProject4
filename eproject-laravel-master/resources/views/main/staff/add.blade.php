@@ -63,7 +63,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 @if ($errors->any())
                     <div class="alert alert-danger border-0 alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-                        <p><b>Input data is not correct:</b></p>
+                        <p><b>Invalid Input:</b></p>
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -74,55 +74,61 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                 <div class="row">
                     <div class="col-md-12">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#staff" role="tab" aria-controls="staff" aria-selected="true">Employee</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="allowance-tab" data-toggle="tab" href="#allowance" role="tab" aria-controls="allowance" aria-selected="false">Education</a>
-                            </li>
-                        </ul>
+                       
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="staff" role="tabpanel" aria-labelledby="staff-tab">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <fieldset>
                                             <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Information</legend>
-
                                             <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Employee Code<span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" name="txtCode" value="{{ old('txtCode') }}" required placeholder="Enter Employee Code: TTN">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Role<span class="text-danger">*</span></label>
-                                                        <select class="form-control" name="txtisManager" color="red">
-                                                            <option value="0" selected>Employee</option>
-                                                            <option value="1">Manager</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Last Name<span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" name="txtLname" value="{{ old('txtLname') }}" placeholder="Enter Last Name">
-                                                    </div>
-                                                </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>First Name<span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control" name="txtFname" value="{{ old('txtFname') }}" required placeholder="Enter First Name">
                                                     </div>
                                                 </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Last Name<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="txtLname" value="{{ old('txtLname') }}" placeholder="Enter Last Name">
+                                                    </div>
+                                                </div>
+                                                
                                             </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Phone</label>
+                                                        <input type="number" class="form-control" name="txtPhone" value="{{ old('txtPhone') }}" placeholder="Enter phone number">
+                                                    </div>
+                                                </div>
 
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Email<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="txtEmail" value="{{ old('txtEmail') }}" placeholder="Enter Email email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Date of Birth<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control daterange-single" name="txtDob" value="{{ old('txtDob') }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Gender<span class="text-danger">*</span></label>
+                                                        <select class="form-control" name="txtGender" color="red">
+                                                            <option value="1" selected>Male</option>
+                                                            <option value="0">Female</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -134,38 +140,22 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                                         </select>
                                                     </div>
                                                 </div>
-
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Date of Birth:</label>
-                                                        <input type="text" class="form-control daterange-single" name="txtDob" value="{{ old('txtDob') }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Joining Date<span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control daterange-single" name="txtJoinat" value="{{ old('txtJoinat') }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Gender<span class="text-danger">*</span></label>
-                                                        <select class="form-control" name="txtGender" color="red">
-                                                            <option value="1" selected>Male</option>
-                                                            <option value="0">Female</option>
+                                                        <label>Role<span class="text-danger">*</span></label>
+                                                        <select class="form-control" name="txtisManager" color="red">
+                                                            <option value="0" selected>Employee</option>
+                                                            <option value="1">Manager</option>
                                                         </select>
                                                     </div>
                                                 </div>
+                                                
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Region<span class="text-danger">*</span></label>
+                                                        <label>Province/City<span class="text-danger">*</span></label>
                                                         <select id="province" class="form-control form-control-select2" color="red" data-fouc>
                                                             @foreach ($data_reg as $reg)
                                                                 <option value="{{ $reg['id'] }}">{{ $reg['name'] }}</option>
@@ -176,7 +166,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>City/District/Commune<span class="text-danger">*</span></label>
+                                                        <label>District/Commune<span class="text-danger">*</span></label>
                                                         <select id="district" class="form-control form-control-select2" name="txtRegional" color="red" data-fouc>
                                                             @foreach ($data_district as $district)
                                                                 <option value="{{ $district['id'] }}">{{ $district['name'] }}</option>
@@ -185,22 +175,15 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Phone:</label>
-                                                        <input type="number" class="form-control" name="txtPhone" value="{{ old('txtPhone') }}" placeholder="Enter phone number">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Email<span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" name="txtEmail" value="{{ old('txtEmail') }}" placeholder="Enter Email abc12@exam.com">
+                                                        <label>Joining Date<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control daterange-single" name="txtJoinat" value="{{ old('txtJoinat') }}">
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </fieldset>
                                     </div>
 
@@ -214,12 +197,12 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                             </div>
 
                                             <div class="form-group">
-                                                <label>ID Number<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="txtIDNumber" placeholder="Enter ID Number" value="{{ old('txtIDNumber') }}">
+                                                <label>Identity No.<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="txtIDNumber" placeholder="Enter Identity Number" value="{{ old('txtIDNumber') }}">
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Issue Date<span class="text-danger">*</span></label>
+                                                <label>Identity Issue Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control daterange-single" name="txtIssue" value="{{ old('txtIssue') }}">
                                             </div>
 
@@ -247,7 +230,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 </div>
                             </div>
                             {{-- TAB 2 --}}
-                            <div class="tab-pane fade" id="allowance" role="tabpanel" aria-labelledby="allowance-tab">
+                            {{-- <div class="tab-pane fade" id="allowance" role="tabpanel" aria-labelledby="allowance-tab">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <button type="button" class="btn btn-success" onclick="addOption()"><i title="Add Details" class="icon-stack-plus "></i> Add Degree</button>
@@ -266,7 +249,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Level Name:</label>
+                                                        <label>Level Name<span class="text-danger">*</span></label>
                                                         <select id="txtLevelName" class="form-control" name="education[0][levelName]">
                                                             <option value="Elementary">Elementary</option>
                                                             <option value="Secondary">Secondary</option>
@@ -283,13 +266,13 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>School Name<span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control text-uppercase" id="txtSchool" name="education[0][school]" value="">
+                                                        <input type="text" class="form-control text-uppercase" id="txtSchool" name="education[0][school]" value="" placeholder="Enter your program's school or host">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Field of Study: (*)</label>
-                                                        <input type="text" class="form-control" name="education[0][fieldOfStudy]" value="">
+                                                        <label>Field of Study<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="education[0][fieldOfStudy]" value="" placeholder="e.g IT, Construction,...">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -301,26 +284,26 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Grade:</label>
-                                                        <input type="text" class="form-control" name="education[0][grade]" value="">
+                                                        <input type="text" class="form-control" name="education[0][grade]" value="" placeholder="e.g Excellent, good, normal, poor,...">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Mode of Study:</label>
-                                                        <input type="text" class="form-control" name="education[0][modeOfStudy]" value="">
+                                                        <input type="text" class="form-control" name="education[0][modeOfStudy]" value="" placeholder="e.g full-time program, remote program,...">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="btn btn-success" type="submit">Create New <i class="icon-paperplane ml-2"></i></button>
+                        <button class="btn btn-success" type="submit">Submit <i class="icon-paperplane ml-2"></i></button>
                         <button type="reset" class="btn btn-primary">Reset</button>
                     </div>
                 </div>
@@ -336,66 +319,66 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     <script>
         let optionIndex = 0;
 
-        function addOption() {
-            optionIndex++;
-            $('#education').append(`
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Level:</label>
-                                <input type="text" class="form-control" name="education[${optionIndex}][level]">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Level Name:</label>
-                                <select id="txtLevelName" class="form-control" name="education[${optionIndex}][levelName]">
-                                    <option value="Elementary">Elementary</option>
-                                    <option value="Secondary">Secondary</option>
-                                    <option value="High School">High School</option>
-                                    <option value="University">University</option>
-                                    <option value="Master">Master</option>
-                                    <option value="Doctor">Doctor</option>
-                                    <option value="Associate Professor">Associate Professor</option>
-                                    <option value="Professor">Professor</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>School Name: (*)</label>
-                                <input type="text" class="form-control text-uppercase" id="txtSchool" name="education[${optionIndex}][school]">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Field of Study: (*)</label>
-                                <input type="text" class="form-control" name="education[${optionIndex}][fieldOfStudy]">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Year of Graduation:(*)</label>
-                                <input type="text" class="form-control" name="education[${optionIndex}][graduatedYear]">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Grade:</label>
-                                <input type="text" class="form-control" name="education[${optionIndex}][grade]">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Mode of Study:</label>
-                                <input type="text" class="form-control" name="education[${optionIndex}][modeOfStudy]">
-                            </div>
-                        </div>
-                    </div>
-            `);
-        }
+        // function addOption() {
+        //     optionIndex++;
+        //     $('#education').append(`
+        //             <hr>
+        //             <div class="row">
+        //                 <div class="col-md-2">
+        //                     <div class="form-group">
+        //                         <label>Level:</label>
+        //                         <input type="text" class="form-control" name="education[${optionIndex}][level]">
+        //                     </div>
+        //                 </div>
+        //                 <div class="col-md-2">
+        //                     <div class="form-group">
+        //                         <label>Level Name:</label>
+        //                         <select id="txtLevelName" class="form-control" name="education[${optionIndex}][levelName]">
+        //                             <option value="Elementary">Elementary</option>
+        //                             <option value="Secondary">Secondary</option>
+        //                             <option value="High School">High School</option>
+        //                             <option value="University">University</option>
+        //                             <option value="Master">Master</option>
+        //                             <option value="Doctor">Doctor</option>
+        //                             <option value="Associate Professor">Associate Professor</option>
+        //                             <option value="Professor">Professor</option>
+        //                             <option value="Other">Other</option>
+        //                         </select>
+        //                     </div>
+        //                 </div>
+        //                 <div class="col-md-2">
+        //                     <div class="form-group">
+        //                         <label>School Name: (*)</label>
+        //                         <input type="text" class="form-control text-uppercase" id="txtSchool" name="education[${optionIndex}][school]">
+        //                     </div>
+        //                 </div>
+        //                 <div class="col-md-2">
+        //                     <div class="form-group">
+        //                         <label>Field of Study: (*)</label>
+        //                         <input type="text" class="form-control" name="education[${optionIndex}][fieldOfStudy]">
+        //                     </div>
+        //                 </div>
+        //                 <div class="col-md-2">
+        //                     <div class="form-group">
+        //                         <label>Year of Graduation:(*)</label>
+        //                         <input type="text" class="form-control" name="education[${optionIndex}][graduatedYear]">
+        //                     </div>
+        //                 </div>
+        //                 <div class="col-md-2">
+        //                     <div class="form-group">
+        //                         <label>Grade:</label>
+        //                         <input type="text" class="form-control" name="education[${optionIndex}][grade]">
+        //                     </div>
+        //                 </div>
+        //                 <div class="col-md-2">
+        //                     <div class="form-group">
+        //                         <label>Mode of Study:</label>
+        //                         <input type="text" class="form-control" name="education[${optionIndex}][modeOfStudy]">
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //     `);
+        // }
 
         $('#province').on('change', function() {
             var parent = this.value;

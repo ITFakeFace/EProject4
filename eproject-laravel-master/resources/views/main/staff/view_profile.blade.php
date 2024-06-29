@@ -18,7 +18,7 @@
                                             <div class="card-body text-center">
                                                 <!-- Profile picture image-->
                                                 @if (!empty($staff['photo']))
-                                                    <img class="img-account-profile rounded-circle mb-2" src="{{ asset($staff['photo']) }}" alt="Display_photo" width="250px" height="250px">
+                                                    <img class="img-account-profile rounded-circle mb-2" src="{{ asset($staff['photo']) }}" alt="Display_photo" width="310px" height="310px">
                                                     <input type="hidden" name="current_account_image" value="{{ asset($staff['photo']) }}">
                                                 @endif
                                                 <!-- Profile picture help block-->
@@ -84,12 +84,54 @@
                                                             <input class="form-control" name="status" type="text" value="{{ $staff['off_date'] == null ? 'Enable' : 'Disable' }}" readonly>
                                                         </div>
                                                     </div>
-                                                    <input type="button" class="btn btn-primary btn-sm" onclick="history.back();" value="Back">
+                                                    
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Education</legend>
+                                        <div class="card-body p-0 mt-3 mb-3 ml-4 mr-4">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Level</th>
+                                                            <th>Level Name</th>
+                                                            <th>School</th>
+                                                            <th>Field of Study</th>
+                                                            <th>Graduation Year</th>
+                                                            <th>Grade</th>
+                                                            <th>Mode of Study</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php $count = 1; ?>
+                                                        @foreach ($educations as $de)
+                                                            <tr>
+                                                                @if ($staff['id'] == $de['staffId'])
+                                                                    <td><?php echo $count; ?></td>
+                                                                    <td>{{ $de['level'] }}</td>
+                                                                    <td>{{ $de['levelName'] }}</td>
+                                                                    <td>{{ $de['school'] }}</td>
+                                                                    <td>{{ $de['fieldOfStudy'] }}</td>
+                                                                    <td>{{ $de['graduatedYear'] }}</td>
+                                                                    <td>{{ $de['grade'] }}</td>
+                                                                    <td>{{ $de['modeOfStudy'] }}</td>
+                                                                @endif
+                                                            </tr>
+                                                            <?php $count++; ?>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="button" class="btn btn-primary btn-sm" onclick="history.back();" value="Back">
                             </div>
                         </form>
                     </div>
