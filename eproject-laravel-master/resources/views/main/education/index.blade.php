@@ -14,32 +14,33 @@
         <div class="card-header header-elements-inline">
             <h1 class="pt-3 pl-3 pr-3">List of Educational Qualifications</h1>
             <div class="header-elements">
-                @if (\Session::has('success'))
-                <div class="">
-                    <div class="alert alert-success">
-                        {!! \Session::get('success') !!}
-                    </div>
-                </div>
-            @endif
-
-            @if (\Session::has('message'))
-                @php
-                    $message = \Session::get('message');
-                @endphp
-                <div class="alert alert-{{ $message['type'] }}">
-                    {{ $message['message'] }}
-                </div>
-            @endif
+              
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
                     <a class="list-icons-item" data-action="reload"></a>
                     <a class="list-icons-item" data-action="remove"></a>
                 </div>
             </div>
+           
         </div>
         <div class="card-body">
             <form action="#" method="GET">
-
+                @if (\Session::has('success'))
+                    <div class="">
+                        <div class="alert alert-success">
+                            {!! \Session::get('success') !!}
+                        </div>
+                    </div>
+                @endif
+    
+                @if (\Session::has('message'))
+                    @php
+                        $message = \Session::get('message');
+                    @endphp
+                    <div class="alert alert-{{ $message['type'] }}">
+                        {{ $message['message'] }}
+                    </div>
+                @endif
             </form>
         </div>
 

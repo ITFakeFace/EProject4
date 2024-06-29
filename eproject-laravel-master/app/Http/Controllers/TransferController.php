@@ -633,6 +633,8 @@ class TransferController extends Controller
       }
     }
 
+    $update_date = $body['data']['updateAt']==null?"":\Carbon\Carbon::createFromTimestampMs($body['data']['updateAt'])->format('d/m/Y');
+
 
     $html = '<input type="hidden" name="id_update" value="' . $id . '">';
     $html .= '
@@ -678,7 +680,7 @@ class TransferController extends Controller
             <div class="form-group row">
             <label class="col-lg-3 col-form-label">Director Approval Date:</label>
             <div class="col-lg-9" >
-                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . \Carbon\Carbon::createFromTimestampMs($body['data']['updateAt'])->format('d/m/Y') . '</textarea>
+                <textarea readonly class="form-control" name="note_update" id="note" cols="1" rows="1">' . $update_date . '</textarea>
             </div>
              </div>
 

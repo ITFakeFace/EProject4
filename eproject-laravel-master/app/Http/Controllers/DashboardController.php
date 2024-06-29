@@ -132,6 +132,24 @@ class DashboardController extends Controller
     }
     $staffs_off = json_encode($arr_chart_staffs_off);
 
+    //count department
+     // Tạo mảng để đếm số lượng nhân viên cho mỗi phòng ban
+     $staffCountByDepartment = [];
+    
+     foreach ($data_staffs as $staff) {
+         $departmentId = $staff['department'];
+         if (!isset($staffCountByDepartment[$departmentId])) {
+             $staffCountByDepartment[$departmentId] = 0;
+         }
+         $staffCountByDepartment[$departmentId]++;
+     }
+ 
+     // Thêm số lượng nhân viên vào dữ liệu phòng ban
+     foreach ($data_department as &$department) {
+         $departmentId = $department['id'];
+         $department['employee_count'] = $staffCountByDepartment[$departmentId] ?? 0;
+     }
+ 
     return view('main.dashboard.index')
       ->with('staffs_gender', $staffs_gender)
       ->with('staffs_age', $staffs_age)

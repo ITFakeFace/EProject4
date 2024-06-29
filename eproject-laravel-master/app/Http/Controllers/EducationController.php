@@ -47,12 +47,20 @@ class EducationController extends Controller
             'txtSchool' => 'bail|required|min:3|max:100',
             'txtFieldOfStudy' => 'bail|required',
             'txtGraduatedYear' => 'bail|required',
+            'txtLevel'=> 'bail|required',
+            'txtLevelName'=> 'bail|required',
+            'txtGrade'=> 'bail|required',
+            'txtModeOf'=> 'bail|required',
         ];
         $message = [
             'txtSchool.required' => 'School name cannot be empty',
             'txtSchool.max' => 'School name can be maximum 100 characters',
             'txtFieldOfStudy.required' => 'Field of study cannot be empty',
-            'txtGraduatedYear.required' => 'Graduation year cannot be empty',
+            'txtLevel.required' => 'Level year cannot be empty',
+            'txtLevelName.required' => 'LevelName year cannot be empty',
+            'txtGrade.required' => 'Grade year cannot be empty',
+            'txtModeOf.required' => 'ModeOf year cannot be empty',
+    
         ];
         $data = $request->all();
         $validate = Validator::make($data, $rule, $message);

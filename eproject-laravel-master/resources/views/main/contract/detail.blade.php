@@ -39,7 +39,7 @@
                                     <span class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-calendar22"></i></span>
                                     </span>
-                                    <input type="text" class="form-control daterange-single" value="{{ \Carbon\Carbon::createFromTimestampMs($contract->startDate)->format('d/m/Y') }}" name="startDate" readonly>
+                                    <input type="text" class="form-control daterange-single" value="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $contract->startDate) }}" name="startDate" readonly>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,8 @@
                                     <span class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-calendar22"></i></span>
                                     </span>
-                                    <input type="text" class="form-control daterange-single" value="{{ \Carbon\Carbon::createFromTimestampMs($contract->endDate)->format('d/m/Y') }}" name="endDate" readonly>
+                                    {{-- <input type="text" class="form-control daterange-single" value="{{ \Carbon\Carbon::createFromTimestampMs($contract->endDate)->format('d/m/Y') }}" name="endDate" readonly> --}}
+                                    <input type="text" class="form-control daterange-single" value="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $contract->endDate) }}" name="endDate" readonly>
                                 </div>
                             </div>
                         </div>
