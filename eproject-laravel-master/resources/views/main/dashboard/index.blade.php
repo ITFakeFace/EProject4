@@ -18,6 +18,21 @@
 
 @section('content')
 <div class="card">
+    <h1 class="pt-3 pl-3 pr-3 text-primary">Welcome to {{Auth::user()->firstname}} {{Auth::user()->lastname}},</h1>
+    @if(Auth::user()->is_manager == 1 && Auth::user()->department == 5)
+        <h4 class="pl-4 pr-3">You are the CEO of the company.</h4>
+    @else
+    <h4 class="pl-4 pr-3">You are {{Auth::user()->is_manager? 'manager' : 'staff'}} of 
+        @foreach ($data_department as $department)
+        @if (Auth::user()->department == $department['id'])
+            <td>{{ $department['name'] }}</td>
+        @endif
+        @endforeach 
+        department.
+    </h4 >
+    @endif
+</div>
+<div class="card">
     <h1 class="pt-3 pl-3 pr-3"><a href="{{action('StaffController@index')}}">Newest Employees</a> </h1>
     <table class="table datatable-basic">
         <thead>
@@ -140,42 +155,6 @@
 </div>
 <!-- /basic datatable -->
 
- <!-- Modal Add Department -->
- <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form action="{{action('DepartmentController@CreateDepartment')}}" method="post">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">ADD NEW</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">Department Name</label>
-                            <div class="col-lg-9">
-                                <input type="text" class="form-control" name="txtName"  required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">Department Name (Vietnamese)</label>
-                            <div class="col-lg-9">
-                            <input type="text" class="form-control" name="txtName1"  required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add New</button>
-                    </div>
-                </form>  
-            </div>
-        </div>
-    </div>
-
-<!-- /basic datatable -->
     <!-- Pies -->
     <div class="row">
         <div class="col-lg-6">
