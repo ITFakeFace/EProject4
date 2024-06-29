@@ -16,7 +16,8 @@
 
 @section('content')
     <div class="card">
-        <h1 class="pt-3 pl-3 pr-3">GPS Check-in</h1>
+        <h1 class="pt-3 pl-3 pr-3">Check-{{ $checkIn == null ? 'In' : 'Out' }}</h1>
+
         <form method="POST" action="{{ action('CheckInOutController@create') }}" enctype="multipart/form-data">
             @csrf
             <div class="row p-3">
@@ -86,7 +87,7 @@
                 </div> --}}
 
                 <div class="col-12 col-md-12">
-                    <button type="submit" class="btn btn-primary mt-2 w-auto h-auto">Check-in</button>
+                    <button type="submit" class="btn btn-primary mt-2 w-auto h-auto" {{ $checkOut == null ? '' : 'disabled' }}>Check-{{ $checkIn == null ? 'In' : 'Out' }}</button>
                 </div>
                 {{-- <div class="col-12 col-md-6 mt-2">
                     <button type="button" class="btn btn-success" id=btnScreenshot>Take Photo</button>
@@ -186,27 +187,27 @@
             }
             init();
         }
-    </script> --}}
+    </script>
     {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111717926-1"></script>
+    <script>
+        function gtag() {
+            dataLayer.push(arguments)
+        }
+        window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "UA-111717926-1")
+    </script>
+    <div>
+        <script async src=//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js></script><ins class=adsbygoogle style="display:block; text-align:center;" data-ad-layout=in-article data-ad-format=fluid data-ad-client=ca-pub-1121308659421064 data-ad-slot=8232164616></ins>
         <script>
-            function gtag() {
-                dataLayer.push(arguments)
-            }
-            window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "UA-111717926-1")
+            (adsbygoogle = window.adsbygoogle || []).push({})
         </script>
-        <div>
-            <script async src=//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js></script><ins class=adsbygoogle style="display:block; text-align:center;" data-ad-layout=in-article data-ad-format=fluid data-ad-client=ca-pub-1121308659421064 data-ad-slot=8232164616></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({})
-            </script>
-            <div></div>
-        </div>
-        </body>
+        <div></div>
+    </div> --}}
+    </body>
 
-        </html>
-    @endsection
+    </html>
+@endsection
 
-    @section('scripts')
+@section('scripts')
     <script>
         $(document).ready(function() {
             getLocation();
@@ -265,4 +266,4 @@
             }
         }
     </script>
-    @endsection
+@endsection
