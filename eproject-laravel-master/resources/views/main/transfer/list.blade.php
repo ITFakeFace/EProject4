@@ -205,7 +205,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             <tbody>
 {{-- chu ý  --}}
 <?php $count = 1; ?>
-<?php 
+{{-- <?php 
                 if (auth()->user()->department !=2 && auth()->user()->department !=5){
 
                     $res = [];
@@ -216,7 +216,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     }
                     $data = $res;
                 }
-            ?>
+            ?> --}}
     {{-- if chinh --}}
         @if(auth()->user()->department ==2 and auth()->user()->is_manager !=0)
             @if(auth()->user()->is_manager == 0)
