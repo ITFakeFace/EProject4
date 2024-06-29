@@ -206,7 +206,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Leave Date:</label>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control day_leave" name="day_leave" value="" required>
+                                        <input type="date" class="form-control day_leave" name="day_leave" value="" required>
                                     </div>
                                 </div>
 

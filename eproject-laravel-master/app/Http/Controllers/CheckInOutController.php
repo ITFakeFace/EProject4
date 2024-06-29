@@ -31,9 +31,9 @@ class CheckInOutController extends Controller
     $longitude = $request->input('longitude');
     $image = $request->input('image_64');
 
-    if (empty($image)) {
-      return redirect()->back()->with('error', 'Please take a photo!');
-    }
+    // if (empty($image)) {
+    //   return redirect()->back()->with('error', 'Please take a photo!');
+    // }
 
     if (empty($latitude) || empty($longitude)) {
       return redirect()->back()->with('error', 'Please enable GPS as instructed!');
