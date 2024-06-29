@@ -291,7 +291,7 @@ class _CheckInPageState extends State<CheckInPage> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: 300, // Specify a fixed height for ListView
+                height: 500, // Specify a fixed height for ListView
                 width: 500,
                 child: ListView.builder(
                   itemCount: checkInOutHistory?.length,
