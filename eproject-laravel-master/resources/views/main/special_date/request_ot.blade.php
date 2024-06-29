@@ -141,7 +141,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label">Reason for Overtime:</label>
                                 <div class="col-lg-8">
-                                    <textarea class="form-control" name="note" id="note" cols="20" rows="10" placeholder="e.g., Overtime for new product production, ..." required></textarea>
+                                    <textarea class="form-control" name="note" id="note" cols="20" rows="10" placeholder="e.g., Overtime for new product, ..." required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -176,10 +176,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         <tr>
                             <td><?php echo $count;
                             $count++; ?></td>
-                            <td><?php echo $special_date['full_name_staff_request']; ?></td>
-                            <td><?php echo $special_date['name_department_request']; ?></td>
-                            <td><?php echo $special_date['day_special_from']; ?></td>
-                            <td><?php echo $special_date['day_special_to']; ?></td>
+                            <td>{{($special_date['full_name_staff_request'])}}</td>
+                            <td>{{($special_date['name_department_request'])}}</td>
+                            <td>{{Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('Y-m-d')}}</td>
+                            <td>{{Carbon\Carbon::createFromTimestampMs($special_date['day_special_to'])->format('Y-m-d')}}</td>
                             <td>
                                 @if ($special_date['is_approved'] == 0)
                                     <span class="badge badge-warning">Pending</span>
@@ -195,10 +195,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                         <span class="badge badge-primary">Approved. Cannot Edit!</span>
                                     @elseif($special_date['is_approved'] == -1)
                                         <span class="badge badge-danger">Rejected!</span>
-                                    @elseif(date('Y-m-d') <= $special_date['day_special_from'])
-                                        <div class="from-group d-flex">
-                                            <a class="btn btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Edit</a>
-                                            <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
+                                    @elseif(now()->lessThanOrEqualTo(Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('Y-m-d')))
+                                        <div class="form-group d-flex">
+                                            <a class="btn btn-sm btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Edit</a>
+                                            <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-sm btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
                                         </div>
                                     @else
                                         <span class="badge badge-warning">Expired!</span>
@@ -208,7 +208,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                                         <span class="badge badge-primary">Approved!</span>
                                     @elseif($special_date['is_approved'] == -1)
                                         <span class="badge badge-danger">Rejected!</span>
-                                    @elseif(date('Y-m-d') <= $special_date['day_special_from'])
+                                    @elseif(now()->lessThanOrEqualTo(Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('Y-m-d')))
                                         <div class="from-group d-flex">
                                             <a class="btn btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Details</a>
                                         </div>
@@ -220,7 +220,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             @if (auth()->user()->id != 7)
                                 <td>
                                     <div class="from-group d-flex">
-                                        <a class="btn btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Details</a>
+                                        <a class="btn btn-sm btn-info open-detail-approve-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Details</a>
                                     </div>
                                 </td>
                             @endif

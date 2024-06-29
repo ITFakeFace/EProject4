@@ -64,39 +64,39 @@
                     <th>ID</th>
                     <th>Department Name</th>
                     <th>Department Name (Vietnamese)</th>
-                    <th>Number of employees</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($data_department as $department)
-                <tr>
-                    <td>{{ $department['id'] }}</td>
-                    <td>{{ $department['name'] }}</td>
-                    <td>{{ $department['nameVn'] }}</td>
-                    <td>{{ $department['employee_count'] }}</td> <!-- Thêm cột số lượng nhân viên -->
-                    <!-- <td>
-                        @if($department['del'] == 0)
-                            Show
-                        @else
-                            Hide
-                        @endif    
-                    </td> -->
-                    <td class="text-center">
+                    @foreach($data_department as $department)
+                    <tr>
+                        <td>{{ $department['id'] }}</td>
+                        <td>{{ $department['name'] }}</td>
+                        <td>{{ $department['nameVn'] }}</td>
+                        <!-- <td>
+                            @if($department['del'] == 0)
+                                Show
+                            @else
+                                Hide
+                            @endif    
+                        </td> -->
+                
+                        <td class="text-center">
                         <div class="list-icons">
                             <div class="dropdown">
                                 <a href="#" class="list-icons-item" data-toggle="dropdown">
                                     <i class="icon-menu9"></i>
                                 </a>
+
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="{{ action('DepartmentController@getEditDep') }}?id={{ $department['id'] }}" class="dropdown-item">Update</a>
-                                    <a href="{{ action('DepartmentController@getDeleteDep') }}?id={{ $department['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
+                                        <a href="{{ action('DepartmentController@getEditDep') }}?id={{ $department['id'] }}" class="dropdown-item">Update</a>
+                                        <a href="{{ action('DepartmentController@getDeleteDep') }}?id={{ $department['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
                                 </div>
                             </div>
                         </div>
                     </td>
-                </tr>
-                @endforeach
+                    </tr>
+                    @endforeach
             </tbody>
         </table>
     </div>

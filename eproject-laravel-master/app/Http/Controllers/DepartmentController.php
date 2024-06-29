@@ -9,42 +9,16 @@ use Illuminate\Support\Facades\Validator;
 
 class DepartmentController extends Controller
 {
-    public function index() {
-        // Lấy danh sách các phòng ban
-        $departmentResponse = Http::get('http://localhost:8888/department/list');
-        $departmentBody = json_decode($departmentResponse->body(), true);
-        $data_department = $departmentBody['data'];
-    
-        // Lấy danh sách nhân viên
-        $staffResponse = Http::get('http://localhost:8888/staff/list');
-        $staffBody = json_decode($staffResponse->body(), true);
-        $data_staff = $staffBody['data'];
-    
-        // Tạo mảng để đếm số lượng nhân viên cho mỗi phòng ban
-        $staffCountByDepartment = [];
-    
-        foreach ($data_staff as $staff) {
-            $departmentId = $staff['department'];
-            if (!isset($staffCountByDepartment[$departmentId])) {
-                $staffCountByDepartment[$departmentId] = 0;
-            }
-            $staffCountByDepartment[$departmentId]++;
-        }
-    
-        // Thêm số lượng nhân viên vào dữ liệu phòng ban
-        foreach ($data_department as &$department) {
-            $departmentId = $department['id'];
-            $department['employee_count'] = $staffCountByDepartment[$departmentId] ?? 0;
-        }
-    
-        return view('main.department.index')
-            ->with('data_department', $data_department)
-            ->with('breadcrumbs', [
-                ['text' => 'Department', 'url' => '../view-menu/department'], 
-                ['text' => 'Department List', 'url' => '#']
-            ]);
-    }
+    public function index(){
 
+        $response = Http::get('http://localhost:8888/department/list');
+        $body = json_decode($response->body(), true);
+        $data_department = $body['data'];
+
+        return view('main.department.index')
+        ->with('data_department', $data_department)
+        ->with('breadcrumbs', [['text' => 'Department', 'url' => '../view-menu/department'], ['text' => 'Department List', 'url' => '#']]);
+    }
 
     public function listUndo(){
 

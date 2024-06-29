@@ -37,8 +37,8 @@
                 @foreach ($data as $item)
                     <tr>
                         <td>{{ $item->id }}</td>
-                        <td>{{ \Carbon\Carbon::createFromTimestampMs($item->fromDate)->format('d/m/Y') }}</td>
-                        <td>{{ \Carbon\Carbon::createFromTimestampMs($item->toDate)->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::createFromTimestampMs($item->fromDate)->format('Y-m-d') }}</td>
+                        <td>{{ \Carbon\Carbon::createFromTimestampMs($item->toDate)->format('Y-m-d') }}</td>
                         <td>{{ $item->status == 'pending' ? 'Chưa khóa' : 'Đã khóa' }}</td>
                         <td class="text-center">
                             <div class="list-icons">

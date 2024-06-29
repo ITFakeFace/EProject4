@@ -87,7 +87,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     <th>Staff Name</th>
                     <th>Staff Code</th>
                     <th>Department</th>
-                    <td>Position</td>
+                    <th>Position</td>
                     <th>KPI Name</th>
                     <th>Creation Time</th>
                     <th>Status</th>

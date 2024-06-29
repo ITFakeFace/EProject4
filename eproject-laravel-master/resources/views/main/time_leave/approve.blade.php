@@ -177,7 +177,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             <td>{{ $time_leave['name_vn'] }}</td>
                             <td>{{ $time_leave['is_manager'] == 1 ? 'Manager' : 'Staff' }}</td>
                             <td>
-                                {{ \Carbon\Carbon::createFromTimestampMs($time_leave['day_time_leave'])->format('d/m/Y') }}
+                                {{ \Carbon\Carbon::createFromTimestampMs($time_leave['day_time_leave'])->format('Y-m-d') }}
                                 <?php
                                 if ($time_leave['day_of_week'] == 1) {
                                     echo 'Sunday';

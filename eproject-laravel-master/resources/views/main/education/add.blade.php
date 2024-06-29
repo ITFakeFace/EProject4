@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Level:(*)</label>
+                                        <label>Level:</label>
                                         <input type="text" class="form-control" name="txtLevel" value="{{ old('txtLevel') }}">
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Level Name:(*)</label>
+                                        <label>Level Name:</label>
                                         <input type="text" class="form-control" name="txtLevelName" value="{{ old('txtLevelName') }}">
                                     </div>
                                 </div>
@@ -135,13 +135,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Grade:(*)</label>
+                                        <label>Grade:</label>
                                         <input type="text" class="form-control" name="txtGrade" value="{{ old('txtGrade') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Study Mode:(*)</label>
+                                        <label>Study Mode:</label>
                                         <input type="text" class="form-control" name="txtModeOf" value="{{ old('txtModeOf') }}">
                                     </div>
                                 </div>

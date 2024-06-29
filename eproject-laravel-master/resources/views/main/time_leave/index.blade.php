@@ -438,7 +438,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                     @if ($time_leave['type'] == 0)
                         <tr>
                             <td>
-                                {{ \Carbon\Carbon::createFromTimestampMs($time_leave['dayTimeLeave'])->format('d/m/Y') }}
+                                {{ \Carbon\Carbon::createFromTimestampMs($time_leave['dayTimeLeave'])->format('Y-m-d') }}
                             </td>
                             <td><?php echo $time_leave['time'] == '08:00:00' ? '1 day' : '0.5 day'; ?></td>
                             <td><?php echo $time_leave['type'] == 0 ? 'Additional Attendance' : 'Leave Registration'; ?></td>
@@ -509,7 +509,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                 @foreach ($data as $time_leave)
                     @if ($time_leave['type'] == 1)
                         <tr>
-                            <td>{{ $time_leave['dayTimeLeave'] }}</td>
+                            <td>{{ \Carbon\Carbon::createFromTimestampMs($time_leave['dayTimeLeave'])->format('Y-m-d') }}</td>
                             <td><?php echo $time_leave['time'] == '08:00:00' ? '1 day' : '0.5 day'; ?></td>
                             <td><?php echo $time_leave['type'] == 0 ? 'Additional Attendance' : 'Leave Registration'; ?></td>
                             <td>
@@ -565,8 +565,8 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
             <tbody>
                 @foreach ($leave_other as $item)
                     <tr>
-                        <td>{{ $item['fromDate'] }}</td>
-                        <td>{{ $item['toDate'] }}</td>
+                        <td>{{ \Carbon\Carbon::createFromTimestampMs($item['fromDate'])->format('Y-m-d') }}</td>
+                        <td>{{ \Carbon\Carbon::createFromTimestampMs($item['toDate'])->format('Y-m-d') }}</td>
                         <td>
                             <?php
                             if ($item['typeLeave'] == 2) {

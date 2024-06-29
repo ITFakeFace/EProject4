@@ -141,10 +141,10 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             $count++; ?></td>
                             <td>
                                 {{-- <?php echo $special_date['day_special_from']; ?> --}}
-                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('d/m/Y') }}
+                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('Y-m-d') }}
                             </td>
                             <td>
-                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_to'])->format('d/m/Y') }}
+                                {{ \Carbon\Carbon::createFromTimestampMs($special_date['day_special_to'])->format('Y-m-d') }}
                                 {{-- <?php echo $special_date['day_special_to']; ?> --}}
                             </td>
                             <td>
@@ -159,25 +159,26 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                             <td>
                                 <span class="badge badge-danger">Special Date</span>
                             </td>
-                            <td class="text-center">
-                                @if (date('Y-m-d') < $special_date['day_special_from'])
-                                    <div class="from-group">
-                                        <a class="btn btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Edit</a>
-                                        <a href="{{ action('SpecialDateController@deleteSpecialDate') }}?id={{ $special_date['id'] }}" class="btn btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
+                            <td class="text-center pt-4">
+                                @if (now()->format('Y-m-d') < Carbon\Carbon::createFromTimestampMs($special_date['day_special_from'])->format('Y-m-d'))
+                                    <div class="form-group">
+                                        <a class="btn btn-sm btn-info open-detail-special-date" id="{{ $special_date['id'] }}" style="color: white; cursor: pointer;">Edit</a>
+                                        <a href="{{ action('SpecialDateController@deleteSpecialDate', ['id' => $special_date['id']]) }}" class="btn btn-sm btn-danger ml-2" style="color: white; cursor: pointer;">Delete</a>
                                     </div>
                                 @else
                                     <span class="badge badge-primary">Date has passed!</span>
                                 @endif
                             </td>
+                            
                             <td>
                                 <?php
                                 $date_check = date('Y-m-d', strtotime('+2 days', strtotime($special_date['day_special_to'])));
                                 ?>
                                 @if (date('Y-m-d') > $date_check)
                                     @if ($special_date['detail_id'])
-                                        <a href="{{ action('TimeSpecialController@details') }}?id_special_date={{ $special_date['id'] }}" class="btn btn-primary ml-2" style="color: white; cursor: pointer;">Details</a>
+                                        <a href="{{ action('TimeSpecialController@details') }}?id_special_date={{ $special_date['id'] }}" class="btn btm-sm btn-primary ml-2" style="color: white; cursor: pointer;">Details</a>
                                     @else
-                                        <a href="{{ action('TimeSpecialController@create') }}?id={{ $special_date['id'] }}" class="btn btn-warning ml-2" style="color: white; cursor: pointer;">Add</a>
+                                        <a href="{{ action('TimeSpecialController@create') }}?id={{ $special_date['id'] }}" class="btn btn-sm btn-warning ml-2" style="color: white; cursor: pointer;">Add</a>
                                     @endif
                                 @else
                                     <span class="">Only allowed to add after 3 days of the end of the holiday!</span>

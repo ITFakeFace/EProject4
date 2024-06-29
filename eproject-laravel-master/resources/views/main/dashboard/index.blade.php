@@ -28,7 +28,6 @@
                 <th>ID</th>
                 <th>Department Name</th>
                 <th>Department Name (Vietnamese)</th>
-                <th>Number of employees</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -38,7 +37,6 @@
                     <td>{{ $department['id'] }}</td>
                     <td>{{ $department['name'] }}</td>
                     <td>{{ $department['nameVn'] }}</td>
-                    <td>{{ $department['employee_count'] }}</td>
                     <!-- <td>
                         @if($department['del'] == 0)
                             Show
