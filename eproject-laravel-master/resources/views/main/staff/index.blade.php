@@ -17,7 +17,6 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Code</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Department</th>
@@ -32,7 +31,6 @@
                 @foreach ($data_staff as $staff)
                     <tr>
                         <td>{{ $staff['id'] }}</td>
-                        <td>{{ $staff['code'] }}</td>
                         <td>{{ $staff['firstname'] }}</td>
                         <td>{{ $staff['lastname'] }}</td>
                         @foreach ($data_department as $department)

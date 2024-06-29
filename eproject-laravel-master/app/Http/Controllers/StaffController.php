@@ -315,7 +315,6 @@ class StaffController extends Controller
 
   public function getEditStaff(Request $request)
   {
-    //chinh
     $data_request = $request->all();
 
     $response = Http::get('http://localhost:8888/staff/one', $data_request);

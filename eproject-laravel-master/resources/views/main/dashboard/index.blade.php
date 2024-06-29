@@ -17,26 +17,114 @@
 @endsection
 
 @section('content')
+<div class="card">
+    <h1 class="pt-3 pl-3 pr-3 text-primary">Welcome {{Auth::user()->firstname}} {{Auth::user()->lastname}},</h1>
+    @if(Auth::user()->is_manager == 1 && Auth::user()->department == 5)
+        <h4 class="pl-4 pr-3">You are the CEO of the company.</h4>
+    @else
+    <h4 class="pl-4 pr-3">You are {{Auth::user()->is_manager? 'manager' : 'staff'}} of 
+        @foreach ($data_department as $department)
+        @if (Auth::user()->department == $department['id'])
+            <td>{{ $department['name'] }}</td>
+        @endif
+        @endforeach 
+        department.
+    </h4 >
+    @endif
+</div>
+<div class="card">
+    <h1 class="pt-3 pl-3 pr-3"><a href="{{action('StaffController@index')}}">Newest Employees</a> </h1>
+    <table class="table datatable-basic">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Department</th>
+                <th>Position</th>
+                <th>Joining Date</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                @if (Auth::user()->is_manager == 1 && (Auth::user()->department == 2 || Auth::user()->department == 5))
+                <th>Action</th>
+                @endif
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($staffListTakeTen as $index =>  $staff)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $staff['firstname'] }}</td>
+                    <td>{{ $staff['lastname'] }}</td>
+                    @foreach ($data_department as $department)
+                        @if ($staff['department'] == $department['id'])
+                            <td>{{ $department['nameVn'] }}</td>
+                        @endif
+                    @endforeach
+                    <td>
+                        @if ($staff['isManager'] == 0)
+                            Employee
+                        @else
+                            Manager
+                        @endif
+                    </td>
+                    <td>{{ \Carbon\Carbon::createFromTimestamp($staff['joinedAt'] / 1000)->format('Y-m-d') }}</td>
+                    <td>{{ \Carbon\Carbon::createFromTimestamp($staff['dob'] / 1000)->format('Y-m-d') }}</td>
+                    <td>
+                        @if ($staff['gender'] == 1)
+                            Male
+                        @else
+                            Female
+                        @endif
+                    </td>
+                    @if (Auth::user()->is_manager == 1 && (Auth::user()->department == 2 || Auth::user()->department == 5))
+                    <td>
+                        <div class="list-icons">
+                            <div class="dropdown">
+                                <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                    <i class="icon-menu9"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="{{ action('StaffController@getEditStaff') }}?id={{ $staff['id'] }}" class="dropdown-item">Update</a>
+                                    <a href="{{ action('StaffController@getDetail') }}?id={{ $staff['id'] }}" class="dropdown-item">Detail</a>
+                                    <a href="{{ route('exportWord1', ['id' => $staff['id']]) }}" class="dropdown-item">Export Employee File</a>
+                                    <a href="{{ action('StaffController@getDeleteStaff') }}?id={{ $staff['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    @endif
+                    
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 <!-- Basic datatable -->
 <div class="card">
-    <h1 class="pt-3 pl-3 pr-3"><a href="{{action('DepartmentController@index')}}">Department List</a> </h1>
+    <h1 class="pt-3 pl-3 pr-3"><a href="{{action('DepartmentController@index')}}">Latest Departments</a> </h1>
     
 
     <table class="table datatable-basic">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>No.</th>
                 <th>Department Name</th>
                 <th>Department Name (Vietnamese)</th>
+                <th>Number of employees</th>
+                @if (Auth::user()->is_manager == 1 && (Auth::user()->department == 2 || Auth::user()->department == 5))
                 <th>Action</th>
+                @endif
             </tr>
         </thead>
         <tbody>
-                @foreach($data_department as $department)
+                @foreach($departmentListTakeTen as $index => $department)
                 <tr>
-                    <td>{{ $department['id'] }}</td>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $department['name'] }}</td>
                     <td>{{ $department['nameVn'] }}</td>
+                    <td>{{ $department['employee_count'] }}</td>
                     <!-- <td>
                         @if($department['del'] == 0)
                             Show
@@ -44,21 +132,22 @@
                             Hide
                         @endif    
                     </td> -->
-            
-                    <td class="text-center">
-                    <div class="list-icons">
-                        <div class="dropdown">
-                            <a href="#" class="list-icons-item" data-toggle="dropdown">
-                                <i class="icon-menu9"></i>
-                            </a>
+                    @if (Auth::user()->is_manager == 1 && (Auth::user()->department == 2 || Auth::user()->department == 5))
+                        <td class="text-center">
+                            <div class="list-icons">
+                                <div class="dropdown">
+                                    <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                        <i class="icon-menu9"></i>
+                                    </a>
 
-                            <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="{{ action('DepartmentController@getEditDep') }}?id={{ $department['id'] }}" class="dropdown-item">Update</a>
-                                    <a href="{{ action('DepartmentController@getDeleteDep') }}?id={{ $department['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                            <a href="{{ action('DepartmentController@getEditDep') }}?id={{ $department['id'] }}" class="dropdown-item">Update</a>
+                                            <a href="{{ action('DepartmentController@getDeleteDep') }}?id={{ $department['id'] }}" class="dropdown-item" onclick="return confirm('Are you sure?')">Delete</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </td>
+                        </td>
+                    @endif    
                 </tr>
                 @endforeach
         </tbody>
@@ -66,42 +155,6 @@
 </div>
 <!-- /basic datatable -->
 
- <!-- Modal Add Department -->
- <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form action="{{action('DepartmentController@CreateDepartment')}}" method="post">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">ADD NEW</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">Department Name</label>
-                            <div class="col-lg-9">
-                                <input type="text" class="form-control" name="txtName"  required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">Department Name (Vietnamese)</label>
-                            <div class="col-lg-9">
-                            <input type="text" class="form-control" name="txtName1"  required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add New</button>
-                    </div>
-                </form>  
-            </div>
-        </div>
-    </div>
-
-<!-- /basic datatable -->
     <!-- Pies -->
     <div class="row">
         <div class="col-lg-6">
