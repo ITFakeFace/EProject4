@@ -113,8 +113,8 @@ class TransferController extends Controller
 
     // var_dump($temp_date);die;
     if ($temp_date != null) {
-      $date1 = date_create($temp_date);
-      $date2 = date_create(date('Y-m-d'));
+      $date1 = \Carbon\Carbon::createFromTimestampMs($temp_date);
+      $date2 = \Carbon\Carbon::today();
       $diff = date_diff($date1, $date2);
       if ($diff->format("%a") < 30) {
         return redirect()->back()->with('error', 'Transfer must be at least 30 days apart from the previous transfer.');
@@ -157,7 +157,7 @@ class TransferController extends Controller
       'oldManagerApproved' => "0",
       'newManagerApproved' => "0",
       'managerApproved' => "0",
-      'hr_approved' => $hr_approved == null ? "0" : $hr_approved,
+      'hr_approved' => $hr_approved == null ? "1" : $hr_approved,
       'new_salary' => $new_salary,
       'del' => "0",
       'note' => $note,
