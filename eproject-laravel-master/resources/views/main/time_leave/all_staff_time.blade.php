@@ -95,7 +95,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
                         <td>{{ $item['total_day_off'] }}</td>
                         <td>{{ $item['total_day_special'] }}</td>
                         <td style="background-color: #ffffe7">{{ $item['total_number_time_all'] }}</td>
-                        <td><button id="{{ $item['staff_id'] }}" class="btn btn-primary open-detail">Details</button></td>
+                        <td><button type="button" data-id="{{ $item['staff_id'] }}" class="btn btn-primary open-detail">Details</button></td>
                     </tr>
                 @endforeach
                 @foreach ($staffNotCheck as $item)
@@ -167,27 +167,28 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
-        $('.open-detail').click(function() {
-            var staff_id = $(this).attr('id');
-            var month = <?php echo $month; ?>;
-            var year = <?php echo $year; ?>;
+    $(document).on("click", ".open-detail", function() {
+        var staff_id = $(this).data('id');
+        var month = <?php echo $month; ?>;
+        var year = <?php echo $year; ?>;
 
-            $.ajax({
-                url: '{{ action('TimeleaveController@getDetailStaffTime') }}',
-                Type: 'POST',
-                datatype: 'text',
-                data: {
-                    staff_id: staff_id,
-                    month: month,
-                    year: year
-                },
-                cache: false,
-                success: function(data) {
-                    $('#detail').empty().append(data);
-                    $('#modalDetail').modal();
-                }
-            });
+        $.ajax({
+            url: '{{ action('TimeleaveController@getDetailStaffTime') }}',
+            Type: 'POST',
+            datatype: 'text',
+            data: {
+                staff_id: staff_id,
+                month: month,
+                year: year
+            },
+            cache: false,
+            success: function(data) {
+                $('#detail').empty().append(data);
+                $('#modalDetail').modal();
+            },
+            error: function(request, status, errorThrown) {
+                alert(request.responseText);
+            }
         });
     });
 </script>
